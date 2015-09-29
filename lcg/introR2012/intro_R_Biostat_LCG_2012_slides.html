@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+  <meta name="author" content="Leonardo Collado Torres" />
+  <title>Introduction to R and Biostatistics</title>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+<style>
+  html { background-color: black; }
+  body { background-color: white; border-radius: 12px}
+  /* A section is a slide. It's size is 800x600, and this will never change */
+  section {
+      font-family: Arial, serif;
+      font-size: 20pt;
+    }
+  address, blockquote, dl, fieldset, form, h1, h2, h3, h4, h5, h6, hr, ol, p, pre, table, ul, dl { padding: 10px 20px 10px 20px; }
+  h1, h2, h3 {
+    text-align: center;
+    margin: 10pt 10pt 20pt 10pt;
+  }
+  ul, ol {
+    margin: 10px 10px 10px 50px;
+  }
+  section.titleslide h1 { margin-top: 200px; }
+  h1.title { margin-top: 150px; }
+  h1 { font-size: 180%; }
+  h2 { font-size: 120%; }
+  h3 { font-size: 100%; }
+  q { quotes: "“" "”" "‘" "’"; }
+  blockquote { font-style: italic }
+  /* Figures are displayed full-page, with the caption on
+     top of the image/video */
+  figure {
+    background-color: black;
+  }
+  figcaption {
+    margin: 70px;
+  }
+  footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 40px;
+    text-align: right;
+    background-color: #F3F4F8;
+    border-top: 1px solid #CCC;
+  }
+
+  /* Transition effect */
+  /* Feel free to change the transition effect for original
+     animations. See here:
+     https://developer.mozilla.org/en/CSS/CSS_transitions
+     How to use CSS3 Transitions: */
+  section {
+      -moz-transition: left 400ms linear 0s;
+      -webkit-transition: left 400ms linear 0s;
+      -ms-transition: left 400ms linear 0s;
+      transition: left 400ms linear 0s;
+  }
+
+  /* Before */
+  section { left: -150%; }
+  /* Now */
+  section[aria-selected] { left: 0; }
+  /* After */
+  section[aria-selected] ~ section { left: +150%; }
+
+  /* Incremental elements */
+
+  /* By default, visible */
+  .incremental > * { opacity: 1; }
+
+  /* The current item */
+  .incremental > *[aria-selected] { color: red; opacity: 1; }
+
+  /* The items to-be-selected */
+  .incremental > *[aria-selected] ~ * { opacity: 0.2; }
+</style>
+</head>
+<body>
+<section>
+  <h1 class="title">Introduction to R and Biostatistics</h1>
+  <h2 class="author"><a href="http://www.biostat.jhsph.edu/~lcollado/">Leonardo Collado Torres</a></h2>
+  <h3 class="date">Nov 9, 2012</h3>
+</section>
+<section class="titleslide slide level1" id="prerequisites"><h1>Prerequisites</h1></section><section class="slide level2" id="section">
+<h1></h1>
+<p>Hopefully</p>
+<ul class="incremental">
+<li>You read the 3 the <em>papers</em> from <a href="http://fellgernon.tumblr.com/post/34677935591/introducing-r-and-biostatistics-to-first-year-lcg#.UJwncOOe918">Introducing R and Biostatistics to first year LCG students (2012 version)</a></li>
+</ul>
+<p>Ideally</p>
+<ul class="incremental">
+<li>You also have <a href="http://www.rstudio.com/ide/">RStudio</a> installed.</li>
+</ul>
+</section>
+<section class="titleslide slide level1" id="welcome-to-the-genomics-sciences"><h1>Welcome to the Genomics sciences =)</h1></section><section class="slide level2" id="they-are-very-diverse">
+<h1>They are very diverse!</h1>
+<ul class="incremental">
+<li>Main branches
+<ul class="incremental">
+<li>Molecular biology</li>
+<li>Biochemistry</li>
+<li>Mathematics</li>
+<li>Computing</li>
+</ul></li>
+<li>Close to the core:
+<ul class="incremental">
+<li>Immunology, developmental biology, phylogenetics, …</li>
+</ul></li>
+<li>Wide variety of model organisms
+<ul class="incremental">
+<li>Bacteria, plants, higher eurakyotes, communities, …</li>
+</ul></li>
+</ul>
+</section><section class="slide level2" id="who-are-we">
+<h1>Who are we?</h1>
+<p><a href="http://www.lcg.unam.mx">LCG</a>’s main focus is in developing researchers.</p>
+<ul class="incremental">
+<li>From the wet biologist to the do-it-all to the more mathematical side</li>
+<li>But not any kind. The program trains you to understand a wide gamma of languages.</li>
+<li>Understand enough to <strong>communicate</strong>. That’s it!</li>
+<li>Then you specialize in something.
+<ul class="incremental">
+<li>You might start in your 4th year or a bit earlier.</li>
+</ul></li>
+</ul>
+</section><section class="slide level2" id="what-defines-a-researcher">
+<h1>What defines a researcher?</h1>
+<ul class="incremental">
+<li>We use the scientific method.</li>
+<li>Thus we observe a phenomenon, make hypothesis, gather data, and test them.</li>
+<li>We aim to be objective!
+<ul class="incremental">
+<li>Can we really ignore our prejudices and inner subjectivity?</li>
+</ul></li>
+<li>We also have to be able to communicate our ideas to others. <em>Or try to</em>.</li>
+</ul>
+</section>
+<section class="titleslide slide level1" id="statistics-and-philosophy"><h1>Statistics and philosophy</h1></section><section class="slide level2" id="statistics">
+<h1>Statistics</h1>
+<p>Richard Royall, <em>Statistical Evidence</em>, 1997</p>
+<blockquote>
+<p>Science looks to statistics for help in <strong>interpreting data</strong>.</p>
+</blockquote>
+<blockquote>
+<p>Statistics is supposed to provide objective methods for representic scientific data as <strong>evidence</strong> and for measuring the <strong>strength</strong> of that evidence.</p>
+</blockquote>
+</section><section class="slide level2" id="section-1">
+<h1></h1>
+<blockquote>
+<p>Statistics serves science in other ways as well, contributing to both efficiency and objectivity through theories for the <strong>design of experiments</strong> and <strong>decision-making</strong>, for example.</p>
+</blockquote>
+<blockquote>
+<p>But its most important task is to provide <strong>objective quantitative alternatives to personal judgement</strong> for integrating the evidence produced by experiments and observational studies.</p>
+</blockquote>
+</section><section class="slide level2" id="useful-scenario-royall-1997">
+<h1>Useful scenario (Royall, 1997)</h1>
+<p>There is a disease that you are interested in and you have a single diagnostic test.</p>
+<p>Lets say that you have two incompatible cases:</p>
+<ul class="incremental">
+<li>In case A, a person has a disease (<img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=D" alt="D" title="D">).
+<ul class="incremental">
+<li>The probability that the test will be positive <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28T%5E%2B%7CD%29%20%3D%200.95" alt="P(T^+|D) = 0.95" title="P(T^+|D) = 0.95">.</li>
+<li>Thus, <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28T%5E-%7CD%29%20%3D%200.05" alt="P(T^-|D) = 0.05" title="P(T^-|D) = 0.05">.</li>
+</ul></li>
+</ul>
+</section><section class="slide level2" id="section-2">
+<h1></h1>
+<ul class="incremental">
+<li>In case B, the person does not have the disease (<img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=D%5Ec" alt="D^c" title="D^c">).
+<ul class="incremental">
+<li>The probability that the test will be positive is <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28T%5E%2B%7CD%5Ec%29%20%3D%200.02" alt="P(T^+|D^c) = 0.02" title="P(T^+|D^c) = 0.02">.</li>
+<li>Thus, <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28T%5E-%7CD%5Ec%29%20%3D%200.98" alt="P(T^-|D^c) = 0.98" title="P(T^-|D^c) = 0.98">.</li>
+</ul></li>
+<li>You apply the test to Juan, and it comes out positive. This is our observation.</li>
+</ul>
+</section><section class="slide level2" id="three-questions">
+<h1>Three questions</h1>
+<ol class="incremental" type="1">
+<li>What do <strong>I believe</strong>, now that I have this observation?</li>
+<li>What should I <strong>do</strong>, now that I have this observation?</li>
+<li>What does this observation tell me about case A versus case B? (How should I interpret this observation as <strong>evidence</strong> regarding A versus B?)</li>
+</ol>
+</section><section class="slide level2" id="three-possible-conclusions">
+<h1>Three possible conclusions</h1>
+<ol class="incremental" type="1">
+<li>Juan probably does not have the disease.</li>
+<li>Juan should be treated for the disease.</li>
+<li>The test result is evidence that Juan has the disease.</li>
+</ol>
+</section><section class="slide level2" id="three-interpretations">
+<h1>Three interpretations</h1>
+<ol class="incremental" type="1">
+<li>Belief: Bayesian statistics.</li>
+<li>Decision: Decision theory that is linked to frequentist statistics.</li>
+<li>Evidence: Likelihood statistics.</li>
+</ol>
+</section><section class="slide level2" id="why-is-the-first-one-a-belief">
+<h1>Why is the first one a <em>belief</em>?</h1>
+<p><strong>Bayes theorem</strong> Let <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=A%2C%20B" alt="A, B" title="A, B"> be sets contained in the sample space. Then: <br><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%20P%28A%20%7C%20B%29%20%3D%20%5Cfrac%7BP%28A%20%5Ccap%20B%29%7D%7BP%28B%29%7D" alt=" P(A | B) = \frac{P(A \cap B)}{P(B)}" title=" P(A | B) = \frac{P(A \cap B)}{P(B)}"><br> if <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28B%29%20%3E%200" alt="P(B) &gt; 0" title="P(B) &gt; 0">.</p>
+<p>Note that if <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%29%20%3E%200" alt="P(A) &gt; 0" title="P(A) &gt; 0"> then <br><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28B%20%7C%20A%29%20%3D%20%5Cfrac%7BP%28B%20%5Ccap%20A%29%7D%7BP%28A%29%7D" alt="P(B | A) = \frac{P(B \cap A)}{P(A)}" title="P(B | A) = \frac{P(B \cap A)}{P(A)}"><br> and thus <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28B%20%7C%20A%29%20P%28A%29%20%3D%20P%28B%20%5Ccap%20A%29" alt="P(B | A) P(A) = P(B \cap A)" title="P(B | A) P(A) = P(B \cap A)"></p>
+</section><section class="slide level2" id="section-3">
+<h1></h1>
+<p>But <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28A%20%5Ccap%20B%29%20%3D%20P%28B%20%5Ccap%20A%29" alt="P(A \cap B) = P(B \cap A)" title="P(A \cap B) = P(B \cap A)"> so <br><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%20P%28A%20%7CB%20%29%20%3D%20%5Cfrac%7B%20P%28B%20%7C%20A%29%20P%28A%29%7D%7BP%28B%29%7D%20" alt=" P(A |B ) = \frac{ P(B | A) P(A)}{P(B)} " title=" P(A |B ) = \frac{ P(B | A) P(A)}{P(B)} "><br></p>
+<p><strong>Multiplication rule</strong> Let <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=A%2C%20B" alt="A, B" title="A, B"> be sets contained in the sample space. Then: <br><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%20P%28B%29%20%3D%20P%28B%7CA%29P%28A%29%20%2B%20P%28B%7CA%5Ec%29P%28A%5Ec%29%20" alt=" P(B) = P(B|A)P(A) + P(B|A^c)P(A^c) " title=" P(B) = P(B|A)P(A) + P(B|A^c)P(A^c) "><br></p>
+</section><section class="slide level2" id="section-4">
+<h1></h1>
+<p>Using Bayes theorem and the multiplication rule, we have:</p>
+<p><br><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%20P%28D%7CT%5E%2B%29%20%3D%20%5Cfrac%7B%20P%28T%5E%2B%20%7C%20D%29%20P%28D%29%7D%7B%20P%28T%5E%2B%20%7C%20D%29%20P%28D%29%20%2B%20P%28T%5E%2B%20%7C%20D%5Ec%29%20P%28D%5Ec%29%7D%20" alt=" P(D|T^+) = \frac{ P(T^+ | D) P(D)}{ P(T^+ | D) P(D) + P(T^+ | D^c) P(D^c)} " title=" P(D|T^+) = \frac{ P(T^+ | D) P(D)}{ P(T^+ | D) P(D) + P(T^+ | D^c) P(D^c)} "><br> As <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28D%5Ec%29%20%3D%201%20-%20P%28D%29" alt="P(D^c) = 1 - P(D)" title="P(D^c) = 1 - P(D)"> and substituting the values we assumed earlier, we get that <br><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%20P%28D%7CT%5E%2B%29%20%3D%20%5Cfrac%7B0.95%20P%28D%29%7D%7B0.95%20P%28D%29%2B%200.02%20%281%20-%20P%28D%29%29%7D%20" alt=" P(D|T^+) = \frac{0.95 P(D)}{0.95 P(D)+ 0.02 (1 - P(D))} " title=" P(D|T^+) = \frac{0.95 P(D)}{0.95 P(D)+ 0.02 (1 - P(D))} "><br></p>
+</section><section class="slide level2" id="section-5">
+<h1></h1>
+<p>Therefore, our answer to question 1 depends on <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28D%29" alt="P(D)" title="P(D)">, which we call the <em>prior probability</em>.</p>
+<p>So you can think of <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28D%29" alt="P(D)" title="P(D)"> as the combination of all prior knowledge and your beliefs, and <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28D%7CT%5E%2B%29" alt="P(D|T^+)" title="P(D|T^+)"> as your new (updated) beliefs after observing the data. In this case, after seeing Juan get a positive test.</p>
+</section><section class="slide level2" id="what-about-question-2">
+<h1>What about question 2?</h1>
+<p>We need to know the possible actions that we can take and their risks (consequences).</p>
+<p>For example, if the treatment is harmless, inexpensive and not treating a sick person leads to terrible consequences, then we will go for it and treat Juan.</p>
+<p>So we need other information.</p>
+</section><section class="slide level2" id="question-3.">
+<h1>Question 3.</h1>
+<p>The idea behind determining the evidence and it’s measure of strength is so that you may use it along with other information you may have to do what you think is best.</p>
+</section><section class="slide level2" id="conclusions">
+<h1>Conclusions</h1>
+<p>As you can see, there are three main divisions of statistical thinking.</p>
+<p>But you don’t have to choose a side. Use what is out there if you are <strong>clear</strong> about what you are asking and the methods you use are compatible.</p>
+<p>The wrong thing to do is to claim something when what you used doesn’t answer that question!</p>
+</section>
+<section class="titleslide slide level1" id="statistical-models"><h1>Statistical models</h1></section><section class="slide level2" id="purpose">
+<h1>Purpose</h1>
+<ul class="incremental">
+<li>One of the reasons we use them is to try to uncover causes by studying relationships between variables.</li>
+<li>Although statistical relationships do not necessarily imply causal relationships, they do give us a starting point for further research.</li>
+</ul>
+<p>Seber and Lee, <em>Linear Regression Analysis</em>, 2003</p>
+</section><section class="slide level2" id="basics">
+<h1>Basics</h1>
+<ul class="incremental">
+<li>We are interested in some variables, normally just one which we call the <em>response</em>.</li>
+<li>We want to study how it depends on a set of variables called <em>explanatory variables</em>.</li>
+<li>Example: risk of heart attack explained by blood pressure, age, gender, cholesterol level, etc.</li>
+</ul>
+<p>Seber and Lee, <em>Linear Regression Analysis</em>, 2003</p>
+</section><section class="slide level2" id="exam-grades-example">
+<h1>Exam grades example</h1>
+<img src="figure/faraway.png" width="400px" height="400px"  alt="plot of chunk faraway" title="plot of chunk faraway" />
+<p>Faraway, <em>Linear Models with R</em>, 2005</p>
+</section><section class="slide level2" id="uses">
+<h1>Uses</h1>
+<p>Once we have a statistical model we can</p>
+<ul class="incremental">
+<li>use it for prediction.</li>
+<li>test hypothesis.</li>
+<li><p>estimate parameters and give a measure of uncertainty.</p></li>
+<li><p>As one of my professors said, 80% of statistics is linear models.</p></li>
+</ul>
+</section>
+<section class="titleslide slide level1" id="why-do-i-need-statistics"><h1>Why do <strong>I</strong> need statistics?</h1></section><section class="slide level2" id="are-we-observing-something-that-could-happen-by-chance">
+<h1>Are we observing something that could happen by chance?</h1>
+<p>That is a big question that we will ask ourselves very frequently.</p>
+<p>In other words, are we observing something <strong>unexpected</strong>?</p>
+<p>This is the problem of hypothesis testing with the null hypothesis being <em>chance</em>.</p>
+</section><section class="slide level2" id="we-have-seen-that-you-need-statistics">
+<h1>We have seen that you need statistics</h1>
+<p>To be objective</p>
+<p>To estimate a parameter of interest and give a measure of uncertainty</p>
+<p>To explain relationships between variables</p>
+<p>To test your hypothesis</p>
+</section><section class="slide level2" id="you-will-need-biostatistics">
+<h1>You will need biostatistics</h1>
+<p>Biostatistics is statistics applied to biological problems.</p>
+<p>No matter what you do in science, you will need statistics at some point or another.</p>
+<ul class="incremental">
+<li>How much? The basics.
+<ul class="incremental">
+<li>Takes around 2 semester-long courses to learn them (mostly frequentist)</li>
+</ul></li>
+<li><em>But I can collaborate with a statistician</em>
+<ul class="incremental">
+<li>True, but it will be very hard to do so without a common language.</li>
+</ul></li>
+</ul>
+</section>
+<section class="titleslide slide level1" id="r"><h1>R</h1></section><section class="slide level2" id="why-r">
+<h1>Why R?</h1>
+<ul class="incremental">
+<li>It’s free (open source)</li>
+<li>Available on Windows, Mac, Linux/Unix.</li>
+<li>Easily to customize and expand with libraries called <em>packages</em>
+<ul class="incremental">
+<li>Check out <a href="http://cran.r-project.org">CRAN</a> and <a href="http://bioconductor.org">Bioconductor</a></li>
+</ul></li>
+<li>A lot of people in academia use it!</li>
+<li>Great for reproducibility (more later)</li>
+</ul>
+</section><section class="slide level2" id="some-cons">
+<h1>Some cons</h1>
+<ul class="incremental">
+<li>It has a big learning curve</li>
+<li>No buttons which is a big difference if you are used to Excel…</li>
+<li>Can be very heterogeneous since lots of developers are working on different parts</li>
+</ul>
+</section><section class="slide level2" id="rstudio">
+<h1>RStudio</h1>
+<p><a href="http://www.rstudio.com/ide/">RStudio</a></p>
+<p>I highly recommend it as your first R user interface.</p>
+<p>It’s very friendly: menus, all the windows you want, highlighting, …</p>
+<p>Once you learn to use RStudio you <em>might</em> want to try out other options which generally involve quite a bit of customization. Or you <em>might</em> be happy ever after with RStudio!</p>
+</section><section class="slide level2" id="r-code">
+<h1>R code</h1>
+<p>You will notice some R code in the next slides followed by it’s output.</p>
+<p>If you want to get the same results as me, just copy and paste them into R</p>
+<p>Note that</p>
+<pre><code># This symbol is used as a comment sign.
+# Anything after will not be considered R code.</code></pre>
+</section><section class="slide level2" id="r-is-vectored">
+<h1>R is vectored</h1>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;- <span class="dv">1</span>
+y &lt;- <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)
+x + y</code></pre>
+<pre><code>## [1] 2 3 4</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">z &lt;- <span class="dv">1</span>:<span class="dv">3</span>
+y - z</code></pre>
+<pre><code>## [1] 0 0 0</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span>:<span class="dv">20</span></code></pre>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10 11 12
+## [13] 13 14 15 16 17 18 19 20</code></pre>
+</section><section class="slide level2" id="r-as-a-calculator">
+<h1>R as a calculator</h1>
+<p>Take Royall’s example from the beginning. We know that: <br><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%20P%28D%7CT%5E%2B%29%20%3D%20%5Cfrac%7B0.95%20P%28D%29%7D%7B0.95%20P%28D%29%2B%200.02%20%281%20-%20P%28D%29%29%7D%20" alt=" P(D|T^+) = \frac{0.95 P(D)}{0.95 P(D)+ 0.02 (1 - P(D))} " title=" P(D|T^+) = \frac{0.95 P(D)}{0.95 P(D)+ 0.02 (1 - P(D))} "><br></p>
+<p>So, what is the <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28D%7CT%5E%2B%29" alt="P(D|T^+)" title="P(D|T^+)"> if <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28D%29%20%3D%200.001" alt="P(D) = 0.001" title="P(D) = 0.001">?</p>
+<p>Well, lets use R as a calculator!</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="fl">0.95</span> * <span class="fl">0.001</span>/(<span class="fl">0.95</span> * <span class="fl">0.001</span> + <span class="fl">0.02</span> * (<span class="dv">1</span> - 
+    <span class="fl">0.001</span>))</code></pre>
+<pre><code>## [1] 0.04539</code></pre>
+</section><section class="slide level2" id="r-as-a-programming-language">
+<h1>R as a programming language</h1>
+<p>We want more. We want to check if <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28D%7CT%5E%2B%29" alt="P(D|T^+)" title="P(D|T^+)"> is greater when <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28D%29%20%3D%200.001%2C%200.20%2C" alt="P(D) = 0.001, 0.20," title="P(D) = 0.001, 0.20,"> or <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=0.5" alt="0.5" title="0.5">.</p>
+<p>To simplify things, we can write a function and check that it works:</p>
+<pre class="sourceCode r"><code class="sourceCode r">pr.d.given.t &lt;- function(pr.d) {
+    <span class="fl">0.95</span> * pr.d/(<span class="fl">0.95</span> * pr.d + <span class="fl">0.02</span> * (<span class="dv">1</span> - 
+        pr.d))
+}
+<span class="kw">pr.d.given.t</span>(<span class="fl">0.001</span>)</code></pre>
+<pre><code>## [1] 0.04539</code></pre>
+</section><section class="slide level2" id="section-6">
+<h1></h1>
+<p>Now we can find the maximum one sequentially</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pr.d.given.t</span>(<span class="fl">0.001</span>) &lt; <span class="kw">pr.d.given.t</span>(<span class="fl">0.2</span>)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pr.d.given.t</span>(<span class="fl">0.001</span>) &lt; <span class="kw">pr.d.given.t</span>(<span class="fl">0.5</span>)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pr.d.given.t</span>(<span class="fl">0.2</span>) &lt; <span class="kw">pr.d.given.t</span>(<span class="fl">0.5</span>)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pr.d.given.t</span>(<span class="fl">0.5</span>)</code></pre>
+<pre><code>## [1] 0.9794</code></pre>
+</section><section class="slide level2" id="r-as-a-graphics-device">
+<h1>R as a graphics device</h1>
+<p>Not enough!</p>
+<p>Lets look at <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28D%7CT%5E%2B%29" alt="P(D|T^+)" title="P(D|T^+)"> for all possible values of <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=P%28D%29" alt="P(D)" title="P(D)"></p>
+</section><section class="slide level2" id="section-7">
+<h1></h1>
+<pre class="sourceCode r"><code class="sourceCode r">pr.d &lt;- <span class="kw">seq</span>(<span class="fl">0.001</span>, <span class="fl">0.999</span>, <span class="dt">by =</span> <span class="fl">0.001</span>)
+<span class="kw">plot</span>(pr.d, <span class="kw">pr.d.given.t</span>(pr.d), <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, 
+    <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</code></pre>
+<img src="figure/rcurve.png" width="400px" height="400px"  alt="plot of chunk rcurve" title="plot of chunk rcurve" />
+</section><section class="slide level2" id="finding-help">
+<h1>Finding help</h1>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apropos</span>(<span class="st">&quot;norm&quot;</span>)</code></pre>
+<pre><code>##  [1] &quot;dlnorm&quot;         &quot;dnorm&quot;         
+##  [3] &quot;halfnorm&quot;       &quot;norm&quot;          
+##  [5] &quot;normalizePath&quot;  &quot;plnorm&quot;        
+##  [7] &quot;pnorm&quot;          &quot;qlnorm&quot;        
+##  [9] &quot;qnorm&quot;          &quot;qqnorm&quot;        
+## [11] &quot;qqnorm.default&quot; &quot;qqnorml&quot;       
+## [13] &quot;rlnorm&quot;         &quot;rnorm&quot;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="st">`</span><span class="dt">?</span><span class="st">`</span>(pnorm)
+<span class="kw">args</span>(rnorm)</code></pre>
+<pre><code>## function (n, mean = 0, sd = 1) 
+## NULL</code></pre>
+</section>
+<section class="titleslide slide level1" id="the-normal-distribution"><h1>The Normal distribution</h1></section><section class="slide level2" id="pdf">
+<h1>PDF</h1>
+<p>Let <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=X" alt="X" title="X"> be the random variable that has a Normal distribution with mean <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%5Cmu" alt="\mu" title="\mu"> and variance <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%5Csigma%5E2" alt="\sigma^2" title="\sigma^2">. Then it’s probability density function (pdf) is given by the following equation:</p>
+<p><br><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%20f_X%28x%29%20%3D%20%5Cfrac%7B1%7D%7B%5Csqrt%7B2%5Cpi%20%5Csigma%5E2%7D%7D%20%5Cexp%20%5Cleft%28%20-%5Cfrac%7B%28x%20-%20%5Cmu%29%5E2%7D%7B2%20%5Csigma%5E2%7D%20%5Cright%29%20" alt=" f_X(x) = \frac{1}{\sqrt{2\pi \sigma^2}} \exp \left( -\frac{(x - \mu)^2}{2 \sigma^2} \right) " title=" f_X(x) = \frac{1}{\sqrt{2\pi \sigma^2}} \exp \left( -\frac{(x - \mu)^2}{2 \sigma^2} \right) "><br></p>
+<p>If <img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=Z%20%5Csim%20N%280%2C%201%29" alt="Z \sim N(0, 1)" title="Z \sim N(0, 1)"> then it’s density is:</p>
+<p><br><img style="vertical-align:middle" src="http://chart.apis.google.com/chart?cht=tx&amp;chl=%20f_Z%28z%29%20%3D%20%5Cfrac%7B1%7D%7B%5Csqrt%7B2%5Cpi%7D%7D%20%5Cexp%20%5Cleft%28-%20%5Cfrac%7Bz%5E2%7D%7B2%7D%20%5Cright%29%20" alt=" f_Z(z) = \frac{1}{\sqrt{2\pi}} \exp \left(- \frac{z^2}{2} \right) " title=" f_Z(z) = \frac{1}{\sqrt{2\pi}} \exp \left(- \frac{z^2}{2} \right) "><br></p>
+<p>Very famous and highly useful because of the Central Limit Theorem (check <a href="http://en.wikipedia.org/wiki/Central_limit_theorem">wiki</a> and <a href="http://onlinestatbook.com/stat_sim/sampling_dist/index.html">this useful applet</a>).</p>
+</section><section class="slide level2" id="lets-plot-its-density">
+<h1>Lets plot its density</h1>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;- <span class="kw">seq</span>(-<span class="dv">5</span>, <span class="dv">5</span>, <span class="dt">by =</span> <span class="fl">0.01</span>)
+<span class="kw">args</span>(dnorm)</code></pre>
+<pre><code>## function (x, mean = 0, sd = 1, log = FALSE) 
+## NULL</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">y &lt;- <span class="kw">dnorm</span>(x, <span class="dv">0</span>, <span class="dv">1</span>)</code></pre>
+</section><section class="slide level2" id="section-8">
+<h1></h1>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(x, y, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;forest green&quot;</span>)</code></pre>
+<img src="figure/normdensity2.png" width="400px" height="400px"  alt="plot of chunk normdensity2" title="plot of chunk normdensity2" />
+</section><section class="slide level2" id="section-9">
+<h1></h1>
+<p>That was neat, because we know the <strong>parameters</strong> which describe the <strong>population</strong>.</p>
+<p>But in reality, we only observe a <strong>sample</strong>. And from the sample, we get <strong>statistics</strong> such as the <em>sample mean</em> and <em>sample variance</em>.</p>
+</section><section class="slide level2" id="starting-from-a-sample">
+<h1>Starting from a sample</h1>
+<p>First, lets generate two random samples.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">args</span>(rnorm)</code></pre>
+<pre><code>## function (n, mean = 0, sd = 1) 
+## NULL</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">101</span>)
+x &lt;- <span class="kw">rnorm</span>(<span class="dv">100</span>)
+<span class="kw">set.seed</span>(<span class="dv">102</span>)
+y &lt;- <span class="kw">rnorm</span>(<span class="dv">100</span>, <span class="dv">2</span>)</code></pre>
+<p><em>Exploratory Data Analysis</em> is the first step when working backwards.</p>
+<p>It relies heavily on plots</p>
+</section><section class="slide level2" id="plot">
+<h1>Plot</h1>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(x, y)</code></pre>
+<img src="figure/basicplot.png" width="400px" height="400px"  alt="plot of chunk basicplot" title="plot of chunk basicplot" />
+</section><section class="slide level2" id="boxplot">
+<h1>Boxplot</h1>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(x, y, <span class="dt">col =</span> <span class="st">&quot;light blue&quot;</span>)</code></pre>
+<img src="figure/boxplot.png" width="400px" height="400px"  alt="plot of chunk boxplot" title="plot of chunk boxplot" />
+</section><section class="slide level2" id="histogram">
+<h1>Histogram</h1>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(x, <span class="dt">freq =</span> <span class="ot">FALSE</span>, <span class="dt">col =</span> <span class="st">&quot;skyblue&quot;</span>)</code></pre>
+<img src="figure/simplehist.png" width="400px" height="400px"  alt="plot of chunk simplehist" title="plot of chunk simplehist" />
+</section><section class="slide level2" id="section-10">
+<h1></h1>
+<p>With estimated density line</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(x, <span class="dt">freq =</span> <span class="ot">FALSE</span>, <span class="dt">col =</span> <span class="st">&quot;skyblue&quot;</span>)
+<span class="kw">lines</span>(<span class="kw">density</span>(x), <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</code></pre>
+<img src="figure/densityhist.png" width="400px" height="400px"  alt="plot of chunk densityhist" title="plot of chunk densityhist" />
+</section><section class="slide level2" id="section-11">
+<h1></h1>
+<p>Overlaying two histograms</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create histogram and density line for</span>
+<span class="co"># sample 1 (x)</span>
+<span class="kw">hist</span>(x, <span class="dt">xlim =</span> <span class="kw">range</span>(<span class="kw">c</span>(x, y)) * <span class="fl">1.2</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, 
+    <span class="fl">0.55</span>), <span class="dt">main =</span> <span class="st">&quot;Density plots of two samples&quot;</span>, 
+    <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">density =</span> <span class="dv">2</span>, <span class="dt">freq =</span> <span class="ot">FALSE</span>, 
+    <span class="dt">border =</span> <span class="st">&quot;skyblue&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;skyblue&quot;</span>)
+<span class="kw">lines</span>(<span class="kw">density</span>(x), <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)
+
+<span class="co"># Add histogram and density line for</span>
+<span class="co"># sample 2 (y)</span>
+<span class="kw">hist</span>(y, <span class="dt">xlim =</span> <span class="kw">range</span>(<span class="kw">c</span>(x, y)), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, 
+    <span class="fl">0.55</span>), <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">density =</span> <span class="dv">2</span>, <span class="dt">freq =</span> <span class="ot">FALSE</span>, 
+    <span class="dt">border =</span> <span class="st">&quot;pink&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;pink&quot;</span>, <span class="dt">add =</span> <span class="ot">TRUE</span>)
+<span class="kw">lines</span>(<span class="kw">density</span>(y), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
+</section><section class="slide level2" id="section-12">
+<h1></h1>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Add legend</span>
+<span class="kw">legend</span>(<span class="st">&quot;top&quot;</span>, <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>), 
+             
+  <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;red&quot;</span>), <span class="dt">lty=</span><span class="dv">1</span>, <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>, 
+    <span class="dt">density =</span> <span class="dv">20</span>, <span class="dt">border =</span> <span class="kw">c</span>(<span class="st">&quot;skyblue&quot;</span>, <span class="st">&quot;pink&quot;</span>),
+    <span class="dt">fill =</span> <span class="kw">c</span>(<span class="st">&quot;skyblue&quot;</span>, <span class="st">&quot;pink&quot;</span>), <span class="dt">cex=</span><span class="fl">0.8</span>)
+<span class="co"># Example from my code a 140.776 exercise</span></code></pre>
+</section><section class="slide level2" id="section-13">
+<h1></h1>
+<img src="figure/complicatedHist.png" width="400px" height="400px"  alt="plot of chunk complicatedHist" title="plot of chunk complicatedHist" />
+</section><section class="slide level2" id="qqnorm">
+<h1>qqnorm</h1>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">qqnorm</span>(x)
+<span class="kw">qqline</span>(x, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
+<img src="figure/qqnorm.png" width="400px" height="400px"  alt="plot of chunk qqnorm" title="plot of chunk qqnorm" />
+</section>
+<section class="titleslide slide level1" id="reproducibility"><h1>Reproducibility</h1></section><section class="slide level2" id="what-does-it-mean">
+<h1>What does it mean?</h1>
+<ul class="incremental">
+<li>For some sciences, it means being able to replicate other’s work.</li>
+<li>You want this to be true, right? Otherwise no one will trust your results.</li>
+<li>In bioinformatics and biostatistics, we take reproducibility to a whole new level.</li>
+<li>Ideally, someone else can press a button and <strong>everything</strong> will run smoothly and produce the same exact results.</li>
+</ul>
+</section><section class="slide level2" id="reproducibility-with-r-code">
+<h1>Reproducibility with R code</h1>
+<p>One way to promote reproducibility is using <em>self-contained</em> documents.</p>
+<p>Meaning that they have code and words explaining the results all in one single place.</p>
+<p>An example? Look at <a href="intro_R_Biostat_LCG_2012.Rmd">intro_R_Biostat_LCG_2012.Rmd</a></p>
+<p>Normally, we use it to create PDF reports for ourselves and collaborators.</p>
+</section><section class="slide level2" id="what-is-the-problem">
+<h1>What is the problem?</h1>
+<p>Well, it normally involves learning and the <code>Sweave</code>.</p>
+<p>These files can look very complicated and take quite a bit of practice before you can get comfortable using them.</p>
+</section><section class="slide level2" id="knitr-and-markdown">
+<h1>knitr and markdown</h1>
+<p><a href="http://daringfireball.net/projects/markdown/basics">Markdown</a></p>
+<ul class="incremental">
+<li>It’s a very simple mark_up_ syntax</li>
+<li>In RStudio
+<ul class="incremental">
+<li>File &gt; New &gt; R Markdown</li>
+<li>Click on <em>Markdown quick reference</em></li>
+</ul></li>
+</ul>
+<p><a href="http://yihui.name/knitr/">knitr</a></p>
+<ul class="incremental">
+<li>It can take Markdown files and export them to PDF or HTML files.</li>
+<li>Has a <em>ton</em> of customization options</li>
+<li>Works great with RStudio</li>
+<li>Greatly benefits from <a href="http://johnmacfarlane.net/pandoc/">pandoc</a></li>
+</ul>
+</section><section class="slide level2" id="what-is-the-point">
+<h1>What is the point?</h1>
+<p><strong>You</strong> can learn how to use R with RStudio from the beginning and easily export your homeworks either in HTML or PDF format using <strong>knitr</strong></p>
+<p>Take a look at the same material in a webpage format <a href="intro_R_Biostat_LCG_2012.html">here</a>.</p>
+<p>It’s always good to start with the best practices, specially if they are very <em>simple</em></p>
+</section><section class="slide level2" id="thank-you">
+<h1>Thank you!</h1>
+<p>If you have questions, feel free to contact me!</p>
+</section><section class="slide level2" id="section-14">
+<h1></h1>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()</code></pre>
+<pre><code>## R version 2.15.1 (2012-06-22)
+## Platform: x86_64-apple-darwin9.8.0/x86_64 (64-bit)
+## 
+## locale:
+## [1] C/en_US.UTF-8/C/C/C/C
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices
+## [4] utils     datasets  methods  
+## [7] base     
+## 
+## other attached packages:
+## [1] faraway_1.0.5 knitr_0.8    
+## 
+## loaded via a namespace (and not attached):
+## [1] digest_0.5.2   evaluate_0.4.2
+## [3] formatR_0.6    plyr_1.7.1    
+## [5] stringr_0.6.1  tools_2.15.1</code></pre>
+</section>
+<!-- {{{{ dzslides core
+#
+#
+#     __  __  __       .  __   ___  __
+#    |  \  / /__` |    | |  \ |__  /__`
+#    |__/ /_ .__/ |___ | |__/ |___ .__/ core :€
+#
+#
+# The following block of code is not supposed to be edited.
+# But if you want to change the behavior of these slides,
+# feel free to hack it!
+#
+-->
+
+<div id="progress-bar"></div>
+
+<!-- Default Style -->
+<style>
+  * { margin: 0; padding: 0; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+  details { display: none; }
+  body {
+    width: 800px; height: 600px;
+    margin-left: -400px; margin-top: -300px;
+    position: absolute; top: 50%; left: 50%;
+    overflow: hidden;
+  }
+  section {
+    position: absolute;
+    pointer-events: none;
+    width: 100%; height: 100%;
+  }
+  section[aria-selected] { pointer-events: auto; }
+  html { overflow: hidden; }
+  body { display: none; }
+  body.loaded { display: block; }
+  .incremental {visibility: hidden; }
+  .incremental[active] {visibility: visible; }
+  #progress-bar{
+    bottom: 0;
+    position: absolute;
+    -moz-transition: width 400ms linear 0s;
+    -webkit-transition: width 400ms linear 0s;
+    -ms-transition: width 400ms linear 0s;
+    transition: width 400ms linear 0s;
+  }
+  figure {
+    width: 100%;
+    height: 100%;
+  }
+  figure > * {
+    position: absolute;
+  }
+  figure > img, figure > video {
+    width: 100%; height: 100%;
+  }
+</style>
+
+<script>
+  var Dz = {
+    remoteWindows: [],
+    idx: -1,
+    step: 0,
+    slides: null,
+    progressBar : null,
+    params: {
+      autoplay: "1"
+    }
+  };
+
+  Dz.init = function() {
+    document.body.className = "loaded";
+    this.slides = $$("body > section");
+    this.progressBar = $("#progress-bar");
+    this.setupParams();
+    this.onhashchange();
+    this.setupTouchEvents();
+    this.onresize();
+  }
+  
+  Dz.setupParams = function() {
+    var p = window.location.search.substr(1).split('&');
+    p.forEach(function(e, i, a) {
+      var keyVal = e.split('=');
+      Dz.params[keyVal[0]] = decodeURIComponent(keyVal[1]);
+    });
+  // Specific params handling
+    if (!+this.params.autoplay)
+      $$.forEach($$("video"), function(v){ v.controls = true });
+  }
+
+  Dz.onkeydown = function(aEvent) {
+    // Don't intercept keyboard shortcuts
+    if (aEvent.altKey
+      || aEvent.ctrlKey
+      || aEvent.metaKey
+      || aEvent.shiftKey) {
+      return;
+    }
+    if ( aEvent.keyCode == 37 // left arrow
+      || aEvent.keyCode == 38 // up arrow
+      || aEvent.keyCode == 33 // page up
+    ) {
+      aEvent.preventDefault();
+      this.back();
+    }
+    if ( aEvent.keyCode == 39 // right arrow
+      || aEvent.keyCode == 40 // down arrow
+      || aEvent.keyCode == 34 // page down
+    ) {
+      aEvent.preventDefault();
+      this.forward();
+    }
+    if (aEvent.keyCode == 35) { // end
+      aEvent.preventDefault();
+      this.goEnd();
+    }
+    if (aEvent.keyCode == 36) { // home
+      aEvent.preventDefault();
+      this.goStart();
+    }
+    if (aEvent.keyCode == 32) { // space
+      aEvent.preventDefault();
+      this.toggleContent();
+    }
+    if (aEvent.keyCode == 70) { // f
+      aEvent.preventDefault();
+      this.goFullscreen();
+    }
+  }
+
+  /* Touch Events */
+
+  Dz.setupTouchEvents = function() {
+    var orgX, newX;
+    var tracking = false;
+
+    var db = document.body;
+    db.addEventListener("touchstart", start.bind(this), false);
+    db.addEventListener("touchmove", move.bind(this), false);
+
+    function start(aEvent) {
+      aEvent.preventDefault();
+      tracking = true;
+      orgX = aEvent.changedTouches[0].pageX;
+    }
+
+    function move(aEvent) {
+      if (!tracking) return;
+      newX = aEvent.changedTouches[0].pageX;
+      if (orgX - newX > 100) {
+        tracking = false;
+        this.forward();
+      } else {
+        if (orgX - newX < -100) {
+          tracking = false;
+          this.back();
+        }
+      }
+    }
+  }
+
+  /* Adapt the size of the slides to the window */
+
+  Dz.onresize = function() {
+    var db = document.body;
+    var sx = db.clientWidth / window.innerWidth;
+    var sy = db.clientHeight / window.innerHeight;
+    var transform = "scale(" + (1/Math.max(sx, sy)) + ")";
+
+    db.style.MozTransform = transform;
+    db.style.WebkitTransform = transform;
+    db.style.OTransform = transform;
+    db.style.msTransform = transform;
+    db.style.transform = transform;
+  }
+
+
+  Dz.getDetails = function(aIdx) {
+    var s = $("section:nth-of-type(" + aIdx + ")");
+    var d = s.$("details");
+    return d ? d.innerHTML : "";
+  }
+
+  Dz.onmessage = function(aEvent) {
+    var argv = aEvent.data.split(" "), argc = argv.length;
+    argv.forEach(function(e, i, a) { a[i] = decodeURIComponent(e) });
+    var win = aEvent.source;
+    if (argv[0] === "REGISTER" && argc === 1) {
+      this.remoteWindows.push(win);
+      this.postMsg(win, "REGISTERED", document.title, this.slides.length);
+      this.postMsg(win, "CURSOR", this.idx + "." + this.step);
+      return;
+    }
+    if (argv[0] === "BACK" && argc === 1)
+      this.back();
+    if (argv[0] === "FORWARD" && argc === 1)
+      this.forward();
+    if (argv[0] === "START" && argc === 1)
+      this.goStart();
+    if (argv[0] === "END" && argc === 1)
+      this.goEnd();
+    if (argv[0] === "TOGGLE_CONTENT" && argc === 1)
+      this.toggleContent();
+    if (argv[0] === "SET_CURSOR" && argc === 2)
+      window.location.hash = "#" + argv[1];
+    if (argv[0] === "GET_CURSOR" && argc === 1)
+      this.postMsg(win, "CURSOR", this.idx + "." + this.step);
+    if (argv[0] === "GET_NOTES" && argc === 1)
+      this.postMsg(win, "NOTES", this.getDetails(this.idx));
+  }
+
+  Dz.toggleContent = function() {
+    // If a Video is present in this new slide, play it.
+    // If a Video is present in the previous slide, stop it.
+    var s = $("section[aria-selected]");
+    if (s) {
+      var video = s.$("video");
+      if (video) {
+        if (video.ended || video.paused) {
+          video.play();
+        } else {
+          video.pause();
+        }
+      }
+    }
+  }
+
+  Dz.setCursor = function(aIdx, aStep) {
+    // If the user change the slide number in the URL bar, jump
+    // to this slide.
+    aStep = (aStep != 0 && typeof aStep !== "undefined") ? "." + aStep : ".0";
+    window.location.hash = "#" + aIdx + aStep;
+  }
+
+  Dz.onhashchange = function() {
+    var cursor = window.location.hash.split("#"),
+        newidx = 1,
+        newstep = 0;
+    if (cursor.length == 2) {
+      newidx = ~~cursor[1].split(".")[0];
+      newstep = ~~cursor[1].split(".")[1];
+      if (newstep > Dz.slides[newidx - 1].$$('.incremental > *').length) {
+        newstep = 0;
+        newidx++;
+      }
+    }
+    this.setProgress(newidx, newstep);
+    if (newidx != this.idx) {
+      this.setSlide(newidx);
+    }
+    if (newstep != this.step) {
+      this.setIncremental(newstep);
+    }
+    for (var i = 0; i < this.remoteWindows.length; i++) {
+      this.postMsg(this.remoteWindows[i], "CURSOR", this.idx + "." + this.step);
+    }
+  }
+
+  Dz.back = function() {
+    if (this.idx == 1 && this.step == 0) {
+      return;
+    }
+    if (this.step == 0) {
+      this.setCursor(this.idx - 1,
+                     this.slides[this.idx - 2].$$('.incremental > *').length);
+    } else {
+      this.setCursor(this.idx, this.step - 1);
+    }
+  }
+
+  Dz.forward = function() {
+    if (this.idx >= this.slides.length &&
+        this.step >= this.slides[this.idx - 1].$$('.incremental > *').length) {
+        return;
+    }
+    if (this.step >= this.slides[this.idx - 1].$$('.incremental > *').length) {
+      this.setCursor(this.idx + 1, 0);
+    } else {
+      this.setCursor(this.idx, this.step + 1);
+    }
+  }
+
+  Dz.goStart = function() {
+    this.setCursor(1, 0);
+  }
+
+  Dz.goEnd = function() {
+    var lastIdx = this.slides.length;
+    var lastStep = this.slides[lastIdx - 1].$$('.incremental > *').length;
+    this.setCursor(lastIdx, lastStep);
+  }
+
+  Dz.setSlide = function(aIdx) {
+    this.idx = aIdx;
+    var old = $("section[aria-selected]");
+    var next = $("section:nth-of-type("+ this.idx +")");
+    if (old) {
+      old.removeAttribute("aria-selected");
+      var video = old.$("video");
+      if (video) {
+        video.pause();
+      }
+    }
+    if (next) {
+      next.setAttribute("aria-selected", "true");
+      var video = next.$("video");
+      if (video && !!+this.params.autoplay) {
+        video.play();
+      }
+    } else {
+      // That should not happen
+      this.idx = -1;
+      // console.warn("Slide doesn't exist.");
+    }
+  }
+
+  Dz.setIncremental = function(aStep) {
+    this.step = aStep;
+    var old = this.slides[this.idx - 1].$('.incremental > *[aria-selected]');
+    if (old) {
+      old.removeAttribute('aria-selected');
+    }
+    var incrementals = $$('.incremental');
+    if (this.step <= 0) {
+      $$.forEach(incrementals, function(aNode) {
+        aNode.removeAttribute('active');
+      });
+      return;
+    }
+    var next = this.slides[this.idx - 1].$$('.incremental > *')[this.step - 1];
+    if (next) {
+      next.setAttribute('aria-selected', true);
+      next.parentNode.setAttribute('active', true);
+      var found = false;
+      $$.forEach(incrementals, function(aNode) {
+        if (aNode != next.parentNode)
+          if (found)
+            aNode.removeAttribute('active');
+          else
+            aNode.setAttribute('active', true);
+        else
+          found = true;
+      });
+    } else {
+      setCursor(this.idx, 0);
+    }
+    return next;
+  }
+
+  Dz.goFullscreen = function() {
+    var html = $('html'),
+        requestFullscreen = html.requestFullscreen || html.requestFullScreen || html.mozRequestFullScreen || html.webkitRequestFullScreen;
+    if (requestFullscreen) {
+      requestFullscreen.apply(html);
+    }
+  }
+  
+  Dz.setProgress = function(aIdx, aStep) {
+    var slide = $("section:nth-of-type("+ aIdx +")");
+    if (!slide)
+      return;
+    var steps = slide.$$('.incremental > *').length + 1,
+        slideSize = 100 / (this.slides.length - 1),
+        stepSize = slideSize / steps;
+    this.progressBar.style.width = ((aIdx - 1) * slideSize + aStep * stepSize) + '%';
+  }
+  
+  Dz.postMsg = function(aWin, aMsg) { // [arg0, [arg1...]]
+    aMsg = [aMsg];
+    for (var i = 2; i < arguments.length; i++)
+      aMsg.push(encodeURIComponent(arguments[i]));
+    aWin.postMessage(aMsg.join(" "), "*");
+  }
+  
+  function init() {
+    Dz.init();
+    window.onkeydown = Dz.onkeydown.bind(Dz);
+    window.onresize = Dz.onresize.bind(Dz);
+    window.onhashchange = Dz.onhashchange.bind(Dz);
+    window.onmessage = Dz.onmessage.bind(Dz);
+  }
+
+  window.onload = init;
+</script>
+
+
+<script> // Helpers
+  if (!Function.prototype.bind) {
+    Function.prototype.bind = function (oThis) {
+
+      // closest thing possible to the ECMAScript 5 internal IsCallable
+      // function 
+      if (typeof this !== "function")
+      throw new TypeError(
+        "Function.prototype.bind - what is trying to be fBound is not callable"
+      );
+
+      var aArgs = Array.prototype.slice.call(arguments, 1),
+          fToBind = this,
+          fNOP = function () {},
+          fBound = function () {
+            return fToBind.apply( this instanceof fNOP ? this : oThis || window,
+                   aArgs.concat(Array.prototype.slice.call(arguments)));
+          };
+
+      fNOP.prototype = this.prototype;
+      fBound.prototype = new fNOP();
+
+      return fBound;
+    };
+  }
+
+  var $ = (HTMLElement.prototype.$ = function(aQuery) {
+    return this.querySelector(aQuery);
+  }).bind(document);
+
+  var $$ = (HTMLElement.prototype.$$ = function(aQuery) {
+    return this.querySelectorAll(aQuery);
+  }).bind(document);
+
+  $$.forEach = function(nodeList, fun) {
+    Array.prototype.forEach.call(nodeList, fun);
+  }
+
+</script>
+<!-- vim: set fdm=marker: }}} -->
+</body>
+</html>
