@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Principios de EstadÃ­stica. Feb-Jun 2009</title>
+  <title>Seminario III: R/Bioconductor. Ago-Dic 2009</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <link rel="stylesheet" type="text/css" href="./web/courseR.css"/>
   <script type="text/javascript">//<![CDATA[
@@ -17,7 +17,7 @@ var tab = null;
 function change(el){
 	var lis = document.getElementsByTagName("li");
 	if (el == undefined) {
-		// la pestaÃ±a home es el li numero 0!!	
+		// la pestaña home es el li numero 0!!	
 		el = lis[0];
 	}
 	if (el.id == 'current') {
@@ -54,12 +54,12 @@ function change_main(esto){
 <div id=container_med>
 	<div id=intro_med>
 		<div id=pageHeader_med>
-			<h1><span>Principios de EstadÃ­stica</span></h1>
-			<h2><span>Febrero-Junio 2009</span></h2>
+			<h1><span>Seminario III: R/Bioconductor</span></h1>
+			<h2><span>Agosto-Diciembre 2009</span></h2>
 		</div>
 		<div id=quickSummary_med>
-			<div class=p1><span><a href="http://www.lcg.unam.mx/~lcollado/index.php" title="PÃ¡gina de Leonardo Collado Torres" target="_blank">Leonardo Collado Torres</a> &amp; <a href="http://kabah.lcg.unam.mx/~mgutierr/" title="PÃ¡gina de MarÃ­a GutiÃ©rrez" target="_blank">MarÃ­a GutiÃ©rrez Arcelus</a> - Licenciatura en Ciencias GenÃ³micas, LCG-UNAM</span></div>
-			<div class=p2><span>Feb-Jun, 2009 - Cuernavaca, MÃ©xico</span></div>
+			<div class=p1><span><a href="http://lcolladotor.github.io/about.html#.Vqp-ZVMrLEY" title="Página de Leonardo Collado Torres" target="_blank">Leonardo Collado Torres</a> - Licenciatura en Ciencias Genómicas, LCG-UNAM</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="index_en.html" title="English Version" target="_self">English Version</a></span></div>
+			<div class=p2><span>Ago-Dic, 2009 - Cuernavaca, México</span></div>
 		</div>
 	</div>
 	<div id="linkList">
@@ -101,6 +101,20 @@ function change_main(esto){
 		<div id="lresources">
 			<br>
 			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('video')"><b>Videos</b></span></h3>
+			</li>
+
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('overview')"><b>Expos Paquetes</b></span></h3>
+			</li>
+
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
 			<h3><span onclick="return change_main('resources')"><b>Material de Apoyo</b></span></h3>
 			</li>	
 		</div>
@@ -118,36 +132,36 @@ function change_main(esto){
 		<div id=preamble>
 			<div id="home" class="opciones">
 			
-						
-				<h2><span>LCG (English)</span></h2><br>
-				<p class=p2><span>
-				This course was taught at the Undergraduate Program on Genomic Sciences (LCG in Spanish) from the National Autonomous University of Mexico (UNAM in Spanish). It was directed at the second semester students from the sixth generation. It was a part of the Principles of Statistics topic and was meant as an introductory R course. It had an official length of 16 class hours. For more information on this undergraduate program visit LCG's <a href="http://www.lcg.unam.mx/" title ="LCG's Oficial Page" target="_blank">main page</a>. For example, the sections on <a href="http://www.lcg.unam.mx/node/3" title="Development in Mexico" target="_blank">Development of the Genomic Sciences in Mexico</a> and <a href="http://www.lcg.unam.mx/evaluacion" title="International Evaluation" target="_blank">LCG's International Evaluation</a> could be of your interest.
-				</span></p>
-				<br><br>
-				
 				<h2><span>LCG</span></h2><br>
 				<p class=p2><span>
-				Este curso fue impartido en la Licenciatura en Ciencias GenÃ³micas (LCG) de la Universidad Nacional AutÃ³noma de MÃ©xico (UNAM). Fue dirigido a los alumnos de segundo semestre de la sexta generaciÃ³n. Fue parte de la materia de Principios de EstadÃ­stica y sirviÃ³ como un curso introductorio de R. Su duraciÃ³n oficial fue de 16 horas de clase. Para mayor informaciÃ³n sobre la licenciatura visita la <a href="http://www.lcg.unam.mx/" title ="PÃ¡gina Oficial de la LCG" target="_blank">pÃ¡gina principal</a> de la LCG. Por ejemplo, las secciones de <a href="http://www.lcg.unam.mx/node/3" title="Desarrollo en MÃ©xico" target="_blank">Desarrollo de las Ciencias GenÃ³micas en MÃ©xico</a> y de <a href="http://www.lcg.unam.mx/evaluacion" title="EvaluaciÃ³n Internacional" target="_blank">EvaluaciÃ³n internacional de la LCG</a> pueden ser de tu interÃ©s.
+				Este curso será impartido en la Licenciatura en Ciencias Genómicas (LCG) de la Universidad Nacional Autónoma de México (UNAM). Está dirigido a los alumnos de tercer semestre de la sexta generación. Se trata de un curso panorámico de Bioconductor y el nombre oficial de la materia es Seminario III. Su duración oficial será de 32 horas de clase. Para mayor información sobre la licenciatura visita la <a href="http://www.lcg.unam.mx/" title ="Página Oficial de la LCG" target="_blank">página principal</a> de la LCG. Por ejemplo, las secciones de <a href="http://www.lcg.unam.mx/node/3" title="Desarrollo en México" target="_blank">Desarrollo de las Ciencias Genómicas en México</a> y de <a href="http://www.lcg.unam.mx/evaluacion" title="Evaluación Internacional" target="_blank">Evaluación internacional de la LCG</a> pueden ser de tu interés.
 				</span></p>
 				<br><br>
 				
-				<h2><span>inicio</span></h2><br>
+				<h2><span>Inicio</span></h2><br>
 				<p class=p2><span>
-				EstÃ¡ pÃ¡gina es el soporte para el curso de Principios de EstadÃ­stica impartido por Julio MartÃ­nez a la 6ta generaciÃ³n de la LCG. Nosotros somos los ayudantes de dicho curso y tenemos varios objetivos. Uno de ellos es que aprendan a usar R a la par del curso de estadÃ­stica, pues la gran mayorÃ­a de la gente utiliza algÃºn paquete estadÃ­stico (Excel, MATLAB, Minitab, R, ...) en vez de hacer los cÃ¡lculos a mano. AdemÃ¡s, queremos que la pÃ¡gina sea Ãºtil como referencia para dichos alumnos y otros de diversas generaciones. Aparte, queremos aprender mÃ¡s de estadÃ­stica nosotros mismos y ayudar en la formaciÃ³n de la nueva generaciÃ³n.
-				</span></p>
-				<p class=p2><span>
-				Durante la duraciÃ³n del curso, tendremos aproximadamente 30 minutos por clase para dar una cÃ¡psula de estadÃ­stica y R, que equivale a un cuarto del curso. Vamos a preparar ejemplos sencillos, unos de Ã­ndole genÃ³mica y ejercicios para que reafirmen los conceptos que vean con Julio MartÃ­nez. Nosotros, MarÃ­a y Leonardo, aprendimos R con un curso impartido por James Bullard del laboratorio de Sandrine Dudoit y lo hemos utilizado en Ã¡reas diferentes: la diversidad genÃ³mica humana y la de bacterÃ­ofagos.
-				</span></p>
-				<p class=p2><span>
-				A lo largo del curso esperamos cubrir las presentaciones (conceptos bÃ¡sicos, ejemplos sencillos, unos complejos, ejercicios) de acuerdo al programa tentativo que pueden ver <a href="http://www.lcg.unam.mx/~lcollado/E/programa/programa.pdf">aquÃ­</a>. AdemÃ¡s, esperamos que nos pregunten y hagan comentarios a travÃ©s del <a href="http://foros.nnb.unam.mx/viewforum.php?f=88">foro</a> del curso. De esta forma, si hay preguntas repetidas solo las respondemos una vez y respetan nuestro tiempo... pues tambiÃ©n tenemos que trabajar :P Finalmente tenemos que evaluar el 25% de la materia, lo cual pensamos hacerlo a travÃ©s de ejercicios. 
-				</span></p>
-				<p class=p2><span>
-				Para los ejercicios, tendremos 2 tipos. Para el primero, que serÃ¡n la mayorÃ­a, se los damos en una clase. Para la siguiente nos entregan sus respuestas vÃ­a la pÃ¡gina de <a href="http://cursos.lcg.unam.mx/">cursos</a> y les damos las respuestas correctas vÃ­a un cÃ³digo documentado. Para estos ejercicios simplemente contaremos que los entreguen a tiempo y completos -- es muy fÃ¡cil darse cuenta si se estÃ¡n copiando. Para el segundo tipo de ejercicio, los evaluaremos a detalle y estos serÃ¡n ejercicios extensos. Haremos uno de estos cada mes. Los regulares valdrÃ¡n 10% y los otros el 15%, lo cual nos da nuestro 25% de evaluaciÃ³n.
-				</span></p>
-				<p class=p2><span>
-				En sÃ­, no nos preocupa la parte de la evaluaciÃ³n, pero queremos dejarla clara. Nuestro interÃ©s primordial es que aprendan y disfruten de la clase ^^.
+				Esta es la página oficial del curso Seminario III: R/Bioconductor. Aquí puedes encontrar las presentaciones, ejercicios, respuestas, datos y material de apoyo relacionado al curso. En el <a href="http://www.lcg.unam.mx/~lcollado/B/syllabus/esp_syllabus.pdf" title="Programa del curso" target="_blank">programa</a> viene una descripción del curso, los objetivos, el proyecto, una clase "normal" y el calendario tentativo de las clases.
 				</span></p>
 				<br><br>
+				
+				<h2><span>Comentarios de <a href="http://www.stat.berkeley.edu/~sandrine/">Sandrine Dudoit</a></span></h2><br>
+				<p class=p2><span>
+				"I have already mentioned this to Rafael, but I cannot stress enough how impressed I am by the quality of the LCG program and its outstanding students.<br>
+It is truly a pleasure to work with students that have such rare dedication, sense of initiative, and enthusiasm. In particular, I am delighted to see how proficient you have become with R and Bioconductor."<br>Los comentarios fueron publicados con su permiso. Rafael Palacios es el coordinador actual de la LCG.
+				</span></p>
+				<br><br>
+				
+				<h2><span>OCW</span></h2><br>
+				<p class=p2><span>
+				Este curso servirá como el curso piloto de la LCG para el OpenCourseWare (OCW). La idea es crear un curso de la más alta calidad digno de ser un curso OCW. Por lo tanto, vamos a grabar video de todas las clases y todo el material estará en español e inglés.
+				</span></p>
+				<br><br>
+				
+				<p class=p2><span>
+				Ya empezó el curso!!!! :)
+				</span></p>
+				<br><br>
+				
 				
 				
 				</span></p>
@@ -163,111 +177,161 @@ function change_main(esto){
 		<div id=preamble>
 			<div id="lectures" class="opciones" style="display:none;">
 				<h2><span>presentaciones</span></h2><br>
-				En esta secciÃ³n pueden encontrar una pequeÃ±a descripciÃ³n de cada presentaciÃ³n. AdemÃ¡s, pueden bajar las presentaciones en formato PDF y/o el cÃ³digo R.
+				En esta sección pueden encontrar una pequeña descripción de cada presentación. Además, pueden bajar las presentaciones en formato PDF, el código R y/o el archivo .Rnw para hacer la presentación.
 				<br><br>
 				
-				<b><a href="lectures/intro/intro.pdf"
-				title="introducciÃ³n a R"
-				target="_blank">IntroducciÃ³n a R</a>&nbsp;
-				  <a href="lectures/intro/intro.R"
-				target="_blank">[cÃ³digo]</a>&nbsp;</b><br> 
+				<b><a href="lectures/review/reviewsp.pdf"
+				title="Primera clase"
+				target="_blank">Clase 01: review</a>&nbsp;
+				  <a href="lectures/review/reviewsp.R"
+				target="_blank">[código]</a>&nbsp;
+				  <a href="lectures/review/reviewsp.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
 
-				En esta presentaciÃ³n vamos a conocer el lenguaje de programaciÃ³n R. Veremos un poco de su historia y aprenderemos lo bÃ¡sico para usar R. Algo muy importante que vamos a revisar es como obtener ayuda. AdemÃ¡s, vamos a ver como movernos en los vectores.
+				La primera clase del semestre!!! Vamos a revisar como usar R, como hacer gráficas y veremos como se usan las funciones apply. Traducido por Víctor Moreno y rápidamente revisado por Leonardo.
 				<br><br>
 				
-				<b><a href="lectures/introII/introII.pdf"
-				title="introducciÃ³n a R"
-				target="_blank">IntroducciÃ³n a R - parte 2</a>&nbsp;
-				  <a href="lectures/introII/introII.R"
-				target="_blank">[cÃ³digo]</a>&nbsp;</b><br> 
+				<b><a href="lectures/sweave/sweave.pdf"
+				title="Segunda clase"
+				target="_blank">Clase 02: bioconductor y como documentar</a>&nbsp;
+				  <a href="lectures/sweave/sweave.R"
+				target="_blank">[código]</a>&nbsp;
+				  <a href="lectures/sweave/sweave.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
 
-				En esta presentaciÃ³n vamos a continuar con la introducciÃ³n a R bÃ¡sico. Vamos a ver las estructuras de control, como leer archivos y generar matrices. AdemÃ¡s, conoceremos a los objetos tipo list y factor.
+				Vamos a conocer Bioconductor, aprender a hacer heatmaps y como hacer investigación reproducible con R a través de Sweave. Aún no disponible en español.
 				<br><br>
 				
-				<b><a href="lectures/letras/letras.pdf"
-				title="un problema curioso de conteo"
-				target="_blank">Letras y Universo</a>&nbsp;
-				  <a href="lectures/letras/letras.R"
-				target="_blank">[cÃ³digo]</a>&nbsp;</b><br> 
+				<b><a href="lectures/advplots/advplots.pdf"
+				title="Tercera clase"
+				target="_blank">Clase 03: gráficas avanzadas</a>&nbsp;
+				  <a href="lectures/advplots/advplots.R"
+				target="_blank">[código]</a>&nbsp;
+				  <a href="lectures/advplots/advplots.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
 
-				Vamos a resolver un problema curioso de letras y universo o nÃºmeros y muestreo... como lo quieran ver ;). Aprenderemos a usar la funciÃ³n plot y utilizaremos los ciclos for.
+				Vamos a aprender a hacer gráficas avanzadas con los paquetes de lattice, plotrix, ggplots2 y car. Aún no disponible en español.
 				<br><br>
 				
-				<b><a href="lectures/rnas/rnas.pdf"
-				title="imitando grÃ¡ficas de una artÃ­culo"
-				target="_blank">GrÃ¡ficas sobre RNAs</a>&nbsp;
-				  <a href="lectures/rnas/rnas.R"
-				target="_blank">[cÃ³digo]</a>&nbsp;</b><br> 
+				<b><a href="lectures/biomart/biomart.pdf"
+				title="Cuarta clase"
+				target="_blank">Clase 04: datos públicos</a>&nbsp;
+				  <a href="lectures/biomart/biomart.R"
+				target="_blank">[código]</a>&nbsp;
+				  <a href="lectures/biomart/biomart.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
 
-				Vamos a aprender a usar tres funciones grÃ¡ficas: pie, barplot y mosaicplot. Usaremos datos de una artÃ­culo sobre RNAs del cual imitaremos grÃ¡ficas. AdemÃ¡s, haremos una mejor de las que publicaron ;)
+				Aún no disponible en español.
 				<br><br>
 				
-				<b><a href="lectures/sample/sample2.pdf"
-				title="haciendo unas simulaciones"
-				target="_blank">Simulaciones sobre "letras y universo" [versiÃ³n completa]</a>&nbsp;
-				  <a href="lectures/sample/sample2.R"
-				target="_blank">[cÃ³digo]</a>&nbsp;</b><br> 
+				<b><a href="lectures/sql/sql.pdf"
+				title="Quinta clase"
+				target="_blank">Clase 05: SQL</a>&nbsp;
+				  <a href="lectures/sql/sql.R"
+				target="_blank">[código]</a>&nbsp;
+				  <a href="lectures/sql/sql.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
 
-				Aprenderemos a muestrar usando sample, lo cual nos va a servir para hacer unas simulaciones. Graficaremos con plot los resultados.
+				Aún no disponible en español.
 				<br><br>
 				
-				<b><a href="lectures/random/random.pdf"
-				title="nÃºmeros al azar"
-				target="_blank">MÃ¡s sobre nÃºmeros al azar</a>&nbsp;
-				  <a href="lectures/random/random.R"
-				target="_blank">[cÃ³digo]</a>&nbsp;</b><br> 
+				<b><a href="lectures/genome/genome.pdf"
+				title="Sexta clase"
+				target="_blank">Clase 06: gráficas genómicas</a>&nbsp;
+				  <a href="lectures/genome/genome.R"
+				target="_blank">[código]</a>&nbsp;
+				  <a href="lectures/genome/genome.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
 
-				Entenderemos un poco mÃ¡s de como sacar nÃºmeros al azar y como comparar diferentes distribuciones visualmente usando boxplot.
+				Aún no disponible en español.
 				<br><br>
 				
-				<b><a href="lectures/hist/hist.pdf"
-				title="histogramas and the like"
-				target="_blank">Histogramas y similares</a>&nbsp;
-				  <a href="lectures/hist/hist.R"
-				target="_blank">[cÃ³digo]</a>&nbsp;</b><br> 
+				<b><a href="lectures/limma/limma.pdf"
+				title="Séptima clase"
+				target="_blank">Clase 07: microarreglos</a>&nbsp;
+				  <a href="lectures/limma/limma.R"
+				target="_blank">[código]</a>&nbsp;
+				  <a href="lectures/limma/limma.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
 
-				Veremos como hacer histogramas, qqplots, qqnorms y otras grÃ¡ficas para visualizar y comparar distribuciones.
+				Aún no disponible en español.
 				<br><br>
 				
-				<b><a href="lectures/eda/eda.pdf"
-				title="Diaps. EDA de Jim"
-				target="_blank">Boxplots</a>&nbsp;
-				  <a href="lectures/eda/eda.R"
-				target="_blank">[cÃ³digo]</a>&nbsp;</b><br> 
+				<b><a href="lectures/biostrings/biostrings_session.pdf"
+				title="Octava clase"
+				target="_blank">Clase 08: biostrings</a>&nbsp;
+				  <a href="lectures/biostrings/biostrings_session.R"
+				target="_blank">[código]</a>&nbsp;
+				  <a href="lectures/biostrings/biostrings_session.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
 
-				Son unas diapositivas de James Bullard sobre los boxplots.
+				Por José Reyes. Aún no disponible en español.
 				<br><br>
 				
-				<b><a href="lectures/htest/htest.pdf"
-				title="Bases de htest"
-				target="_blank">Htest</a>&nbsp;
-				  <a href="lectures/htest/htest.R"
-				target="_blank">[cÃ³digo]</a>&nbsp;</b><br> 
+				<b><a href="lectures/areyes/clasemia.pdf"
+				title="Novena clase"
+				target="_blank">Clase 09: ShortRead</a>&nbsp;
+				  <a href="lectures/areyes/clasemia.R"
+				target="_blank">[código]</a>&nbsp;
+				  <a href="lectures/areyes/clasemia.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
 
-				Bases del uso de las pruebas de hipÃ³tesis y los objetos de clase htest.
+				Por Alejandro Reyes. Aún no disponible en español.
 				<br><br>
 				
-				<b><a href="lectures/anova/anova.pdf"
-				title="Bases de ANOVAs"
-				target="_blank">ANOVA</a>&nbsp;
-				  <a href="lectures/anova/anova.R"
-				target="_blank">[cÃ³digo]</a>&nbsp;</b><br> 
+				<b><a href="lectures/packages/packages.pdf"
+				title="Décima clase"
+				target="_blank">Clase 10: paquetes</a>&nbsp;
+				  <a href="lectures/packages/packages.R"
+				target="_blank">[código]</a>&nbsp;
+				  <a href="lectures/packages/packages.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
 
-				Intro a ANOVAs sencillas usando oneway.test y aov. Incluye 3 problemas a resolver.
+				Aún no disponible en español.
 				<br><br>
 				
-				<b><a href="lectures/anova/ANOVA.ppt"
-				title="PPT ANOVAs"
-				target="_blank">ANOVA.ppt</a>&nbsp;</b><br> 
+				<b><a href="lectures/go/go.pdf"
+				title="Onceava clase"
+				target="_blank">Clase 11: GOs</a>&nbsp;
+				  <a href="lectures/go/go.R"
+				target="_blank">[código]</a>&nbsp;
+				  <a href="lectures/go/go.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
 
-				ANOVA.ppt -- presentaciÃ³n de MarÃ­a
+				Aún no disponible en español.
 				<br><br>
 				
-				<b><a href="lectures/pareadasYnoParametricas.ppt"
-				title="PPT no parametricas"
-				target="_blank">pareadasYnoParametricas.ppt</a>&nbsp;</b><br> 
+				<b><a href="lectures/jmoreno/statsnaffy.pdf"
+				title="Doceava clase"
+				target="_blank">Clase 12: affy</a>&nbsp;
+				  <a href="lectures/jmoreno/statsnaffy.R"
+				target="_blank">[código]</a>&nbsp;
+				  <a href="lectures/jmoreno/statsnaffy.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
 
-				pareadasYnoParametricas.ppt -- presentaciÃ³n de MarÃ­a
+				Por Víctor Moreno. Aún no disponible en español.
+				<br><br>
+				
+				<b><a href="lectures/jmoreno2/microarraysmtp.pdf"
+				title="Treceava clase"
+				target="_blank">Clase 13: microarreglos II</a>&nbsp;
+				  <a href="lectures/jmoreno2/microarraysmtp.R"
+				target="_blank">[código]</a>&nbsp;
+				  <a href="lectures/jmoreno2/microarraysmtp.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
+
+				Clase de microarreglos avanzada por Víctor Moreno. Aún no disponible en español.
+				<br><br>
+				
+				<b><a href="lectures/last/last.pdf"
+				title="Catorceava clase"
+				target="_blank">Clase 14: un estudio simulado con datos de HTS</a>&nbsp;
+				  <a href="lectures/last/last.R"
+				target="_blank">[código]</a>&nbsp;
+				  <a href="lectures/last/last.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
+
+				Un estudio simulado con datos de HTS usando formatdb, blastall, Velvet y Bowtie. Aún no disponible en español.
 				<br><br>
 				
 				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
@@ -282,25 +346,49 @@ function change_main(esto){
 		<div id=preamble>
 			<div id="quizes" class="opciones" style="display:none;">
 				<h2><span>cuestionarios y ejercicios</span></h2><br>
-				AquÃ­ encontrarÃ¡n cuestionarios y ejercicios para poner a prueba sus conocimientos y habilidades de estadÃ­stica y R ^^.
+				Aquí encontrarán cuestionarios y ejercicios para poner a prueba sus conocimientos y habilidades de estadística, R y Bioconductor ^^.
 				<br><br>
 				
-				<b><a href="quizes/ej1/ej1.pdf"
-				title="Ejercicio 1" target="_blank">Ejercicio 1</a>&nbsp;<a href="quizes/ej1/ej1.R" target="_blank">[cÃ³digo]</a>&nbsp;</b>
+				<b><a href="quizes/01/exercise_01_review.pdf"
+				title="Ejercicios 01 revisión" target="_blank">Ejercicios 01</a>&nbsp;<a href="quizes/01/exercise_01_review.R" target="_blank">[código]</a>&nbsp;</b>
 				<br>
-				Las preguntas en este archivo servirÃ¡n para reafirmar conocimiento bÃ¡sicos vistos en la introducciÃ³n.
+				Ejercicios para la primera clase, la de revisión. Son ejercicios básicos, de hacer gráficas y de usar las funciones apply. Aún no disponible en español.
 				<br><br>
 				
-				<b><a href="quizes/ej2/ej2.pdf"
-				title="Ejercicio 2" target="_blank">Ejercicio 2</a>&nbsp;<a href="quizes/ej2/ej2.R" target="_blank">[cÃ³digo]</a>&nbsp;</b>
+				<b><a href="quizes/02/exercise_02_sweave.pdf"
+				title="Ejercicios 02" target="_blank">Ejercicios 02</a>&nbsp;<a href="quizes/02/exercise_02_sweave.R" target="_blank">[código]</a>&nbsp;</b>
 				<br>
-				Vamos a terminar de redondear unos conceptos de la introducciÃ³n. AdemÃ¡s, haremos un ejercicio de combinaciones y otro de probabilidades condicionales.
+				Ejercicios para la segunda clase. Son para empezar a usar Sweave y explorar el set de datos ALL. Aún no disponible en español.
 				<br><br>
 				
-				<b><a href="quizes/ji/codigo.R"
-				title="Examen de Ji cuadrada" target="_blank">Examen de Ji^2</a>&nbsp;</b>
+				<b><a href="quizes/03/exercise_03_advplots.pdf"
+				title="Ejercicios 03" target="_blank">Ejercicios 03</a>&nbsp;<a href="quizes/03/exercise_03_advplots.R" target="_blank">[código]</a>&nbsp;</b>
 				<br>
-				Son las instrucciones para el examen de Ji Cuadrada.
+				Ejercicios para la tercera clase. Aún no disponible en español.
+				<br><br>
+				
+				<b><a href="quizes/04/exercise_04_biomart.pdf"
+				title="Ejercicios 04" target="_blank">Ejercicios 04</a>&nbsp;<a href="quizes/04/exercise_04_biomart.R" target="_blank">[código]</a>&nbsp;</b>
+				<br>
+				Ejercicios para la cuarta clase. Aún no disponible en español.
+				<br><br>
+				
+				<b><a href="quizes/06/exercise_06_genome.pdf"
+				title="Ejercicios 06" target="_blank">Ejercicios 06</a>&nbsp;<a href="quizes/06/exercise_06_genome.R" target="_blank">[código]</a>&nbsp;</b>
+				<br>
+				Ejercicios para la sexta clase. Aún no disponible en español.
+				<br><br>
+				
+				<b><a href="quizes/08/biostring_exercise2.pdf"
+				title="Ejercicios 08 (v2)" target="_blank">Ejercicios 08</a>&nbsp;</b>
+				<br>
+				Ejercicios para la octava clase. Aún no disponible en español.
+				<br><br>
+				
+				<b><a href="quizes/09/homewk.pdf"
+				title="Ejercicios 09" target="_blank">Ejercicios 09</a>&nbsp;</b>
+				<br>
+				Ejercicios para la novena clase. Aún no disponible en español.
 				<br><br>
 				
 				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
@@ -313,31 +401,49 @@ function change_main(esto){
 		<div id=preamble>
 			<div id="respuestas" class="opciones" style="display:none;">
 				<h2><span>respuestas</span></h2><br>
-				AquÃ­ encontrarÃ¡n las respuestas a los ejercicios en forma de cÃ³digos documentados. Si no entienden algo, por favor hÃ¡ganlo saber a travÃ©s del <a href="http://foros.nnb.unam.mx/viewforum.php?f=88">foro</a>. Gracias!
+				Aquí encontrarán las respuestas a los ejercicios. Si no entienden algo, por favor háganlo saber a través del <a href="http://foros.nnb.unam.mx/viewforum.php?f=111">foro</a>. ¡Gracias!
 				<br><br>
 				
-				<b><a href="quizes/ej1/ej1_respuestas.R"
-				title="Ejercicio 1" target="_blank">ej1_respuestas.R</a></b>
+				<b><a href="quizes/01_answer/answer_01_review.pdf"
+				title="Ejercicios 01" target="_blank">01_answer_review.pdf</a>&nbsp;<a href="quizes/01_answer/answer_01_review.R" target="_blank">[código]</a>&nbsp;</b>
 				<br>
-				Archivo con las respuestas al Ejercicio 1.
+				Archivo con las respuestas esperadas para el primer set de ejercicios. Aún no disponible en español.
 				<br><br>
 				
-				<b><a href="quizes/ej2/ej2_respuestas.R"
-				title="Ejercicio 2" target="_blank">ej2_respuestas.R</a></b>
+				<b><a href="quizes/02_answer/answer_02_sweave.pdf"
+				title="Ejercicios 02" target="_blank">answer_02_sweave.pdf</a>&nbsp;<a href="quizes/02_answer/answer_02_sweave.R" target="_blank">[código]</a>&nbsp;</b>
 				<br>
-				Archivo con las respuestas al Ejercicio 2.
+				Archivo con las respuestas esperadas para la segunda tarea. Aún no disponible en español.
 				<br><br>
 				
-				<b><a href="quizes/ji/resultado.R"
-				title="Examen Ji" target="_blank">resultado.R</a></b>
+				<b><a href="quizes/03_answer/answer_03_advplots.pdf"
+				title="Ejercicios 03" target="_blank">answer_03_advplots.pdf</a>&nbsp;<a href="quizes/03_answer/answer_03_advplots.R" target="_blank">[código]</a>&nbsp;</b>
 				<br>
-				Archivo con la respuesta esperada al examen de Ji Cuadrada.
+				Archivo con las respuestas esperadas para la tercera tarea. Aún no disponible en español.
 				<br><br>
 				
-				<b><a href="quizes/ejercicioPoissonSAGE_respuestas.R"
-				title="SAGE" target="_blank">ejercicioPoissonSAGE_respuestas.R</a></b>
+				<b><a href="quizes/04_answer/answer_04_biomart.pdf"
+				title="Ejercicios 04 b" target="_blank">answer_04_biomart.pdf</a>&nbsp;<a href="quizes/04_answer/answer_04_biomart.R" target="_blank">[código]</a>&nbsp;</b>
 				<br>
-				Archivo con las respuestas a los problemas con SAGE.
+				Archivo con las respuestas esperadas para la cuarta tarea versión b. Aún no disponible en español.
+				<br><br>
+				
+				<b><a href="quizes/05_answer/answer_05_rmysql.pdf"
+				title="Ejercicios 05" target="_blank">answer_05_rmysql.pdf</a>&nbsp;<a href="quizes/05_answer/answer_05_rmysql.R" target="_blank">[código]</a>&nbsp;</b>
+				<br>
+				Archivo con las respuestas esperadas para la quinta tarea. Aún no disponible en español.
+				<br><br>
+				
+				<b><a href="quizes/06_answer/answer_06_genome.pdf"
+				title="Ejercicios 06" target="_blank">answer_06_genome.pdf</a>&nbsp;<a href="quizes/06_answer/answer_06_genome.R" target="_blank">[código]</a>&nbsp;</b>
+				<br>
+				Archivo con las respuestas esperadas para la sexta tarea. Aún no disponible en español.
+				<br><br>
+				
+				<b><a href="quizes/08_answer/respuesta.pdf"
+				title="Ejercicios 08" target="_blank">respuesta.pdf</a>&nbsp;</b>
+				<br>
+				Archivo con las respuestas esperadas para la octava tarea. Aún no disponible en español.
 				<br><br>
 				
 				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
@@ -351,60 +457,182 @@ function change_main(esto){
 			<div id="data" class="opciones" style="display:none;">
 			
 				<h2><span>datos</span></h2><br>
-				En esta secciÃ³n puedes encontrar los archivos de datos que vamos a usar en el curso y en diversos ejercicios. 
+				En esta sección puedes encontrar los archivos de datos que vamos a usar en el curso y en diversos ejercicios. 
 				<br><br>
 				
-				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/fagos.txt">fagos.txt</a></b></u><br>
-				Contiene los tamaÃ±o del genoma de 10 fagos.
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/data/stats.txt">stats.txt</a></b></u><br>
+				Un archivo de salida del programa Velvet que contiene información sobre contigs de unas secuencias de E. coli que simulé.
+				<br><br>	
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/data/SuppTable01_kogenome6_double_end-clone_1132_742.csv">SuppTable01_kogenome6_double_end-clone_1132_742.csv</a></b></u><br>
+				Una tabla suplementaria de http://www.ncbi.nlm.nih.gov/pubmed/19587683 en formato csv.
+				<br><br>	
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/data/SuppTable06_nsSnp_AK1.csv">SuppTable06_nsSnp_AK1.csv</a></b></u><br>
+				Una tabla suplementaria de http://www.ncbi.nlm.nih.gov/pubmed/19587683 en formato csv.
+				<br><br>	
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/data/swirl/">swirl</a></b></u><br>
+				Datos de Swirl.
+				<br><br>	
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/data/areyes/">areyes</a></b></u><br>
+				Datos para el ejercicio de ShortRead
 				<br><br>
 				
-				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/10biggestPhages.txt">10biggestPhages.txt</a></b></u><br>
-				Es una tabla con informaciÃ³n de los 10 fagos mÃ¡s grandes. Los nombres de las columnas (separadas por tabs) vienen especificados en la primera lÃ­nea.
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/data/jmoreno/">jmoreno</a></b></u><br>
+				Datos para la clase de affy de Víctor Moreno.
 				<br><br>
 				
-				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/rnas.csv">rnas.csv</a></b></u><br>
-				Es un archivo derivado de la tabla suplementaria 1 del artÃ­culo que usamos en la clase de rnas.pdf EstÃ¡ en formato csv y listo para ser usado con R.
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/data/jmoreno2/">jmoreno2</a></b></u><br>
+				Datos para la segunda clase de affy de Víctor Moreno.
 				<br><br>
 				
-				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/mirnas.csv">mirnas.csv</a></b></u><br>
-				Es un archivo derivado de la tabla suplementaria 2 del artÃ­culo que usamos en la clase de rnas.pdf EstÃ¡ en formato csv y listo para ser usado con R. Vean el original por las notas que le pusieron.
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/data/last/">un estudio simulado con datos de HTS</a></b></u><br>
+				Datos para la última clase.
+				<br><br>
+
+				</span></p>
+				
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen2con5">
+					<span></span>
+				</div>
+			</div>
+		</div>
+		
+		<div id=preamble>
+			<div id="video" class="opciones" style="display:none;">
+			
+				<h2><span>videos</span></h2><br>
+				En esta sección puedes encontrar los videos de las clases. Los hiremos subiendo con una semana de retraso debido al proceso de creación.
 				<br><br>
 				
-				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/SAGE/GSM676.txt">GSM676.txt</a></b></u><br>
-				Es una tabla con datos de SAGE para un ejercicio. Parte 1.
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/video/lcollado20090814.flv">lcollado20090814.flv</a></b></u><br>
+				Video de la primera clase :) Dura 1 hora con 14 minutos y 59 segundos. Está disponible en formato flv en un archivo de 113 MB. El video está en inglés.
 				<br><br>
 				
-				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/SAGE/GSM697.txt">GSM697.txt</a></b></u><br>
-				Es una tabla con datos de SAGE para un ejercicio. Parte 2.
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/video/lcollado20090821.mpg">lcollado20090821.mpg</a></b></u><br>
+				Video de la segunda clase. Está disponible en formato mpg en un archivo de 390 MB. El video está en inglés.
 				<br><br>
 				
-				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/ult/gorriones.txt">gorriones.txt</a></b></u><br>
-				gorriones.txt
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/video/lcollado20090821.flv">lcollado20090821.flv</a></b></u><br>
+				Video de la segunda clase. Está disponible en formato flv en un archivo de 143 MB. El video está en inglés.
 				<br><br>
 				
-				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/ult/lobos.txt">lobos.txt</a></b></u><br>
-				lobos.txt
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/video/lcollado20090828.flv">lcollado20090828.flv</a></b></u><br>
+				Video de la tercera clase. Está disponible en formato flv en un archivo de 353 MB. El video está en inglés.
 				<br><br>
 				
-				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/ult/oncillas.txt">oncillas.txt</a></b></u><br>
-				oncillas.txt
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/video/lcollado20090904.flv">lcollado20090904.flv</a></b></u><br>
+				Video de la cuarta clase. Está disponible en formato flv en un archivo de 359 MB. El video está en inglés.
 				<br><br>
 				
-				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/ult/polluelo.txt">polluelo.txt</a></b></u><br>
-				polluelo.txt
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/video/lcollado20090917.flv">lcollado20090917.flv</a></b></u><br>
+				Video de la sexta clase. Está disponible en formato flv en un archivo de 259 MB. El video está en inglés.
 				<br><br>
 				
-				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/ult/garcetaRobaTuristas.txt">garcetaRobaTuristas.txt</a></b></u><br>
-				garcetaRobaTuristas.txt
-				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/video/lcollado20090925.flv">lcollado20090925.flv</a></b></u><br>
+				Video de la séptima clase. Está disponible en formato flv en un archivo de 339 MB. El video está en inglés.
 				<br><br>
-				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/ult/gorrionesPantaneros.txt">gorrionesPantaneros.txt</a></b></u><br>
-				gorrionesPantaneros.txt
 				
+				<h2><span>descarga</span></h2><br>
+				Te recomendamos que bajes los videos usando el botón derecho en la liga y escogiendo "guardar como". Luego usa tu reproductor de videos favorito para ver los videos :)
 				<br><br>
-				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/ult/mapaches.txt">mapaches.txt</a></b></u><br>
-				mapaches.txt
 				
+				<h2><span>gracias</span></h2><br>
+				Agradecemos el apoyo del grupo UATI de la LCG para grabar, editar y crear los archivos de video finales.
+				<br><br>	
+
+				</span></p>
+				
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen2con5">
+					<span></span>
+				</div>
+			</div>
+		</div>
+				
+		<div id=preamble>
+			<div id="overview" class="opciones" style="display:none;">
+			
+				<h2><span>exposiciones de paquetes</span></h2><br>
+				En esta sección puedes encontrar las expocisiones breves sobre diversos paquetes hechas por los alumnos
+				<br><br>
+				
+				<b><a href="overviews/jbuendia/Expo.pdf">Expo.pdf</a>&nbsp;
+				  <a href="overviews/jbuendia/Expo.R"
+				target="_blank">[código]</a>&nbsp;&nbsp;</b><br>
+				Expo de Jorge Buendia sobre geneplotter.
+				<br><br>
+				
+				<b><a href="overviews/lzepeda/PACKAGE.pdf">PACKAGE.pdf</a>&nbsp;
+				  <a href="overviews/lzepeda/PACKAGE.R"
+				target="_blank">[código]</a>&nbsp;
+				  <a href="overviews/lzepeda/my-qvalue-results.txt"
+				target="_blank">txt con resultados</a>&nbsp;</b><br>
+				Expo de Lisandra Zepeda sobre qvalue.
+				<br><br>
+				
+				<b><a href="overviews/ilopez/Biostrings_1.pdf">Biostrings.pdf</a>&nbsp;
+				  <a href="overviews/ilopez/Biostrings_1.R"
+				target="_blank">[código]</a>&nbsp;&nbsp;</b><br>
+				Expo de Isaac Lopez sobre Biostrings.
+				<br><br>
+				
+				<b><a href="overviews/mruizvel/Package_1.pdf">Package.pdf</a>&nbsp;
+				  <a href="overviews/mruizvel/Package_1.R"
+				target="_blank">[código]</a>&nbsp;&nbsp;</b><br>
+				Expo de Mariana Ruiz sobre Hardy-Weinberg.
+				<br><br>
+				
+				<b><a href="overviews/avargas/GeneR-avargas_1.pdf">GeneR-avargas.pdf</a>&nbsp;
+				  <a href="overviews/avargas/GeneR-avargas_1.rnw"
+				target="_blank">[.Rnw]</a>&nbsp;&nbsp;</b><br>
+				Expo de Amhed Vargas sobre GeneR.
+				<br><br>
+				
+				<b><a href="overviews/jzepeda/GeneR_1.pdf">GeneR_1.pdf</a>&nbsp;&nbsp;</b><br>
+				Expo de Jorge Zepeda y Fabricio López sobre GeneR.
+				<br><br>
+				
+				<b><a href="overviews/mortiz/expo_-1-_1.pdf">expo_-1-_1.pdf</a>&nbsp;&nbsp;</b><br>
+				Expo de Marco Ortiz y Augusto Berrocal sobre RmirR.
+				<br><br>
+				
+				<b><a href="overviews/yperez/HTqPCR_2.pdf">HTqPCR_2.pdf</a>&nbsp;
+				  <a href="overviews/yperez/HTqPCR_2.R"
+				target="_blank">[.R]</a>&nbsp;
+				  <a href="overviews/yperez/bn_1.pdf"
+				target="_blank">[pdf estilo vignette]</a>&nbsp;&nbsp;</b><br>
+				Expo de Daniela García y Yuvia Pérez sobre HTqPCR.
+				<br><br>
+				
+				<b><a href="overviews/mnoe/patter_1.pdf">patter_1.pdf</a>&nbsp;
+				<a href="overviews/mnoe/patter_1.R"
+				target="_blank">[.R]</a>&nbsp;
+				  <a href="overviews/mnoe/patter_1.rnw"
+				target="_blank">[.Rnw]</a>&nbsp;&nbsp;</b><br>
+				Expo de Ricardo Moreno y Melvin Noé sobre Splicegear.
+				<br><br>
+				
+				<b><a href="overviews/hmedina/expoMAIN_RUN_1.pdf">expoMAIN_RUN_1.pdf</a>&nbsp;
+				  <a href="overviews/hmedina/expoMAIN_RUN_1.R"
+				target="_blank">[.R]</a>&nbsp;&nbsp;</b><br>
+				Expo de Yael Fonseca y Héctor Medina sobre COSMO.
+				<br><br>
+				
+				<b><a href="overviews/fdiaz/gladglad_1.pdf">gladglad_1.pdf</a>&nbsp;&nbsp;</b><br>
+				Expo de Francisco Diaz y José Samaniego sobre GLAD.
+				<br><br>
+				
+				<b><a href="overviews/lsoto/mayepresent_1.pdf">mayepresent_1.pdf</a>&nbsp;&nbsp;</b><br>
+				Expo de Luz Mayela sobre Rolexa.
+				<br><br>
+				
+				<h2><span>créditos</span></h2><br>
+				Estas exposiciones fueron hechas por y gracias a los estudiantes :) El crédito es suyo ^_^.
+				<br><br>	
 
 				</span></p>
 				
@@ -419,18 +647,34 @@ function change_main(esto){
 			<div id="resources" class="opciones" style="display:none;">
 			
 			<h2><span>material de apoyo</span></h2><br>
-			Esta secciÃ³n contiene links a varios archivos pdf o urls de donde nos basamos para el curso o que les pueden servir como referencia.
+			Esta sección contiene links a varios archivos pdf o urls de donde nos basamos para el curso o que les pueden servir como referencia.
 			<br><br>
 			
-			<b><a href="resources/EstadisticaDescriptiva.pdf" title="estadÃ­stica descriptiva"
-			target="_blank">EstadÃ­stica Descriptiva</a>&nbsp;</b><br><br>
 			<b><a href="resources/R-lang.pdf" title="R lang" target="_blank">R language definition</a>&nbsp;</b><br><br>
 			<b><a href="resources/R-intro.pdf" title="R intro" target="_blank">An Introduction to R</a>&nbsp;</b><br><br>
 			<b><a href="resources/R_intro_easy.pdf" title="R intro"
 			target="_blank">An Easy Introduction to R</a>&nbsp;</b><br><br>
+			<b><a href="resources/not_so_short.pdf" title="R intro"
+			target="_blank">The Not so Short Introduction to LaTeX</a>&nbsp;</b><br><br>
+			<b><a href="resources/beameruserguide.pdf" title="R intro"
+			target="_blank">Beamer Userguide</a>&nbsp;</b><br><br>
+			<b><a href="resources/Symbols in Latex.pdf" title="R intro"
+			target="_blank">Symbols in LaTeX</a>&nbsp;</b><br><br>
 
-			<h2><span>pÃ¡ginas web</span></h2><br>
-			AquÃ­ puedes ver un par de pÃ¡ginas web Ãºtiles para estadÃ­stica y R.
+			<h2><span>páginas web</span></h2><br>
+			Aquí puedes ver un par de páginas web útiles para estadística, R y/o Bioconductor.
+			<br><br>
+			<b><a href="http://bioconductor.org" 
+			      title="Bioconductor"
+			      target="_blank">
+			    Sitio oficial de Bioconductor</a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="http://bioconductor.org/workshops/" 
+			      title="Bioconductor's official workshop site"
+			      target="_blank">
+			    Cursos oficiales de Bioconductor</a>&nbsp;
+			</b>
 			<br><br>
 			<b><a href="http://www.faculty.ucr.edu/~tgirke/Documents/R_BioCond/R_Programming.html" 
 			      title="Programming in R"
@@ -465,28 +709,34 @@ function change_main(esto){
 
 
 			<h2><span>libros</span></h2><br>
-			AquÃ­ puedes encontrar varios libros sobre estadÃ­stica y R.
+			Aquí puedes encontrar varios libros sobre estadística, R y/o Bioconductor.
+			<br><br>
+			Günther Sawitzki (2009).<br><b>Computational Statistics: An Introduction to R.</b><br>
+			CRC Press
+			<br><br>
+			Robert Gentleman (2008).<br><b>R Programming for Bioinformatics.</b><br>
+			CRC Press
+			<br><br>
+			John Chambers (2008).<br><b>Software for Data Analysis: Programming with R.</b><br>
+			Springer
+			<br><br>
+			R. Gentleman, V. Carey, W. Huber, R. Irizarry, and S. Dudoit (2005).<br><b>Bioinformatics and Computational Biology Solutions Using R and Bioconductor.</b><br>
+			Springer
+			<br><br>
+			F. Hahne, W. Huber, R. Gentleman, and S. Falcon (2008).<br><b>Bioconductor Case Studies.</b><br>
+			Springer
 			<br><br>
 			John Verzani (2005).<br><b>UsingR for Introductory Statistics.</b><br>
 			Chapman & Hall-CRC.
 			<br><br>
-			Darrell Huff (1993).<br><b>How to Lie With Statistics.</b><br>
-			W.W. Norton & Company, Inc.
-			<br><br>
 			John Maindonald and John Braun (2007).<br><b>Data Analysis and Graphics Using R - an Example-Based Approach.</b><br>
 			Cambridge University Press.
-			<br><br>
-			Jerrold H. Zar (1999).<br><b>Biostatistical Analysis.</b><br>
-			Prentice-Hall.
 			<br><br>
 			Deborah Rumsey (2003).<br><b>Statistics for Dummies.</b><br>
 			Wiley Publishing, Inc.
 			<br><br>
 			Bernard Rosner (2006).<br><b>Fundamentals of Biostatistics.</b><br>
 			Thomson Books/Cole.
-			<br><br>
-			Mario F. Triola (2004).<br><b>EstadÃ­stica.</b><br>
-			Pearson.
 			<br><br>
 			</span></p>
 				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
@@ -499,14 +749,14 @@ function change_main(esto){
 	</div>
 
 	<div id=preambleMargen1>
-		<span><p>El formato de la pÃ¡gina y de las presentaciones de la clase estÃ¡n basados en uno creado por y con permiso de <a href=mailto:bullard@berkeley.edu>James Bullard</a>. Ã‰l impartiÃ³ un curso de Bioconductor y R en Enero del 2008 en la LCG, lo pueden checar <a href="http://wiki.biostat.berkeley.edu/~bullard/courses/T-mexico-08/">aquÃ­</a>.</p></span>
+		<span><p>El formato de la página y de las presentaciones de la clase están basados en uno creado por y con permiso de <a href=mailto:bullard@berkeley.edu>James Bullard</a>. Él impartió un curso de Bioconductor y R en Enero del 2008 en la LCG, lo puedes checar <a href="http://wiki.biostat.berkeley.edu/~bullard/courses/T-mexico-08/">aquí</a>.</p><p>Para más cursos y eventos sobre R/Bioconductor, checa la página de <a href="http://bioconductor.org/workshops/">cursos oficiales</a> o la página oficial de <a href="http://bioconductor.org">Bioconductor</a>.</p></span>
 	</div>
-	<a href="http://www4.clustrmaps.com/counter/maps.php?url=http://www.lcg.unam.mx/~lcollado/E/" id="clustrMapsLink"><img src="http://www4.clustrmaps.com/counter/index2.php?url=http://www.lcg.unam.mx/~lcollado/E/" style="border:0px;" alt="Locations of visitors to this page" title="Locations of visitors to this page" id="clustrMapsImg" onerror="this.onerror=null; this.src='http://www2.clustrmaps.com/images/clustrmaps-back-soon.jpg'; document.getElementById('clustrMapsLink').href='http://www2.clustrmaps.com';" />
+	<a href="http://www3.clustrmaps.com/counter/maps.php?url=http://www.lcg.unam.mx/~lcollado/B" id="clustrMapsLink"><img src="http://www3.clustrmaps.com/counter/index2.php?url=http://www.lcg.unam.mx/~lcollado/B" style="border:0px;" alt="Locations of visitors to this page" title="Locations of visitors to this page" id="clustrMapsImg" onerror="this.onerror=null; this.src='http://www2.clustrmaps.com/images/clustrmaps-back-soon.jpg'; document.getElementById('clustrMapsLink').href='http://www2.clustrmaps.com';" />
 </a>
 
 	<div id=footer_med>
 		<p><span id=dcha_med><i>Escribe tus preguntas y comentarios en el <a class=up
-		href="http://foros.nnb.unam.mx/viewforum.php?f=88"> foro.</a></i></span></p>
+		href="http://foros.nnb.unam.mx/viewforum.php?f=111"> foro.</a></i></span></p>
 	</div>
 </div>
 
