@@ -1,0 +1,83 @@
+\input{../header.tex}
+\begin{document}
+
+\SweaveOpts{prefix.string=plots/eda, height=5.7}
+
+%%% set up some options for Sweave and R %%%
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Exploratory Data Analysis with R}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Graphical Tools}
+
+\begin{frame}
+  \frametitle{Diaps. de Jim}
+  \begin{itemize}
+    \item Estas diapositivas corresponden a las 28, 29 y 30 de la presentación \BIOCfunction{EDA} de Jim.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{boxplots}
+  \begin{itemize}
+  \item \Rfunction{boxplot} : A plotting method for generating
+    Tukey's boxplots.
+  \item Excellent for comparing location shifts of $k$ distributions
+    of varying size.
+  \item Assess skewness and spread of either of one or more distributions.
+  \item Boxplots are often a much better summary of a distribution
+    than are histograms as they do not suffer from either bandwidth
+    choice or the need to have large data sets.
+  \end{itemize}
+  \begin{example}
+    What does skewness look like on a boxplot, spread? can we generate
+    some data to exemplify these things? (hint: remember all of the
+    random number generators which we talked about in the first lecture)
+  \end{example}
+<<echo=FALSE>>=
+boxplot(rexp(1000))
+boxplot(10 - rexp(1000))
+@ 
+\end{frame} 
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{Anatomy of a boxplot}
+  \begin{itemize}
+  \item A, B : lower/upper adjacent values: 
+    \begin{eqnarray}
+      r & \triangleq & | q_{75} - q_{25} | \\
+      A & = & \textrm{inf}\{x_i : x_i > q_{25} - 1.5r\} \\
+      B & = & \textrm{sup}\{x_i : x_i < q_{75} + 1.5r\}
+    \end{eqnarray}
+  \end{itemize}
+  
+<<fig=TRUE, echo=FALSE>>=
+set.seed(12)
+ab <- boxplot(c(rnorm(100), -2.75, 2.5, 3.0), main = "The anatomy of a Boxplot")
+arrows(x0 = .75, y0 = ab$out,
+       x1 = .95, y1 = ab$out)
+text(x = .65, y = ab$out, labels = rep('outlier', length(ab$out)))
+arrows(x0 = .6, ab$stats,
+       x1 = .75, ab$stats)
+text(x = .55, y = ab$stats[1,], labels = "A")
+text(x = .55, y = ab$stats[5,], labels = "B")
+# quantiles
+text(x = .55, y = ab$stats[2,], labels = expression(q[.25]))
+text(x = .55, y = ab$stats[3,], labels = expression(q[.5]))
+text(x = .55, y = ab$stats[4,], labels = expression(q[.75]))
+@ 
+\end{frame}
+
+\end{document}

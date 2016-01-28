@@ -1,0 +1,1123 @@
+\input{../header.tex}
+\usepackage{Sweave}
+\begin{document}
+
+
+
+%%% set up some options for Sweave and R %%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Datos Bi/Multivariados y Lattice}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Bivariados}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{La clase de hoy...}
+  \begin{itemize}
+  \item En la anterior clase aprendimos a explorar datos univariados. Nos fijábamos en medidas de tendencia central y de dispersión.
+  \item Con datos bi y multivariados vamos a querer encontrar relaciones entre los datos de dos o más variables.
+  \item Vamos a ver varios tipos de gráficas que sirven para explorar estos tipos de datos y el paquete \pl{lattice}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Pares de datos categóricos}
+  \begin{itemize}
+  \item Si vienen resumidos, podemos usar tablas de contingencia para comparar los datos.
+\begin{Schunk}
+\begin{Sinput}
+> x <- matrix(c(56, 2, 8, 16), nrow = 2)
+> dimnames(x) <- list(padre = c("con", 
++     "sin"), hijo = c("con", "sin"))
+> library(xtable)
+\end{Sinput}
+\end{Schunk}
+\begin{Schunk}
+\begin{Sinput}
+> table(x)
+\end{Sinput}
+\end{Schunk}
+% latex table generated in R 2.8.0 by xtable 1.5-4 package
+% Tue Nov  4 23:56:36 2008
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{rrr}
+  \hline
+ & con & sin \\
+  \hline
+con & 56.00 & 8.00 \\
+  sin & 2.00 & 16.00 \\
+   \hline
+\end{tabular}
+\caption{Uso del cinturón en California}
+\end{center}
+\end{table}  \item En este ejemplo claramente vemos la relación entre los datos bivariados.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{}
+  \begin{block}{Matrices}
+  Algunas veces tendrán los datos en vectores diferentes. Estos los pueden juntar para hacer una matriz con funciones como \BIOCfunction{rbind} y \BIOCfunction{cbind}. A diferencia de los vectores, ahora los nombres no se ponen con \BIOCfunction{names} pero con \BIOCfunction{rownames} y \BIOCfunction{colnames}. Alternativamente pueden usar \BIOCfunction{dimnames} donde incluso pueden usar una lista para pasar los nombres.
+  \end{block}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{\BIOCfunction{prop.table}}
+  \begin{itemize}
+  \item Cuando estás comparando dos variables, a veces también quieres ver la distribución marginal. Esta la puedes recuperar de varias formas siendo las principales \BIOCfunction{margin.table} y \BIOCfunction{addmargins}.
+  \item En fin, la forma más sencilla es usar \Rcode{table(x,y)} aunque también \BIOCfunction{prop.table} puede ser bastante útil:
+% latex table generated in R 2.8.0 by xtable 1.5-4 package
+% Tue Nov  4 23:56:36 2008
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{rrr}
+  \hline
+ & con & sin \\
+  \hline
+con & 0.8750 & 0.1250 \\
+  sin & 0.1111 & 0.8889 \\
+   \hline
+\end{tabular}
+\caption{Uso del cinturón en California}
+\end{center}
+\end{table}  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Marginales}
+  \begin{example}
+  Usen el set de datos \pl{grades} del paquete \Rcode{UsingR}. Queremos ver si la calificación del examen anterior\footnote{Variable \Rcode{prev}} tiene alguna relación con la calificación del examen actual\footnote{Variable \Rcode{grade}}. Encuentren las distribuciones marginales y hagan una tabla de proporciones. Hay que usar proporciones por columnas o renglones? Qué concluyen?
+  \end{example}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Con gráficas de barras}
+  \begin{itemize}
+  \item Otra forma de resumir tablas de contingencia es con gráficas de barras. Simplemente usen \BIOCfunction{barplot}
+  \begin{figure}[htbp] 
+  \begin{centering} 
+\includegraphics{plots/clase-007}
+  \end{centering} 
+  \end{figure}
+  \end{itemize}
+\end{frame}
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Gráficas Bivar.}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Comparando distribuciones gráficamente}
+  \begin{itemize}
+  \item A veces tenemos datos de dos variables pero no sabemos si son de la misma población. Por ahora podemos compararlas gráficamente usando funciones ya conocidas como:
+  \begin{itemize}
+    \item \BIOCfunction{boxplot}
+	\item \BIOCfunction{plot} junto con \BIOCfunction{density} ya que no es fácil juntar 2 histogramas.
+	\item \BIOCfunction{stripchart}
+  \end{itemize}
+  \item Aquí les muestro un par de ejemplos:  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Boxplot y density}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-009}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Stripchart}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-010}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{qqplot}
+  \begin{itemize}
+  \item Si se acuerdan, \Rcode{boxplot} usa los cuartiles para hacer la gráfica. Una gráfica más poderosa es \BIOCfunction{qqplot}.
+  \item \Rcode{qqplot} te grafica los cuantiles de una distribución contra los de otra. Si obtienes una línea recta, significa que tus distribuciones tienen formas similares.
+  \item Si no es el caso, la línea será curva de tal forma que podrás interpretar los resultados.
+  \item Puedes usar la función \BIOCfunction{qqnorm} para comparar tu distribución con una normal. \BIOCfunction{qqline} también te puede ser útil.
+  \item \myurlshort{images.google.com/images?&q=qqplot R}{Aquí} pueden más ejemplos de \Rcode{qqplot} y en \myurlshort{en.wikipedia.org/wiki/Q-Q_plot}{wiki} pueden leer más al respecto.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{qqplot: simétricas pero una es más larga}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-011}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Scatterplot con plot}
+  \begin{itemize}
+  \item Muchas veces tienes datos númericos pareados y quieres simplemente ver si tienen alguna relación.
+  \item Para esto simplemente podemos hacer un \emph{scatterplot} con la función \BIOCfunction{plot}.
+  \item A continuación les muestro tres ejemplos. Un scatterplot:
+  \begin{itemize}
+    \item de los valores de 6841 casas en 1970 que luego en el 2000 cuando fueron re-evaluadas.
+	\item entre la temperatura máxima en el día y el cambio en el \pl{Dow Jones Industrial Average} en mayo del 2003.
+	\item de la altura vs el peso de unos niños de 0 a 12 años
+  \end{itemize}
+  \item Claramente se puede ver en que datos hay una relación y en cuales no.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Scatterplot: casas}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-012}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Scatterplot: clima y bolsa}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-013}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Scatterplot: pesos de niños}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-014}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Correlaciones}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Correlaciones}
+  \begin{itemize}
+  \item Muchas veces cuando tengas dos variables van a querer saber si están correlacionadas. La correlación, tal como lo dice \myurlshort{es.wikipedia.org/wiki/Correlación}{wiki}:
+  \begin{itemize}
+    \item \emph{indica la fuerza y la dirección de una relación lineal entre dos variables aleatorias. Se considera que dos variables cuantitativas están correlacionadas cuando los valores de una de ellas varían sistemáticamente con respecto a los valores homónimos de la otra: si tenemos dos variables (A y B) existe correlación si al aumentar los valores de A lo hacen también los de B y viceversa. La correlación entre dos variables no implica, por sí misma, ninguna relación de causalidad}
+  \end{itemize}
+  \item Con \pl{R} podemos encontrar sin tanto esfuerzo el coeficiente de correlación de Pearson y la correlación de Spearman.
+  \end{itemize}
+\end{frame}  
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Correlación de Pearson}
+  \begin{itemize}
+  \item Nos dice que tan correlacionadas están dos variables\footnote{Es independiente de la escala de medidas de las variables}.
+  \item En fin, les recomiendo que chequen \myurlshort{en.wikipedia.org/wiki/Pearson's_correlation_coefficient}{esta página} por si quieren revisar más al respecto.
+  \item En \pl{R} podemos encontrar la correlación de Pearson muestral con la función \BIOCfunction{cor}
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> cor(homedata$y1970, homedata$y2000)
+\end{Sinput}
+\begin{Soutput}
+[1] 0.8962155
+\end{Soutput}
+\begin{Sinput}
+> cor(maydow$max.temp[-1], diff(maydow$DJA))
+\end{Sinput}
+\begin{Soutput}
+[1] 0.01028846
+\end{Soutput}
+\begin{Sinput}
+> cor(kid.weights$height, kid.weights$weight)
+\end{Sinput}
+\begin{Soutput}
+[1] 0.8237564
+\end{Soutput}
+\end{Schunk}
+\end{frame}  
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Correlación de Spearman}
+  \begin{itemize}
+  \item Esta nos sirve principalmente si la relación entre las dos variables no es lineal, pero crece.
+  \item Aquí no usamos los datos como tal, si no que los ordenamos de menor a mayor con la función \BIOCfunction{rank}.
+  \item En \pl{R} podemos calcular esta correlación con \Rcode{cor(rank(x), rank(y))} o simplemente usando el argumento \Rcode{method} de la función \Rcode{cor}.
+  \item Para más información, lean \myurlshort{en.wikipedia.org/wiki/Spearman's_rank_correlation_coefficient}{esto}.
+\begin{Schunk}
+\begin{Sinput}
+> cor(rank(homedata$y1970), rank(homedata$y2000))
+\end{Sinput}
+\begin{Soutput}
+[1] 0.8878185
+\end{Soutput}
+\begin{Sinput}
+> cor(maydow$max.temp[-1], diff(maydow$DJA), 
++     method = "spearman")
+\end{Sinput}
+\begin{Soutput}
+[1] 0.1315711
+\end{Soutput}
+\begin{Sinput}
+> cor(kid.weights$height, kid.weights$weight, 
++     method = "s")
+\end{Sinput}
+\begin{Soutput}
+[1] 0.8822136
+\end{Soutput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Regresiones lineales}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Recordando}
+  \begin{itemize}
+  \item Vamos a ver rapidamente las regresiones lineales. La siguiente ecuación debe serles familiar:
+  \begin{equation}
+  y_i = \beta_0 + \beta_1x_i + \epsilon_i
+  \end{equation}
+  \item Aquí, $\epsilon_i$ es error, $\beta_0$ y $\beta_1$ son los coeficientes de la regresión, $x$ es la variable independiente \& $y$ la dependiente.
+  \item En estadística, generalmente conocemos la $x$ pero necesitamos estimar el resto. Por ejemplo, por el método de mínimos cuadrados.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Funciones}
+  \begin{itemize}  
+  \item Uno de sus principales es hacer predicciones de la variable independiente.
+  \item En \pl{R} podemos hacer regresiones simples con \BIOCfunction{lm (formula.modelo)} donde usamos la notación \Rcode{y TILDE x} para la fórmula. Por ejemplo:
+\begin{Schunk}
+\begin{Sinput}
+> res <- lm(homedata$y2000 ~ homedata$y1970)
+> res
+\end{Sinput}
+\begin{Soutput}
+Call:
+lm(formula = homedata$y2000 ~ homedata$y1970)
+
+Coefficients:
+   (Intercept)  homedata$y1970  
+    -1.040e+05       5.258e+00  
+\end{Soutput}
+\end{Schunk}
+  \item Sin embargo, es mejor almacenar el resultado en una variable. Así luego podemos graficarla u obtener más información de esta regresión con funciones como:
+  \begin{itemize}
+    \item \BIOCfunction{coef} nos da los coeficientes
+	\item \BIOCfunction{residuals} nos regresa los residuos
+	\item \BIOCfunction{predict} nos predice un valor dado una $x$
+  \end{itemize}
+  \item Les aviso que no usen regresiones lineales para predecir valores en un rango no válido para la variable independiente.
+  \item A veces pueden transformar sus datos para que el modelo lineal sea más apropiado.
+  \item Chequen a las funciones \BIOCfunction{lqs} y \BIOCfunction{rlm} ya que estas son más resistentes a \emph{outliers}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graficando}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-018}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graficando: con una transformación}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-019}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Multivariados}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Multivariados}
+  \begin{itemize}
+  \item Visualizar y comparar datos multivariados no es sencillo. Lo que se puede hacer es mantener constantes a algunas de las variables mientras observamos al resto.
+  \item En general en \pl{R}, se pueden usar las mismas herramientas para datos uni y bivariados con los multivariados. Aunque hay algunas diferencias.
+  \item Vamos a entrar un poco en el paquete de \RClass{lattice} ya que este nos permite explorar datos multivariados más a fondo.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Datos categóricos}
+  \begin{itemize}
+  \item Podemos simplemente ver los datos como una matriz. Sin embargo, se vuelve difícil encontrar tendencias en los datos. Por ejemplo, chequen el set de datos \Rcode{student.expenses}
+  \item La otra opción\footnote{Más recomendable} es hacer tablas de contingencia con 3 variables con \BIOCfunction{table}. Por cada valor de la variable 1 vamos a ver una tabla de contingencia para las variables 2 y 3.
+  \item De igual forma, podemos obtener tablas de 2 variables cuando $n$ están fijas.
+\begin{Schunk}
+\begin{Sinput}
+> attach(student.expenses)
+> table(cell.phone, car, cable.modem)
+\end{Sinput}
+\begin{Soutput}
+, , cable.modem = N
+
+          car
+cell.phone N Y
+         N 1 2
+         Y 2 3
+
+, , cable.modem = Y
+
+          car
+cell.phone N Y
+         N 0 0
+         Y 1 1
+\end{Soutput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{\BIOCfunction{ftable}}
+  \begin{itemize}
+  \item Para resumir las tablas anteriores podemos usar \BIOCfunction{ftable}. Aquí se comprimen las tablas y nos ahorran espacio :)
+\begin{Schunk}
+\begin{Sinput}
+> ftable(table(cell.phone, car, cable.modem), 
++     col.vars = c("cable.modem", 
++         "car"))
+\end{Sinput}
+\begin{Soutput}
+           cable.modem N   Y  
+           car         N Y N Y
+cell.phone                    
+N                      1 2 0 0
+Y                      2 3 1 1
+\end{Soutput}
+\begin{Sinput}
+> detach(student.expenses)
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Gráficas Multivar.}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Boxplot}
+  \begin{itemize}
+  \item La función \BIOCfunction{boxplot} te puede hacer este tipo de gráficas para varias variables de un solo golpe.
+  \item Sin embargo, tengan cuidado ya que es fácil cometer errores en estos casos:
+  \begin{itemize}
+    \item puedes repetir datos sin darte cuenta.
+	\item hay que añadir los nombres manualmente.
+	\item puedes olvidar de alguna variable que agrupe a tus datos en diferentes categorías.
+  \end{itemize}	
+  \item Vamos a usar el set de datos \Rcode{ewr} que tiene info sobre los tiempos de espera para llegar a la terminal o para despegar en un aeropuerto.
+\begin{Schunk}
+\begin{Sinput}
+> attach(ewr)
+> boxplot(AA, CO, DL, HP, NW, TW, 
++     US, US)
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Encuentren los errores}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-023}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Versión correcta}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-024}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Scatterplots}
+  \begin{itemize}
+  \item Para investigar relaciones entre variables, ya habíamos visto a los \emph{scatterplots}. Puedes graficar todos los datos en una sola imagen diferenciando a los puntos con colores y/o formas.
+  \item Alternativamente, puedes hacer gráficas para cada par de variables como las que ya habíamos visto antes. Les muestro un ejemplo y luego vamos a jugar con los datos de \Rcode{Iris}.
+  \end{itemize}
+  \begin{block}{Funciones para gráficas}
+  Rápidamente les menciono varias funciones de bajo y alto nivel. Las de alto nivel hacen una gráfica nueva mientras que las de bajo nivel escriben encima de alguna gráfica existente. \BIOCfunction{plot}, \BIOCfunction{points}, \BIOCfunction{lines}, \BIOCfunction{abline}, \BIOCfunction{curve},  \BIOCfunction{rug}, \BIOCfunction{arrows}, \BIOCfunction{text}, \BIOCfunction{title} y \BIOCfunction{legend}.
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Un scatterplot sobre bebés}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-026}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Iris}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Conociendo los datos}
+  \begin{itemize}
+  \item Para empezar, hay que conocer nuestros datos \pl{\^}\pl{\^}. Utilizen los siguientes comandos para darse una idea:
+\begin{Schunk}
+\begin{Sinput}
+> class(iris)
+> head(iris)
+> tail(iris)
+> colnames(iris)
+> iris$Petal.Length
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Un scatterplot sencillo}
+  \begin{itemize}
+  \item Hagan un scatterplot sencillo con dos variables:
+\begin{Schunk}
+\begin{Sinput}
+> plot(iris$Petal.Length, iris$Petal.Width, 
++     main = "Datos Iris de Edgar Anderson")
+\end{Sinput}
+\end{Schunk}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-029}
+  \end{centering} 
+  \end{figure}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Un truco :D}
+  \begin{itemize}
+  \item Ahora chequen el siguiente truco :)
+\begin{Schunk}
+\begin{Sinput}
+> unclass(iris$Species)[c(1:3, 75:77, 
++     112:114)]
+\end{Sinput}
+\begin{Soutput}
+[1] 1 1 1 2 2 2 3 3 3
+\end{Soutput}
+\end{Schunk}
+  \item \BIOCfunction{unclass} nos sirve para romper datos con tipo \Rcode{factor} en números del 1 hasta $n$ categorías.
+  \item Con este truco ahora podemos hacer una gráfica con símbolos y/o colores diferentes por especie.  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Con colores}
+\begin{Schunk}
+\begin{Sinput}
+> plot(iris$Petal.Length, iris$Petal.Width, 
++     pch = 21, bg = c("red", "green3", 
++         "blue")[unclass(iris$Species)], 
++     main = "Datos Iris de Edgar Anderson")
+\end{Sinput}
+\end{Schunk}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-032}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{Pares}
+  \begin{itemize}
+  \item Ahora queremos ver todos los scatterplots. Usamos la función \BIOCfunction{pairs} así:
+\begin{Schunk}
+\begin{Sinput}
+> pairs(iris[1:4], pch = 21, bg = c("red", 
++     "green3", "blue")[unclass(iris$Species)], 
++     main = "Datos Iris de Edgar Anderson")
+\end{Sinput}
+\end{Schunk}
+  \item Esta función nos va a generar los scatterplots por pares de variables. Si fuera el caso de datos tridimensionales, podríamos usar está función para visualizarlos.
+  \item En nuestro ejemplo, casi cualquier par de variables nos podría servir para separar las especies.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{Pares}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-034}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Con más info}
+  \begin{itemize}
+  \item A veces van a querer tener otro tipo de información en vez de todos los pares. Si se fijaron, cada gráfica sale dos veces.
+  \item Vamos a hacer una función para obtener los coeficientes de correlación.
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> panel.pearson <- function(x, y, 
++     ...) {
++     horizontal <- (par("usr")[1] + 
++         par("usr")[2])/2
++     vertical <- (par("usr")[3] + 
++         par("usr")[4])/2
++     text(horizontal, vertical, 
++         format(abs(cor(x, y)), 
++             digits = 2))
++ }
+\end{Sinput}
+\end{Schunk}
+\begin{Schunk}
+\begin{Sinput}
+> pairs(iris[1:4], pch = 21, bg = c("red", 
++     "green3", "blue")[unclass(iris$Species)], 
++     upper.panel = panel.pearson, 
++     main = "Datos Iris de Edgar Anderson")
+\end{Sinput}
+\end{Schunk}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{Con correlaciones de Pearson}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-037}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Una última}
+  \begin{itemize}
+  \item Ahora sin los paneles inferiores :)
+\begin{Schunk}
+\begin{Sinput}
+> pairs(iris[1:4], pch = 21, bg = c("red", 
++     "green3", "blue")[unclass(iris$Species)], 
++     lower.panel = NULL, labels = c("SL", 
++         "SW", "PL", "PW"), font.labels = 2, 
++     cex.labels = 4.5, main = "Datos Iris de Anderson -- 3 especies")
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{Sin inferiores}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-039}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Un paréntesis}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Más funciones: usen \pl{?}}
+  \begin{block}{Data frames}
+  Rápidamente les menciono unas funciones que luego les pueden ayudar a manipular \Rcode{data frames}:
+  \begin{itemize}
+    \item \BIOCfunction{subset} que es equivalente a usar \Rcode{[...]}
+	\item \BIOCfunction{split} sirve para separar una variable por los niveles de un \Rcode{factor},
+	\item \BIOCfunction{stack} es inverso a \Rcode{split},
+	\item \BIOCfunction{xtabs} nos genera tablas de contingencia para un \Rcode{data frame}
+  \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Algo del manual}  
+  \begin{block}{Fórmulas}
+  Sobre la notación de fórmula, les recomiendo que chequen la sección \emph{11.1 Defining statistical models; formulae} del manual de introducción a \pl{R} disponible en esta \myurlshort{www.r-project.org/}{esta página}. Tengan cuidado al usar esta notación porque símbolos como +, -, etc hacen otras cosas.
+  \end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Lattice}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Intro al paquete}
+  \begin{itemize}
+  \item \RClass{lattice} es un paquete muy importante para hacer gráficas con datos multivariados que no podrías hacer con \pl{R} básico.
+  \item Utilizen los siguientes comandos para ver una pequeña descripción y varias funciones que ofrece el paquete:
+\begin{Schunk}
+\begin{Sinput}
+> library(lattice)
+> `?`(Lattice)
+\end{Sinput}
+\end{Schunk}
+  \item \Rcode{lattice} usa la sintaxis de fórmula para sus funciones generalmente así: \pl{ var.dep TILDE var.indep | condición} aunque a veces no hay una \pl{var.dep}
+  \item \alert{Con eso ya terminé y son expertos en \Rcode{lattice}!  :P}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Set de datos}
+  \begin{itemize}
+  \item Gran parte de lo que veremos lo tomé del material de apoyo sobre \Rcode{lattice} que les puse en la página.
+  \item Primero vamos a usar los datos de \Rcode{Chem97} del paquete \Rcode{mlmRev}. Usaremos las variables:
+  \begin{itemize}
+    \item \pl{score}: califs de un examen con valores (0, 2, 4, 6, 8)
+	\item \pl{gcsescore}: promedio de los exámenes GCSE. Es contínua y puede servir para predecir valores de \pl{score}
+	\item \pl{gender}: bueno... sus valores son M ó F
+  \end{itemize}
+  \item Cargen los datos:
+\begin{Schunk}
+\begin{Sinput}
+> data(Chem97, package = "mlmRev")
+\end{Sinput}
+\end{Schunk}
+\begin{Schunk}
+\begin{Sinput}
+> head(Chem97)
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Histogramas}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Histogramas poderosos}
+  \begin{itemize}
+  \item Con \pl{lattice} podemos hacer los histogramas comunes.
+  \item Sin embargo, lo poderoso es hacer un histograma con la función \Rcode{histogram} de una variable para cada intervalo dado de otra variable.
+  \item En la primera gráfica van a ver una distribución simétrica unimodal. Con la segunda podemos aprender más.
+\begin{Schunk}
+\begin{Sinput}
+> histogram(~gcsescore, data = Chem97)
+> histogram(~gcsescore | factor(score), 
++     data = Chem97)
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{Histograma simple}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice1.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{Histograma poderoso}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice2.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Densidades}
+  \begin{itemize}
+  \item Ahora queremos separar a los hombres y mujeres. Como no es fácil sobreponer histogramas, podemos usar densidades.
+  \item Esto lo podemos hacer con la función \BIOCfunction{densityplot}:
+\begin{Schunk}
+\begin{Sinput}
+> densityplot(~gcsescore | factor(score), 
++     Chem97, groups = gender, plot.points = FALSE, 
++     auto.key = TRUE)
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{Densidades}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice2b.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Comp. Distr.}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{qqmath}
+  \begin{itemize}
+  \item Ahora podemos hacer lo equivalente a muchas \Rcode{qqnorm} con la función \BIOCfunction{qqmath}.
+\begin{Schunk}
+\begin{Sinput}
+> qqmath(~gcsescore | factor(score), 
++     Chem97, groups = gender, f.value = ppoints(100), 
++     auto.key = TRUE, type = c("p", 
++         "g"), aspect = "xy")
+\end{Sinput}
+\end{Schunk}
+  \item De aquí podemos ver que las distribuciones están sesgadas a la izquierda. Además, el cambio en la pendiente sugiere que la varianza cambia.
+  \item Si quieren hacer las \Rcode{qqplots} pareadas usen simplemente la función \BIOCfunction{qq}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{qqmath}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice3.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{bwplot}
+  \begin{itemize}
+  \item Ahora hagamos boxplots condicionales con la función \BIOCfunction{bwplot}
+\begin{Schunk}
+\begin{Sinput}
+> bwplot(factor(score) ~ gcsescore | 
++     gender, Chem97)
+\end{Sinput}
+\end{Schunk}
+  \item En esta gráfica podemos notar que la varianza decrece mientras aumenta el \pl{score}.
+  \item Además, podemos notar los sesgos hacia la izquierda.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{bwplot}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice4.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{bwplot cambiada}
+  \begin{itemize}
+  \item Con el argumento \Rcode{layout} podemos cambiar cuantos paneles tenemos. 
+\begin{Schunk}
+\begin{Sinput}
+> bwplot(gcsescore ~ gender | factor(score), 
++     Chem97, layout = c(6, 1))
+\end{Sinput}
+\end{Schunk}
+  \item Junto con el cambio de orden en las variables, podemos comparar directamente los pares de M y F.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{bwplot 2}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice5.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Visualizar Datos}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{stripplot}
+  \begin{itemize}
+  \item A veces, simplemente ver todos los datos nos puede dar información. Claro, preferencialmente cuando el set de datos no es monstruoso.
+  \item Usemos la función \BIOCfunction{stripplot} para visuar unos datos sobre temblores.
+\begin{Schunk}
+\begin{Sinput}
+> stripplot(depth ~ factor(mag), 
++     data = quakes, jitter.data = TRUE, 
++     alpha = 0.6, main = "Profundidad de los epicentros por magnitud", 
++     xlab = "Magnitud (Richter)", 
++     ylab = "Profundidad (km)")
+\end{Sinput}
+\end{Schunk}
+  \item Si se fijan, los puntos en la gráfica son parcialmente transparentes por si se sobrelapan mucho.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{stripplot}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice6.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{barchart}
+  \begin{itemize}
+  \item Muchas veces van a tener datos en tablas. Estos los podemos comparar con las funciones \BIOCfunction{barchart} y \BIOCfunction{dotplot} de forma similar a lo que veníamos haciendo.
+  \item Al usar \Rcode{barchart} hay que tener cuidado de que el área de las barras sea proporcional al valor que representa.
+\begin{Schunk}
+\begin{Sinput}
+> VADeathsDF <- as.data.frame.table(VADeaths, 
++     responseName = "Rate")
+\end{Sinput}
+\end{Schunk}
+\begin{Schunk}
+\begin{Sinput}
+> barchart(Var1 ~ Rate | Var2, VADeathsDF, 
++     layout = c(4, 1))
+> barchart(Var1 ~ Rate | Var2, VADeathsDF, 
++     layout = c(4, 1), origin = 0)
+\end{Sinput}
+\end{Schunk}
+  \item \pl{VADeaths} tiene datos sobre muertes en Virginia en 1941.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{barchart incorrecto}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice7.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{barchart correcto}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice8.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{dotplot}
+  \begin{itemize}
+  \item Las gráficas de barras luego te pueden distraer de la comparación que querías hacer. Osea, ver los valores máximos. Para eso usamos \BIOCfunction{dotplot}
+\begin{Schunk}
+\begin{Sinput}
+> dotplot(Var1 ~ Rate | Var2, VADeathsDF, 
++     layout = c(4, 1))
+> dotplot(Var1 ~ Rate, data = VADeathsDF, 
++     groups = Var2, type = "o", 
++     auto.key = list(space = "right", 
++         points = TRUE, lines = TRUE))
+\end{Sinput}
+\end{Schunk}
+  \item La primera es como la homóloga a las gráficas de barras que hicimos. La segunda nos muestra con mayor claridad relaciones en los datos: fíjense en las curvas de hombres vs las de mujeres.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{dotplot}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice9.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{dotplot clara}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice10.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Usando dfs}
+  \begin{itemize}
+  \item Las funciones de alto nivel de \Rcode{lattice} son genéricas con métodos que hacen el trabajo detrás.
+  \item Hemos usado las funciones con la sintaxis de fórmulas, pero también se pueden usar \pl{data frames} en algunas. Ese es el caso de \Rcode{barchart} y \Rcode{dotplot}
+  \item Si quieren checar los métodos para alguna función utilicen \BIOCfunction{methods}. Por ejemplo:
+\begin{Schunk}
+\begin{Sinput}
+> methods(generic.function = "dotplot")
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Scatterplots}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{xyplot, splom, cloud}
+  \begin{itemize}
+  \item Para hacer scatterplots, podemos usar la función \BIOCfunction{xyplot}.
+  \item Si queremos hacer varias de estas, podemos usar funciones como \BIOCfunction{splom} y \BIOCfunction{cloud}.
+  \item Les muestro unos ejemplos con los datos de Iris :).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{splom}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice11.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{splom 2}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice12.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{cloud}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice13.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{xyplot}
+  \begin{itemize}
+  \item Vamos a ver la relación entre la máxima aceleración horizontal y la distancia de una estación de medición del epicentro de varios terremotos.
+  \item La primera gráfica muestra unos datos sesgados hacia la derecha.
+  \item En la segunda, mejoramos la gráfica al usar ejes logarítmicos. Además, le añadimos una \emph{grid} para poder leer mejor los datos.
+\begin{Schunk}
+\begin{Sinput}
+> data(Earthquake, package = "nlme")
+> xyplot(accel ~ distance, data = Earthquake)
+> xyplot(accel ~ distance, data = Earthquake, 
++     scales = list(log = TRUE), 
++     type = c("p", "g", "smooth"), 
++     xlab = "Distancia al Epicentro (km)", 
++     ylab = "M\341xima Aceleraci\363n Horizontal (g)")
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{Scatterplot sencillo}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice14.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{Con ejes log}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice15.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{3D en 2D}
+  \begin{itemize}
+  \item Con \Rcode{xyplot} y junto con los llamados \emph{shingles}\footnote{Son grupos similares a los que puedes hacer con \Rcode{cut} junto con \Rcode{factor} pero se sobrelapan en cierto porcentaje} podemos visualizar unos datos 3D en 2D.
+\begin{Schunk}
+\begin{Sinput}
+> Depth <- equal.count(quakes$depth, 
++     number = 8, overlap = 0.1)
+> xyplot(lat ~ long | Depth, data = quakes)
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{shingles}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice16.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{cloud}
+  \begin{itemize}
+  \item Claro, que también lo podemos hacer en 3D con la función \BIOCfunction{cloud}. Por ejemplo:
+\begin{Schunk}
+\begin{Sinput}
+> cloud(depth ~ lat * long, data = quakes, 
++     zlim = rev(range(quakes$depth)), 
++     screen = list(z = 105, x = -70), 
++     panel.aspect = 0.75, xlab = "Longitud", 
++     ylab = "Latitud", zlab = "Profundidad")
+\end{Sinput}
+\end{Schunk}
+  \item El problema es que no podemos interactuar con nuestra gráfica 3D; por ejemplo, para girarla. Hay que hacerlo manualmente con el argumento \Rcode{screen}.  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{3D}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice17.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{3D girado}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice18.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Terminando}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{lattice vs R}
+  \begin{itemize}
+  \item Una diferencia muy importante entre las gráficas de \pl{R} y las de \pl{lattice} es que las segundas son objetos de clase "Trellis".
+  \item Esto quiere decir que los podemos almacenar en una variable para luego imprimirlos con \Rcode{plot} o \Rcode{print}.
+  \item Para un ejemplo, fíjense en el código\footnote{A través de la página del curso, porque está invisible en la presentación} con el que hice las gráficas de Iris en \Rcode{lattice}.
+  \item En fin, hay \alert{muchas} más funciones de \Rcode{lattice} que les pueden ser interesantes. Si quieren chequen los ejemplos y el archivo \pl{latticeIntro.pdf} ;)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{FIN}
+  \begin{itemize}
+  \item Sé que fue un bombardeo de info :P
+  \item En fin, hagan el \myurlshort{www.lcg.unam.mx/~lcollado/R/}{ejercicio 3} en la página del curso.
+  \item \alert{Suerte!}
+  \end{itemize}
+\end{frame}  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

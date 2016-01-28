@@ -1,0 +1,436 @@
+\input{../header_1_en.tex}
+
+\SweaveOpts{prefix.string=plots/fig,eps=FALSE,echo=FALSE}
+
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@ 
+
+\begin{document}
+
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\section*{Class outline}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Building Packages}
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Intro}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{About}
+  \begin{itemize}
+  \item Package structure
+  \item Helpful functions for creating packages
+  \item Documenting your package
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{An example}
+  \begin{itemize}
+  \item As a quick way to learn how to create a package is to look at one, please download the \BIOCfunction{SpeCond} source tarball.
+  \item It's a new package developped by Florence Cavalli from \myurlshort{www.ebi.ac.uk/Information/Staff/person_maint.php?person_id=840}{EBI}. She kindly provided us with a copy before its official release :)
+  \item As such, it's only available for download from the private site (cursos.lcg).
+  \item After downloading it, \pl{gunzip} it and use \pl{tar -xvf}\footnote{In Unix only, in Windows use WinRar or another program.}.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Motivation}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{What a pain\ldots, why bother?}
+  \begin{itemize}
+  \item Documenting any script, for anyone, is generally a \alert{pain}.
+  \item However, your scripts, data, etc. need to meet some requirements so others, or yourself later on, can understand them without much trouble.
+  \item Packages are the most reliable, standard, \alert{trustworthy} and flexible way of sharing R code with others.
+  \item If you meet the requirements, you'll have access to a large audience :)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{On this course}
+  \begin{itemize}
+  \item We want you to learn how to build packages, so you can easily create them later in your career and share the data associated with each of your publications. Its the best way to guarantee and fulfill the \alert{reproducibility} requirement in science.
+  \item Contribute to the Bioconductor experimental data package repository. It's been under-exploited and its a great way to introduce yourselves on the real world of research. Your package has to be \alert{innovative} in some aspect(s) :)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{You'll ace it :)}
+  \begin{itemize}
+  \item Don't worry, with practice it'll be easy :) 
+  \item That's why you've been handing homeworks using \pl{Sweave} and \LaTeX
+  \item \emph{Hopefully} easier or more straight forward than documenting Perl scripts with Pod :P
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Installing a package}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Quick review}
+  \begin{itemize}
+  \item So far we've been using functions such as \BIOCfunction{install.package}:
+<<eval=FALSE, echo=TRUE>>=
+install.packages("lattice")
+@  
+  \item Or with the \BIOCfunction{biocLite} script:
+<<eval=FALSE, echo=TRUE>>=
+source("http://bioconductor.org/biocLite.R")
+biocLite("ShortRead")
+@    
+  \item Those commands are the ones we use for \pl{CRAN} and Bioconductor repositories. For the third mayor repository, OmegaHat we would have to use: \scriptsize
+<<eval=FALSE, echo=TRUE>>=
+install.packages("mypackage", rep="http://www.omegahat.org/R")
+@  
+  \item \normalsize How would you choose the name for your \alert{NEW} package?
+  \item Just as a note, you might want to check the other \pl{packages} functions using \BIOCfunction{apropos}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{R in batch mode}
+  \begin{itemize}
+  \item For installing a package that is NOT hosted in a repository, we need to use some \pl{Unix}-like commands.\footnote{If you have correctly set your environmental variables (specially PATH) in Windows, it should be fine. To avoid problems use the Solaris servers.}
+  \item We'll actually be running R in batch mode. The \BIOCfunction{basic} syntaxis is: \\ \pl{R CMD \emph{operation}}
+  \item For installing a package\footnote{In your current working directory.} you need to use: \\ \pl{R CMD INSTALL \emph{package(s)}}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Specifying the library}
+  \begin{itemize}
+  \item A library is the folder where your packages get installed.
+  \item As you've noticed by now, you can install packages in different libraries.
+  \item In \pl{Montealban}, there is an admin controlled library and probably everyone of you has his own extra R library.
+  \item You can use the shell option \pl{-l} to specify the library: \\ \pl{R CMD INSTALL -l LibDirectory \emph{package(s)}}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Building a package}
+  \begin{itemize}
+  \item The previous commands work if you have a directory inside your current working directory for every package you are going to install.
+  \item However, if someone sends you a package, its normally in a tarball.
+  \item Once you extract the files, you can install the package. You should now be able to install the \BIOCfunction{SpeCond} package!\footnote{Florence built it on a Mac, so I'm not sure that it works in Windows. It should work in Solaris.}
+  \item These tarballs are not built with \pl{tar}, but with the \alert{build} command: \\ \pl{R CMD build \emph{package(s)}}
+  \item The \pl{build} command uses information from specific files inside the R package folder, so its important to meet all the requirements :)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Check and remove}
+  \begin{itemize}
+  \item Once you've built your package, you need to \alert{check} it: \\ \pl{R CMD check \emph{package(s)}}
+  \item From what I've read, this command is a real pain. It will check lots of details and prompt you of everything you missed. Nevertheless, its necessary.
+  \item Specially when developing a package, you'll want to \alert{uninstall} a package. To do so, use: \\ \pl{R CMD REMOVE \emph{package(s)}}
+  \item There are some functions to avoid installing and uninstalling packages too frequently, but you'll need to do so in several situations.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Package structure}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Overall structure}
+  Before building a package, you need a folder \pl{MyPkg}\footnote{Name it to your liking, but it has to be new!} with the following structure:
+  \begin{itemize}
+  \item \pl{R} folder
+  \item \pl{data} folder
+  \item \pl{exec} folder
+  \item \pl{inst} folder
+  \item \pl{man} folder
+  \item \pl{po} folder
+  \item \pl{src} folder
+  \item \pl{tests} folder
+  \item A \pl{DESCRIPTION} file
+  \item A \pl{NAMESPACE} file
+  \end{itemize}
+  Most are \alert{optional}, though Bioconductor has more strict requirements than CRAN. Specially on the documentation side!
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{R folder}
+  \begin{itemize}
+  \item This folder contains at least one file: a \pl{.R} file with all the R source code.
+  \item The code is normally made up of functions, but it can also include some objects.
+  \item If you are defining \pl{classes}, \pl{methods}, etc. include a \pl{.R} file for each of these.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{data folder}
+  \begin{itemize}
+  \item Here you'll find loadable versions of the data objects; generally data frames. 
+  \item The normal extensions for these files are \pl{.rda} and \pl{.Rdata}. Both are fine though I personally prefer the later one. You can also create this kind of file using \BIOCfunction{save}.
+  \item In the case of your projects, we'll \alert{mainly} use this folder :)
+  \item You might prefer to use \pl{csv} files instead of \pl{.Rdata} files. In this case, the name of the file specifies the name of the object, so be careful!
+  \item A third option is to include some \pl{.R} files that only contain assignments that do not use external objects. For example:
+<<eval=FALSE, echo=TRUE>>=
+assistants <- c("Alejandro", "Victor", "Jose")
+@  
+  \item Is this the only place where you can include such assignments?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{exec folder}
+  \begin{itemize}
+  \item Here you include only executable scripts.
+  \item Is there an \pl{exec} folder on the \pl{SpeCond} package?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{inst folder}
+  \begin{itemize}
+  \item All the contents in this folder will be copied, recursively, to the directory where the package gets installed.
+  \item Normally, it includes a subfolder named \pl{doc}. A must in Bioconductor packages.
+  \item Any idea why?
+  \end{itemize}
+\end{frame}
+  
+\begin{frame}[allowframebreaks]
+  \frametitle{inst folder}
+  \begin{itemize}  
+  \item That's where you store the vignette(s)!
+  \item Vignettes have to be on \pl{.Rnw} format. You are experts on it by now, but it always helps to check another vignette.
+  \item What difference do you note on the code chunks between SpeCond's vignette and this class \pl{.Rnw} file?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{man folder}
+  \begin{itemize}
+  \item In your opinion, is this an optional folder?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{man folder}
+  \begin{itemize}
+  \item The R, the \pl{inst/doc} and the man folder are the mandatory folders for any given Bioconductor package.
+  \item Here you keep the \pl{.Rd} help files.
+  \item If you have plataform specific code (either \pl{unix} or \pl{windows}), you need to create such sub-folders both on the \pl{man} and \pl{R} folders.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{po folder}
+  \begin{itemize}
+  \item This is probably \alert{THE} most optional folder of all. 
+  \item It contains translation files.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{src folder}
+  \begin{itemize}
+  \item If you are linking R to a compiled library, mostly from C, you'll store it inside this folder.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{tests folder}
+  \begin{itemize}
+  \item Here you save some \pl{.R} files with test code.
+  \item Its useful to keep here code that at some point caused a bug in your package. This is called \BIOCfunction{regression testing}.
+  \item The \pl{R CMD check} command will still run all the examples from the manual as tests. Nevertheless, you might want to include some advanced tests here.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{\pl{DESCRIPTION} file}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Basic}
+  \begin{itemize}
+  \item This file contains the general info for your package.
+  \item The syntax is rather special. A single space can break it :(
+  \item You need be extra careful with this file. It is used several times later on!
+  \item For Bioconductor packages, you need to include the \alert{biocViews} line!
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Basic info}
+  \begin{itemize}
+  \item \pl{Package} \\ The official package name. Make sure its unique!
+  \item \pl{Type} \\ Package
+  \item \pl{Title} \\ A one line (\alert{short}).
+  \item \pl{Version} \\ For Bioconductor, you need to use an \pl{x.y.z} style. For example, \pl{0.99.1} Note that x will be 0 until your package is made public. Please check \myurlshort{wiki.fhcrc.org/bioc/Version_Numbering_Standards}{this for more info}.
+  \item \pl{Date} \\ In YYYY-MM-DD format.
+  \item \pl{Author} \\ The list of people who wrote this package.
+  \item \pl{Maintainer} \\ The one in charge of keeping the package functional. Its a one line format with the name followed by the \alert{valid} email. There can't be two maintainers per package. Bioconductor package maintainers have these responsibilities:
+  \begin{enumerate}
+  \item \emph{Subscribe to the bioc-devel mailing list.}
+  \item \emph{Respond to bug reports and questions from users regarding your package.}
+  \item \emph{Maintain your package and its capabilities as R and other Bioconductor packages evolve. Typically this involves some work every six months, when a new release is being prepared. We can assist by answering questions, but it is your responsibility to look for and make any needed changes. If you are unwilling or unable to do this your package will be removed from the upcoming release. Users will still be able to find the older versions.}
+  \end{enumerate}
+  \item \pl{Description} \\ Another \emph{one} line explaination of your package. It can actually go over one line when you print it, but type it only in one so the \pl{DESCRIPTION} file won't break.
+  \item \pl{License} \\ This specifies how you'll share your work. For example, if a company can use your package freely or if they have to acquire a license. The quick solution is to just use the same one as \pl{R}. Check it with:
+<<eval=FALSE, echo=TRUE>>=
+license()
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Advanced info}
+  \begin{itemize}
+  \item \pl{Depends} \\ The packages (in the same order) that your package depends on. Remember that a user will have access to the functions of the depended packages. Its generally a good practice to include the R version at the beginning\footnote{Be VERY careful with the spacing here.}: \\ \pl{Depends: R(>= 2.10), SomePkg} \\ Note that we did not specify a minimum package version for \pl{SomePkg}.
+  \item \pl{Imports} \\ \alert{Very} similar to \pl{Depends}. The end level user will not have access to the these packages, but you might use them for your own package functions. If you are importing a package on the \pl{NAMESPACE}, you'll need to include it here.
+  \item \pl{Suggests} \\ Another list of packages that the user might want to load but are not used by the package per se. For example, a plotting package. If you load a package in an example or a test, you'll need to include it here.
+  \item \pl{biocViews} \\ The Bioconductor categories that fit your package. This line is used to construct the Bioconductor site. Check them at the \myurlshort{wiki.fhcrc.org/bioc/biocViews_categories}{biocViews site}. \\ How many biocViews does the \pl{limma} package use?
+  \item \pl{LazyLoad} \\ Basically, set it to \pl{Yes} :) \\ Turns on the lazyloading of your package R objects, which is normally faster for the end-user.
+  \item \pl{LazyData} \\ Similar to \pl{LazyLoad}. Say you have a data frame named \alert{df}. Once the user types \pl{df} the first time, it will attach the data set. Otherwise the user will need to use the \BIOCfunction{data} function. Anyhow, saves time!
+  \item \pl{Collate} \\ The order in which you want your \pl{.R} files in the \pl{R} folder to be loaded. Useful if a 2nd function uses a 1st function and you don't want R to crash.
+  \item \pl{Packaged} \\ A line more precise than \pl{Date}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Search path}
+  Depends, imports, suggests\ldots its a pain, why go through it?
+  \begin{itemize}
+  \item Basically, to avoid mistakes where you use \pl{SomeFunction} that exists in more than 1 package.
+  \item Its also a matter of speed. It reduces the \alert{search} path. \\ Its a list of the packages where R checks if \pl{SomeFunction} exists. \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+search()
+@  
+  \item \normalsize You can also find the currently attached packages using:
+<<eval=FALSE, echo=TRUE>>=
+temp <- .packages()
+temp
+@   
+  \item Do they return the same list? 
+  \item Of course, you can also use \BIOCfunction{sessionInfo}.
+  \item If you run R interactively or in batch mode, does R load the same set of packages?
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Rd files}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Help files}
+  \begin{itemize}
+  \item Now we need to document our functions, objects, methods, etc.
+  \item This is done with \pl{.Rd} files, which use a format similar to \TeX and \LaTeX
+  \item Open the \pl{fitPrior.Rd} file so it'll be easier to understand :)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Format}
+  \pl{Rd} files follow the \TeX syntax by using: \pl{backslash tag text}
+  \begin{itemize}
+  \item \pl{name}: The name of your function or object.
+  \item \pl{alias}: Normally, the same as the name. This changes if its a method\ldots
+  \item \pl{title}
+  \item \pl{description}
+  \item \pl{usage}
+  \item \pl{arguments}  with \pl{item} tags
+  \item \pl{value}
+  \item \pl{details}
+  \item \pl{references}
+  \item \pl{author}
+  \item \pl{examples} Used by the check command.
+  \item \pl{keyword}
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Useful tools}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Functions}
+  \begin{itemize}
+  \item The most useful function while creating a package is \BIOCfunction{package.skeleton}:
+<<eval=FALSE, echo=TRUE>>=
+package.skeleton("NAME", ListOfObjects, path="PATH")
+@  
+  \item Create a data frame with some data, then create a package with it.
+  \item Check the files it created :)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Prompt}
+  \begin{itemize}
+  \item Another useful function is \BIOCfunction{prompt}
+<<eval=FALSE, echo=TRUE>>=
+?prompt
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Saves work, but doesn't do it all}
+  \begin{itemize}
+  \item These functions save a lot of time, but you still need to type, then copy and paste lots of information.
+  \item Be careful with the names and the like, so you don't have inconsistencies between files.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Namespaces}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Basics}
+  \begin{itemize}
+  \item Following the principle of importing and depending, you can use the \pl{NAMESPACE} to specify which functions you'll use.
+  \item Avoids conflicts :)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Importing and exporting}
+  \begin{itemize}
+  \item It follows a special format, similar to R code but it isn't R code exactly.
+  \item You use \pl{importFrom} to specify which functions you are importing. For example, the function \pl{prompt} from the package \pl{utilities}: \\ \pl{importFrom(utilities, prompt)}
+  \item You can also import methods using \pl{import()}
+  \item Then you have to specify which functions you'll be exporting. Meaning that the end level user will be able to use.
+  \item You do so using: \\ \pl{export(function1)}
+  \item Alternatively, you can use \pl{exportPattern("pattern")} For example, you could name your internal functions with a dot, and then export those that begin with a letter.
+  \item For explorting classes or methods you need to use different functions: \pl{exportClass()} and \pl{exportMethods()}
+  \item Take a look at the \pl{SpeCond} \pl{NAMESPACE} file.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Extra}
+  \begin{itemize}
+  \item For more information on how to create a package check the \pl{R Extensions Manual}. Its around 150 pages long :P
+  \end{itemize}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Homework}
+\begin{frame}[allowframebreaks]
+  \frametitle{Homework}
+  \begin{itemize}
+  \item With your team, hand in a tarball with the layout for your package.
+  \item Just include a data frame in your package and a simple function on the \pl{R} folder. 
+  \item That means that you'll decide who will maintain it :)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{SessionInfo} \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+sessionInfo()
+@  
+\end{frame}
+
+\end{document}
+

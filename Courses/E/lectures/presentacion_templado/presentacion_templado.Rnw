@@ -1,0 +1,43 @@
+\input{../header.tex}
+
+\SweaveOpts{prefix.string=plots/presentacion_templado}
+
+\begin{document}
+
+%%% set up some options for Sweave and R %%%
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Título de la presentación}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Título de la sección}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Título diapositiva I}
+  \begin{itemize}
+    \item \textquestiondown Por llenar
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Título diapositiva II}
+  \begin{itemize}
+    \item Por llenar
+  \end{itemize}
+\end{frame}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

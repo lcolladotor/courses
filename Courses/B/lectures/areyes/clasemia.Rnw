@@ -1,0 +1,372 @@
+\input{header_1_en.tex}
+
+\SweaveOpts{prefix.string=plots/clasemia, height=5.7}
+
+\begin{document}
+
+%%% set up some options for Sweave and R %%%
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{ShortRead and chipseq}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Libraries}
+  \begin{itemize}
+  \item Packages we are going to use in this section
+<<eval=TRUE, echo=TRUE>>=
+library(ShortRead)
+library(chipseq)
+library(GenomicFeatures)
+library(BSgenome.Mmusculus.UCSC.mm9)
+@  
+  \end{itemize}
+\end{frame}
+
+
+\section{Exploring data with Shortread package}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{What is ShortRead?}
+  \begin{itemize}
+    \item It was developed by Martin Morgan
+    \item "The \BIOCfunction{ShortRead} package aims to provide key functionality for input, qual
+ity assurance, and basic manipulation of short read DNA sequences such as
+those produced by Solexa, 454, Helicos, SOLiD, and related technologies"
+    \item This first part is a lab session made by Cei Abreu
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Starting with ShortRead}
+  \begin{itemize}
+  \item Basic functions of ShortRead
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+reads<-readFastq(".", pattern="Typhi_solexa.fastq.aa")
+head(reads, 1)
+head(id(reads), 1)
+head(sread(reads), 1)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Length of the reads}
+  \begin{itemize}
+  \item Why is it important to consider alphabet frequency per cycle in solexa reads?
+<<eval=TRUE, echo=TRUE>>=
+abc <- alphabetByCycle(sread(reads), alphabet=c("A","T","G","C","N"))
+abc<- abc/colSums(abc)
+dataabc <- as.data.frame(abc)
+@
+<<eval=TRUE, echo=FALSE>>=
+A <- dataabc["A",]
+T <- dataabc["T",]
+G <- dataabc["G",]
+C <- dataabc["C",]
+@
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Alphabet frequency per cycle}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE, height=4.7>>=
+print(xyplot(A+T+C+G~1:ncol(dataabc), dataabc, type="l", xlab="Cycle", main="Frequency per cycle", auto.key=list(x=.75, y=.95, points=FALSE, lines=TRUE)))
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Working with qualities}
+  \begin{itemize}
+  \item ShortRead also allows you to work with the qualities given by solexa reads.
+  \item This is a very important thing to consider, and you can filter your reads to have just what you need.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Qualities}
+  \begin{itemize}
+  \item We can also plot the qualities by cycle in order to cut the sequences when quality falls down.
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+qualitymatrix<-as(quality(reads), "matrix")
+head(qualitymatrix[,1:7])
+meanquality <- apply(qualitymatrix, 2, mean)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Quality per cycle}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE, height=4.7>>=
+plot(meanquality, type="l", main="Quality per cycle", ylab="Quality", xlab="Cycle")
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Cutting sequences}
+  \begin{itemize}
+  \item The two plots indicate us that we need to cut the sequences in order to have shorter but with a better quality secuences
+  \item The function \BIOCfunction{narrow} allow us to do this easily
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+reads
+shortreads<-narrow(reads, start=1, end=25)
+shortreads
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{More quality}
+  \begin{itemize}
+  \item Ok, now we have just the first 25 cycles!
+  \item In solexa reads we have 2 sequences that are very common... Any idea?
+  \item 1. AAAAAAAAAAAAAAAAAAAAAAAAA
+  \item 2. GATCGGAAGAGCTCGTATGCCGTCT
+  \item The function \BIOCfunction{srdistance} calculates de distance between two sequences, therefore it is useful to eliminate this sequences.
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+distance1 <- srdistance(shortreads, "AAAAAAAAAAAAAAAAAAAAAAAAA")[[1]]
+distance2 <- srdistance(shortreads, "GATCGGAAGAGCTCGTATGCCGTCT")[[1]]
+@  
+  \end{itemize}
+\end{frame}
+ 
+\begin{frame}[fragile]
+  \frametitle{Distance}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE, height=4.7>>=
+print(histogram(distance1, main="Distribution of distances to AAAAAAAAAAAAAAAAAAAAAAAAA"))
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Distance}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE, height=4.7>>=
+print(histogram(distance2, main="Distribution of distances to GATCGGAAGAGCTCGTATGCCGTCT"))
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Clean sequences}
+  \begin{itemize}
+  \item We have two vectors containing the distance to a respective sequence, how can we remove this sequences from our reads??
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+length(shortreads)
+cleanreads<-reads[distance1>5 & distance2>5]
+length(cleanreads)
+@
+  \item Then, we can write our clean sequences into a fastq file!
+<<eval=TRUE, echo=TRUE>>=
+writeFastq(cleanreads, "cleanthypi.fastq")
+@
+  \end{itemize}
+\end{frame}
+
+\section{Aligned shortreads}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Aligned shortreads}
+  \begin{itemize}
+  \item ShortRead also contains function to work with aligned reads
+  \item It is focused on aligned reads produced by Solexa Genome Analyzer ELAND Software, but there are also ways to read alignments from MAQ or Bowtie. The name of the funcion is \BIOCfunction{readAligned}.
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+exptPath <- system.file("extdata", package = "ShortRead")
+sp <- SolexaPath(exptPath)
+@
+  \item Note that there al NA values in strand and position.  This means that those sequences could not be aligned by the software.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Functions}
+  \begin{itemize}
+  \item It is focused on aligned reads produced by Solexa Genome Analyzer ELAND Software, but there are also ways to read alignments from MAQ or Bowtie. The name of the funcion is \BIOCfunction{readAligned}.
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+aln <- readAligned(sp, "s_2_export.txt")
+aln
+@
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Functions}
+  \begin{itemize}
+  \item There are some functions to analyze the data such as \BIOCfunction{position}, \BIOCfunction{strand}
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+head(position(aln), 3)
+table(strand(aln))
+@
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Qualities, again!}
+  \begin{itemize}
+  \item We can also play with the qualities of both the sequences and of the alignment!
+  \item The qualities are string-coded by Solexa establishment, the letter A corresponds to the log10 of 1.
+  \item The qualities of the alignment are a little bit different, being 0 a failure in the alignment.
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+head(quality(alignQuality(aln)))
+@
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Filter data}
+  \begin{itemize}
+  \item And with this qualities we can filter our data!!!!
+  \item Lets suppose we want just the sequences that are aligned and filtered by Solexa.
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+filtered <- alignData(aln)[["filtering"]] == "Y"
+mapped <- !is.na(position(aln))
+filteredmapped<-aln[filtered&mapped]
+filteredmapped
+@
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{And in case you are a little more biologist than bioinformatician...}
+  \begin{itemize}
+  \item If you want a default analysis or you do not know how to do graphs (hope is not your case)... ShortRead can do this for you!
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+qual<-qa(sp)
+rpt<-report(qual, dest=".")
+@
+  \end{itemize}
+\end{frame}
+
+\section{Chipseq data analysis}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Chipseq}
+  \begin{itemize}
+  \item Chipseq is a useful tool for analyzing reads!
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+data(cstest)
+cstest
+str(cstest$ctcf$chr10)
+@
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Chipseq}
+  \begin{itemize}
+  \item Chipseq allows you to extend your reads up to what you want.
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+bc <- basesCovered(cstest$ctcf$chr10, shift = 1:250, seqLen = 24)
+ext <- extendReads(cstest$ctcf$chr10, seqLen = 150)
+head(ext)
+@
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Chipseq}
+  \begin{itemize}
+  \item It also allow us to work with coverages.
+  \item Coverage is the number of times each base of the genome is covered by the extended reads.
+  \item Therefore we can identify islands and peaks.
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+musculuschrlen <- seqlengths(Mmusculus)
+cov <- coverage(ext, width = musculuschrlen["chr10"])
+islands <- slice(cov, lower = 1)
+@
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Peaks}
+  \begin{itemize}
+  \item If we want to see how a peak is distributed between the strands we can do this...
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+peaks <- slice(cov, lower = 8)
+cov.pos <- coverage(extendReads(cstest$ctcf$chr10, strand = "+", seqLen = 150), width = musculuschrlen["chr10"])
+cov.neg <- coverage(extendReads(cstest$ctcf$chr10, strand = "-", seqLen = 150), width = musculuschrlen["chr10"])
+peaks.pos <- copyIRanges(peaks, cov.pos)
+peaks.neg <- copyIRanges(peaks, cov.neg)
+@
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Alphabet frequency per cycle}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE, height=4.7>>=
+print(coverageplot(peaks.pos[1], peaks.neg[1]))
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Chipseq}
+  \begin{itemize}
+  \item Chipseq allows you to work with many lanes!
+  \item The function \BIOCfunction{gdapply} helps you with this!
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Thanks!}
+  \begin{itemize}
+  \item Class is over
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Chipseq}
+  \begin{itemize}
+<<eval=TRUE, echo=TRUE>>=
+sessionInfo()
+@
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}

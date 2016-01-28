@@ -1,0 +1,7 @@
+\beamer@endinputifotherversion {3.07pt}
+\beamer@sectionintoc {1}{Orígenes}{3}{0}{1}
+\beamer@sectionintoc {2}{Uso básico de R}{6}{0}{2}
+\beamer@sectionintoc {3}{Obtener ayuda}{16}{0}{3}
+\beamer@sectionintoc {4}{Índices de vectores}{19}{0}{4}
+\beamer@sectionintoc {5}{Mostrando el poder de R}{26}{0}{5}
+\beamer@sectionintoc {6}{Emacs}{32}{0}{6}

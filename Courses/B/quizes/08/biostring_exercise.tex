@@ -1,0 +1,58 @@
+\documentclass[a4paper]{article}
+
+\usepackage[latin1]{inputenc}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\title{\textbf{Seminario III: R/Bioconductor}}
+\author{José Reyes \\ \emph{jreyes@lcg.unam.mx}}
+\date{29 de Septiembre del 2009}
+
+\usepackage{Sweave}
+\begin{document}
+\maketitle
+\footnotesize
+\begin{description}
+	\item{\textbf{Professor}: Leonardo Collado (lcollado@lcg.unam.mx)}
+	\item{\textbf{Assistants}: Alejandro Reyes (areyes@lcg.unam.mx), José Reyes (jreyes@lcg.unam.mx), Víctor Moreno (jmoreno@lcg.unam.mx)}
+\end{description}
+\normalsize
+\begin{abstract}
+These is the exercise for the Biostrings package session. The only mandatory exercise is the first one. The other ones are interesting examples for those who want to learn a little more about this package. Even though these are optional, if you do them they will be considered for your evaluation as extra points.
+\end{abstract}
+
+\section{GC skew in bacterial genomes}
+This is the only mandatory exercise. You will visualize the GC skew of a bacterial genome.
+\begin{enumerate}
+	\item{Load the E. coli genome from the BSgenome package. You will be working with \emph{Escherichia coli str. K12 substr. MG1655} (NC\_000913)}
+	\item{Create a set of 2000bp long overlapping windows, sliding 500bp each step and covering as much of the chromosome as possible (The first window will go from 1-2000, the next one will go from 501-2500 and so on)}
+	\item{For each window, estimate the (G-C)(G+C) index}
+	\item{Obtain the start position and strand of all the protein coding genes from this bacterium, using the "bacterial\_mart\_54" mart and the "esc\_18\_gene" dataset}
+	\item{Using the function \emph{density}, estimate the density of protein coding genes in the plus and minus strands. The density function will return an object with a \emph{x} field and a \emph{y} field. The \emph{x} corresponds to the chromosome location and the \emph{y} corresponds to the estimated density.}
+	\item{Make a genome graph with four tracks:}
+	\begin{itemize}
+		\item{Gene density in + strand.}
+		\item{Chromosome axis.}
+		\item{Gene density in - strand.}
+		\item{The index you calculated}
+	\end{itemize}
+	\item{Use the \emph{makeGeneRegion} function to plot the location of DnaA (emsembl\_gene\_id = "EBESCG00000003429").}
+	\item{Write a brief conclusion about the results.}
+\end{enumerate}
+
+\section{Optional exercises}
+\begin{enumerate}
+	\item{Obtain a nucleotide sequence from EBESCG00000001846 (571591, 571689) and use the function \emph{replaceLetterAt} to introduce every posible point mutation to the sequence. What is the proportion of:}
+	\begin{itemize}
+		\item{Synonymous substitutions?}
+		\item{Non-synonymous substitutions?}
+		\item{Non-sense mutations?}
+	\end{itemize}
+	\item{Use the Biostrings package as an alignment editor. Try to add numbers to the names of a FASTA alingment and to eliminate columns containing more than 50\% gaps.}
+	\item{Extract the (-100,+10) region for each transcript in the E. coli chromosome using a combination of BSgenome and biomaRt packages. For a sample of these sequences, create overlapping windows of lenght 20bp, sliding 10bp each step, and calculate the GC content. Plot the resulting profile of the sampled sequences (use lines to overlap the profiles). Do you notice an interesting pattern?}
+	\item{Make a function to generate random BStrings given a background model (for example, nucleotide or dinucleotide frequencies). 
+		Extract the upstream sequence for each transcript in E. coli. Calculate the nucleotide and dinucleotide fequencies to generate random sequences of about 5000bp. 
+		The sequences you generated may serve as random controls for a transcription factor binding site motif search.}
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,53 @@
+%%% Configurar documento %%%
+
+\documentclass[12pt]{article}
+\title{Mi primer experimento con esta \TeX{}nolog\'ia}
+\author{Jos\'e Reyes \\ \texttt{jreyes@lcg.unam.mx}}
+\date{7 de Agosto del 2009}
+\pagestyle{headings}
+
+%%% Portada %%%
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage{}
+
+%%% Sección 1 %%%
+
+\section{Palabras}
+\label{seccion1}
+Este es mi primer art\'iculo
+\\ Ver seccion \ref{seccion1} en p\'agina \pageref{seccion1}
+\subsection{Listas}
+\newpage{}
+
+%%% Sección 2 %%%
+
+\section{F\'ormulas}
+Una referencia corta\footnote{Esto es un pie de p\'agina}
+\begin{enumerate}
+  \item{N\'umero uno}
+    \begin{itemize}
+      \item{Uno punto uno}
+      \item{uno punto dos}
+      \item[-]{uno punto tres}
+    \end{itemize}
+  \item{N\'umero dos}
+    \begin{description}
+      \item{\emph{Hola}} es un saludo
+      \item{\emph{Adi\'os}} es despedida
+    \end{description}
+  \item{N\'umero tres}
+  \newline \newline
+  \begin{tabular}{|l|c @{ = } c|}
+    \hline
+    Nombre & \multicolumn{2}{|c|}{F\'ormulas} \\
+    \hline
+    Binomio al cuadrado & $(a+b)^{2}$ & \emph{$a^{2}+2ab+b^{2}$} \\
+    \hline
+    Binomio al cubo & $(a+b)^{3}$ & \emph{$a^{3}+3a^{2}b+3ab^{2}+b^{3}$} \\
+    \hline
+  \end{tabular}
+\end{enumerate}
+\end{document}

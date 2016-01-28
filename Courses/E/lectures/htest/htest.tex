@@ -1,0 +1,290 @@
+\input{../header.tex}
+
+
+
+\usepackage{Sweave}
+\begin{document}
+
+%%% set up some options for Sweave and R %%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Pruebas de hipótesis: lo básico}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Clase htest}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Objetivos}
+  \begin{itemize}
+    \item Después de un largo descanso...
+    \item En la clase de hoy vamos a ver las bases de las funciones de pruebas de hipótesis en \pl{R}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Márgenes de una tabla}
+  \begin{itemize}
+    \item Antes de entrar en el tema, les quiero enseñar dos formas de obtener fácilmente los datos marginales de una tabla.
+\begin{Schunk}
+\begin{Sinput}
+> x <- matrix(rnorm(9), 3, 3)
+> margin.table(x, 1)
+> margin.table(x, 2)
+> addmargins(x)
+\end{Sinput}
+\end{Schunk}
+    \item Intituivamente, \textquestiondown qué resultado nos da cada una de las \pl{margin.table} ?
+	\item Esto les debe ser útil en casos como la ji cuadrada, etc.
+  \end{itemize}
+\end{frame}
+ 
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Speedy}
+  \begin{itemize}
+  \item Para ver que tan rápido corren podemos usar la función \BIOCfunction{system.time}\footnote{Para una buena comparación tienen que hacer unas 500 o 1000 réplicas y comparar las medias} la cual nos regresa 3 medidas. Fíjense en la de \pl{elapsed}.
+\begin{Schunk}
+\begin{Sinput}
+> x <- matrix(rnorm(1e+06), 10000, 
++     100)
+> system.time(margin.table(x, 1))
+\end{Sinput}
+\begin{Soutput}
+   user  system elapsed 
+   0.17    0.00    0.17 
+\end{Soutput}
+\begin{Sinput}
+> system.time(margin.table(x, 2))
+\end{Sinput}
+\begin{Soutput}
+   user  system elapsed 
+   0.03    0.00    0.03 
+\end{Soutput}
+\begin{Sinput}
+> system.time(addmargins(x))
+\end{Sinput}
+\begin{Soutput}
+   user  system elapsed 
+   0.72    0.03    0.80 
+\end{Soutput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Clase de un objeto}
+  \begin{itemize}
+  \item Si recuerdan, hay varios tipos de objeto que hemos usado a lo largo del semestre. Por ejemplo:
+\begin{Schunk}
+\begin{Sinput}
+> x <- 1
+> y <- "1"
+> z <- list(reprobados = 5)
+> class(x)
+\end{Sinput}
+\begin{Soutput}
+[1] "numeric"
+\end{Soutput}
+\begin{Sinput}
+> class(y)
+\end{Sinput}
+\begin{Soutput}
+[1] "character"
+\end{Soutput}
+\begin{Sinput}
+> class(z)
+\end{Sinput}
+\begin{Soutput}
+[1] "list"
+\end{Soutput}
+\end{Schunk}
+  \item De los anteriores 3 objetos, \textquestiondown cúal tiene atributos?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Atributos de un objeto}
+  \begin{itemize}
+  \item En realidad no hemos aprovechado los atributos de los objetos mucho. Si a caso en los objetos \pl{data.frame} o \pl{list}.
+\begin{Schunk}
+\begin{Sinput}
+> attributes(x)
+\end{Sinput}
+\begin{Soutput}
+NULL
+\end{Soutput}
+\begin{Sinput}
+> attributes(y)
+\end{Sinput}
+\begin{Soutput}
+NULL
+\end{Soutput}
+\begin{Sinput}
+> attributes(z)
+\end{Sinput}
+\begin{Soutput}
+$names
+[1] "reprobados"
+\end{Soutput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Usando los atributos}
+  \begin{itemize}
+  \item En \pl{R}, las funciones de prueba de hipótesis regresan objetos de clase \BIOCfunction{htest}. Estos varían dependiendo de cada función; usen la función \BIOCfunction{attributes} o chequen la ayuda.
+  \item Todos regresan el atributo \pl{names} con el cual pueden obtener algo que les interese, por ejemplo, el valor p.
+\begin{Schunk}
+\begin{Sinput}
+> z$reprobados
+\end{Sinput}
+\begin{Soutput}
+[1] 5
+\end{Soutput}
+\begin{Sinput}
+> class(z$reprobados)
+\end{Sinput}
+\begin{Soutput}
+[1] "numeric"
+\end{Soutput}
+\end{Schunk}
+  \item Noten que aunque \pl{z} es de clase \pl{list}, \pl{z\$reprobados} es de clase \pl{numeric}.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Ejemplos prácticos}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Binomial}
+  \begin{itemize}
+  \item Tal vez una de las pruebas más fáciles es la de la binomial, que es la repetición de un experimento Bernoulli n veces.
+\begin{Schunk}
+\begin{Sinput}
+> `?`(binom.test)
+\end{Sinput}
+\end{Schunk}
+  \item Chequen la ayuda y ahora resolvamos el siguiente problema. 
+  \item Un examen dado tiene 70 preguntas donde cada una tiene 5 respuestas posibles. \textquestiondown Cúal es el valor p de que alguien saque $x$ preguntas buenas?
+  \begin{enumerate}
+    \item 7
+	\item 68
+	\item 50
+  \end{enumerate}
+  \item \textquestiondown Cúal creen que será el que nos de el valor p más extremo?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Solución}
+  \begin{itemize}
+  \item Para resolver este problema en realidad solo vamos a usar 3 argumentos de la función \BIOCfunction{binom.test}. \textquestiondown Cúales?
+  \item Como solo queremos el valor p de regreso, aprovechemos dicho atributo.
+\begin{Schunk}
+\begin{Sinput}
+> binom.test(7, 70, 0.2)$p.value
+\end{Sinput}
+\begin{Soutput}
+[1] 0.03589705
+\end{Soutput}
+\begin{Sinput}
+> binom.test(68, 70, 0.2)$p.value
+\end{Sinput}
+\begin{Soutput}
+[1] 4.594981e-45
+\end{Soutput}
+\begin{Sinput}
+> binom.test(50, 70, 0.2)$p.value
+\end{Sinput}
+\begin{Soutput}
+[1] 2.327952e-20
+\end{Soutput}
+\end{Schunk}
+  \item Si se dan cuenta, ya ni guardamos el resultado de la función en algún objeto, pues solo nos interesaban los 3 valores p.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Cuidado al concluir}
+  \begin{itemize}
+  \item Tengan \alert{cuidado} para que no vayan a concluir algo erróneamente después de usar una prueba.
+  \item En el ejemplo anterior, \textquestiondown cúal era la hipótesis alternativa? Simplemente utilicemos la función sin almacenarla en algún objeto.
+  \item Corran el siguiente comando:
+\begin{Schunk}
+\begin{Sinput}
+> binom.test(x = 35, n = 70, p = 0.2)
+\end{Sinput}
+\end{Schunk}
+  \item De esta prueba, podemos rechazar la $H0$ en favor de la $HA$ y nada más. 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Shapiro}
+  \begin{itemize}
+  \item Si recuerdan, vimos las gráficas tipo QQplot y en específico a la QQnorm. 
+  \item Existe una prueba de hipótesis, la cual es más fácil de interpretar, para checar si tus datos se distribuyen como una normal.
+  \item Chequen la ayuda y corran el siguiente comando de \BIOCfunction{shapiro.test}:
+\begin{Schunk}
+\begin{Sinput}
+> `?`(shapiro.test)
+> shapiro.test(rnorm(10000))
+\end{Sinput}
+\end{Schunk}
+  \item Como ven, cada función tiene sus peculiaridades. Por ahora no nos interesa mucho saber como funcionan, si no como utilizarlas. Aunque si alguien quiere, \pl{R} te ofrece referencias por cada función.
+\begin{Schunk}
+\begin{Sinput}
+> shapiro.test(rnorm(1000))$p.value
+\end{Sinput}
+\begin{Soutput}
+[1] 0.8772977
+\end{Soutput}
+\begin{Sinput}
+> shapiro.test(runif(1000, 0, 3))$p.value
+\end{Sinput}
+\begin{Soutput}
+[1] 5.355809e-17
+\end{Soutput}
+\end{Schunk}
+  \item Con \pl{shapiro.test} es evidente cual no es normal y cual si, lo cual tal vez era un poco más complicado en un diagrama de caja y brazos.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Problema de la clase}
+ 
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Comparando tiempos de expresiones}
+  \begin{itemize}
+  \item Bueno, ahora pasemos al ejercicio principal.
+  \item Usando \BIOCfunction{t.test} hagan la prueba de hipótesis para ver si las medias de los tiempos\footnote{Solo fíjense en \pl{elapsed}} en los que corren las siguientes expresiones son iguales o diferentes. Las medias son de 100 eventos y solo necesitaremos el valor p para poder sacar nuestra conclusión.
+\begin{Schunk}
+\begin{Sinput}
+> x <- rnorm(1e+06)
+> sort(x)
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Tips}
+  \begin{itemize}
+  \item Usen un ciclo \pl{for} o si alguien se anima, un \pl{apply}.
+  \item Solo necesitan los datos de 1 posición de la función \BIOCfunction{system.time}
+  \item Al usar \BIOCfunction{t.test} usen la forma más simple. Osea, entre menos argumentos usen, mejor :)
+  \end{itemize}
+\end{frame}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

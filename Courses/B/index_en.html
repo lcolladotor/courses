@@ -1,0 +1,775 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+
+<head>
+  <title>Seminar III: R/Bioconductor. Aug-Dic 2009</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link rel="stylesheet" type="text/css" href="./web/courseR.css"/>
+  <script type="text/javascript">//<![CDATA[
+
+function inicio(){
+	change();
+	change_main();
+}
+
+
+var tab = null;
+function change(el){
+	var lis = document.getElementsByTagName("li");
+	if (el == undefined) {
+		// la pestaña home es el li numero 0!!	
+		el = lis[0];
+	}
+	if (el.id == 'current') {
+		tab = el;
+	}else{
+		el.id = "current";
+		if (tab != null){
+			tab.id = "null";
+		}
+		tab = el;
+	}
+}
+
+function change_main(esto){
+	var typo_de_pestana='home';
+	if (esto != undefined) {
+		typo_de_pestana=esto;
+	}
+	var  opciones = document.getElementsByTagName("div");
+	for (LC = 0; LC < opciones.length; LC ++) {
+		if (opciones[LC].className == "opciones") {
+			if (opciones[LC].id == typo_de_pestana) {
+				document.getElementById(opciones[LC].id).style.display = 'inline';
+			}else{
+				document.getElementById(opciones[LC].id).style.display = 'none';
+			}	
+		}
+	}
+}
+
+//]]></script>
+</head>
+<body onload="return inicio()">
+<div id=container_med>
+	<div id=intro_med>
+		<div id=pageHeader_med>
+			<h1><span>Seminar III: R/Bioconductor</span></h1>
+			<h2><span>August-December 2009</span></h2>
+		</div>
+		<div id=quickSummary_med>
+			<div class=p1><span><a href="http://www.lcg.unam.mx/~lcollado/index_en.php" title="Leonardo Collado Torres' homepage" target="_blank">Leonardo Collado Torres</a> - Licenciatura en Ciencias Genómicas, LCG-UNAM</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span><a href="index.html" title="Versión en Español" target="_self">Versión en Español</a></span></div>
+			<div class=p2><span>Aug-Dec, 2009 - Cuernavaca, Mexico</span></div>
+		</div>
+	</div>
+	<div id="linkList">
+	<ul>
+		<div id="lresources">
+			<br>
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('home')"><b>Home</b></span></h3>
+			</li>
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('lectures')"><b>Lectures</b></span></h3>
+			</li>
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('quizes')"><b>Exercises</b></span></h3>
+			</li>
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('respuestas')"><b>Answers</b></span></h3>
+			</li>
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('data')"><b>Data</b></span></h3>
+			</li>
+
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('video')"><b>Videos</b></span></h3>
+			</li>
+
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('overview')"><b>Package Overviews</b></span></h3>
+			</li>
+
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('resources')"><b>Supporting Material</b></span></h3>
+			</li>	
+		</div>
+		<br>
+		
+		
+	</ul>
+	</div>
+
+	<div id=supportingText_med>
+		<div id=preambleMargen1>
+			<span></span>
+		</div>
+		
+		<div id=preamble>
+			<div id="home" class="opciones">
+			
+				<h2><span>LCG</span></h2><br>
+				<p class=p2><span>
+				This course will be taught at the Undergraduate Program on Genomic Sciences (LCG in Spanish) from the National Autonomous University of Mexico (UNAM in Spanish). It is directed at the third semester students from the sixth generation. It is meant as a Bioconductor overview course and its official name is Seminar III. It has an official length of 32 class hours. For more information on this undergraduate program visit LCG's <a href="http://www.lcg.unam.mx/" title ="LCG's Oficial Page" target="_blank">main page</a>. For example, the sections on <a href="http://www.lcg.unam.mx/node/3" title="Development in Mexico" target="_blank">Development of the Genomic Sciences in Mexico</a> and <a href="http://www.lcg.unam.mx/evaluacion" title="International Evaluation" target="_blank">LCG's International Evaluation</a> could be of your interest.
+				</span></p>
+				<br><br>
+				
+				<h2><span>Home</span></h2><br>
+				<p class=p2><span>
+				This is the official course page for Seminar III: R/Bioconductor. Here you can find the lectures, exercises, answers, data and supporting material related to the course. Please check the <a href="http://www.lcg.unam.mx/~lcollado/B/syllabus/syllabus.pdf" title="Course syllabus" target="_blank">syllabus</a> for a description on the course, the objectives, project outline, a sample class and the tentative class calendar.
+				</span></p>
+				<br><br>
+				
+				<h2><span>Comments by <a href="http://www.stat.berkeley.edu/~sandrine/">Sandrine Dudoit</a></span></h2><br>
+				<p class=p2><span>
+				"I have already mentioned this to Rafael, but I cannot stress enough how impressed I am by the quality of the LCG program and its outstanding students.<br>
+It is truly a pleasure to work with students that have such rare dedication, sense of initiative, and enthusiasm. In particular, I am delighted to see how proficient you have become with R and Bioconductor."<br>The comments were mady public with her consent. Rafael Palacios is the current LCG headmaster.
+				</span></p>
+				<br><br>
+				
+				<h2><span>OCW</span></h2><br>
+				<p class=p2><span>
+				This course will serve as LCG's pilot OpenCourseWare (OCW) course. Our goal is to create a course of the highest quality worthy of being an OCW course. As such, we'll video record all the classes and we will prepare all the material both in Spanish and English.
+				</span></p>
+				<br><br>
+				
+				<p class=p2><span>
+				The course has begun!!! :)
+				</span></p>
+				<br><br>
+				
+				
+
+				</span></p>
+	 	
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen5">
+					<span></span>
+				</div>
+			</div> 
+		
+		</div>
+
+		<div id=preamble>
+			<div id="lectures" class="opciones" style="display:none;">
+				<h2><span>lectures</span></h2><br>
+				In this section you can find a small description for every lecture. Additionally, you can download the lectures in PDF format, the R code and/or the .Rnw file to make the lecture files.
+				<br><br>
+				
+				<b><a href="lectures/review/review.pdf"
+				title="First class"
+				target="_blank">Class 01: review</a>&nbsp;
+				  <a href="lectures/review/review.R"
+				target="_blank">[code]</a>&nbsp;
+				  <a href="lectures/review/review.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
+
+				The first class of the semester! We'll review R, how to make plots and learn how to use the apply functions.
+				<br><br>
+				
+				<b><a href="lectures/sweave/sweave.pdf"
+				title="Second class"
+				target="_blank">Class 02: bioconductor and documentation</a>&nbsp;
+				  <a href="lectures/sweave/sweave.R"
+				target="_blank">[code]</a>&nbsp;
+				  <a href="lectures/sweave/sweave.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
+
+				On this class, we'll introduce you to Bioconductor, learn to make a basic heatmap and foment reproducible research through vignette files using Sweave.
+				<br><br>
+				
+				<b><a href="lectures/advplots/advplots.pdf"
+				title="Third class"
+				target="_blank">Class 03: advanced plotting</a>&nbsp;
+				  <a href="lectures/advplots/advplots.R"
+				target="_blank">[code]</a>&nbsp;
+				  <a href="lectures/advplots/advplots.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
+
+				We'll learn how to make advanced plots using the lattice, plotrix, ggplots2 and car packages.
+				<br><br>
+				
+				<b><a href="lectures/biomart/biomart.pdf"
+				title="Fourth class"
+				target="_blank">Class 04: public data</a>&nbsp;
+				  <a href="lectures/biomart/biomart.R"
+				target="_blank">[code]</a>&nbsp;
+				  <a href="lectures/biomart/biomart.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
+
+				We'll learn how to download public data using biomaRt, GEOquery, ArrayExpress, annotate and KEGGSOAP.
+				<br><br>
+				
+				<b><a href="lectures/sql/sql.pdf"
+				title="Fifth class"
+				target="_blank">Class 04: public data</a>&nbsp;
+				  <a href="lectures/sql/sql.R"
+				target="_blank">[code]</a>&nbsp;
+				  <a href="lectures/sql/sql.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
+
+				RMySQL, AnnotationDbi, RSQLite. Short one because I got sick >.<
+				<br><br>
+				
+				<b><a href="lectures/genome/genome.pdf"
+				title="Sixth class"
+				target="_blank">Class 06: genomic plots</a>&nbsp;
+				  <a href="lectures/genome/genome.R"
+				target="_blank">[code]</a>&nbsp;
+				  <a href="lectures/genome/genome.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
+
+				GenomeGraphs.
+				<br><br>
+				
+				<b><a href="lectures/limma/limma.pdf"
+				title="Seventh class"
+				target="_blank">Class 07: microarrays</a>&nbsp;
+				  <a href="lectures/limma/limma.R"
+				target="_blank">[code]</a>&nbsp;
+				  <a href="lectures/limma/limma.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
+
+				Limma.
+				<br><br>
+				
+				<b><a href="lectures/biostrings/biostrings_session.pdf"
+				title="Eight class"
+				target="_blank">Class 08: biostrings</a>&nbsp;
+				  <a href="lectures/biostrings/biostrings_session.R"
+				target="_blank">[code]</a>&nbsp;
+				  <a href="lectures/biostrings/biostrings_session.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
+
+				Biostrings by José Reyes.
+				<br><br>
+				
+				<b><a href="lectures/areyes/clasemia.pdf"
+				title="Ninth class"
+				target="_blank">Class 09: ShortRead</a>&nbsp;
+				  <a href="lectures/areyes/clasemia.R"
+				target="_blank">[code]</a>&nbsp;
+				  <a href="lectures/areyes/clasemia.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
+
+				ShortRead by Alejandro Reyes.
+				<br><br>
+				
+				<b><a href="lectures/packages/packages.pdf"
+				title="Tenth class"
+				target="_blank">Class 10: packages</a>&nbsp;
+				  <a href="lectures/packages/packages.R"
+				target="_blank">[code]</a>&nbsp;
+				  <a href="lectures/packages/packages.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
+
+				Packages.
+				<br><br>
+				
+				<b><a href="lectures/go/go.pdf"
+				title="Eleventh class"
+				target="_blank">Class 11: GOs</a>&nbsp;
+				  <a href="lectures/go/go.R"
+				target="_blank">[code]</a>&nbsp;
+				  <a href="lectures/go/go.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
+
+				GO.
+				<br><br>
+				
+				<b><a href="lectures/jmoreno/statsnaffy.pdf"
+				title="Twelve class"
+				target="_blank">Class 12: affy</a>&nbsp;
+				  <a href="lectures/jmoreno/statsnaffy.R"
+				target="_blank">[code]</a>&nbsp;
+				  <a href="lectures/jmoreno/statsnaffy.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
+
+				Stats and affy by Víctor Moreno.
+				<br><br>
+				
+				<b><a href="lectures/jmoreno2/microarraysmtp.pdf"
+				title="Thirteen class"
+				target="_blank">Class 13: microarrays II</a>&nbsp;
+				  <a href="lectures/jmoreno2/microarraysmtp.R"
+				target="_blank">[code]</a>&nbsp;
+				  <a href="lectures/jmoreno2/microarraysmtp.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
+
+				Advanced Microarrays class by Víctor Moreno.
+				<br><br>
+				
+				<b><a href="lectures/last/last.pdf"
+				title="Fourteen class"
+				target="_blank">Class 14: a simulated HTS case study</a>&nbsp;
+				  <a href="lectures/last/last.R"
+				target="_blank">[code]</a>&nbsp;
+				  <a href="lectures/last/last.Rnw"
+				target="_blank">[.Rnw]</a>&nbsp;</b><br> 
+
+				Formatdb, blastall, Velvet, Bowtie... all in a simulated case study :)
+				<br><br>
+				
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen2">
+				  <span></span>
+				</div>
+			
+				</span></p>
+			</div>
+		</div>
+
+		<div id=preamble>
+			<div id="quizes" class="opciones" style="display:none;">
+				<h2><span>quizzes and exercises</span></h2><br>
+				Here you can find the quizzes and exercises to test your knowledge and skills in statistics, R and Bioconductur ^^.
+				<br><br>
+				
+				<b><a href="quizes/01/exercise_01_review.pdf"
+				title="Exercise 01 review" target="_blank">Exercise 01</a>&nbsp;<a href="quizes/01/exercise_01_review.R" target="_blank">[code]</a>&nbsp;</b>
+				<br>
+				Exercises for the first class (review session). They include some basic review exercises, plots and using the apply family.
+				<br><br>
+				
+				<b><a href="quizes/02/exercise_02_sweave.pdf"
+				title="Exercise 02 sweave" target="_blank">Exercise 02</a>&nbsp;<a href="quizes/02/exercise_02_sweave.R" target="_blank">[code]</a>&nbsp;</b>
+				<br>
+				Exercises for the second class. First steps into using Sweave and exploring the ALL dataset. They are also on the related lecture.
+				<br><br>
+				
+				<b><a href="quizes/03/exercise_03_advplots.pdf"
+				title="Exercise 03 advplots" target="_blank">Exercise 03</a>&nbsp;<a href="quizes/03/exercise_03_advplots.R" target="_blank">[code]</a>&nbsp;</b>
+				<br>
+				Exercises for the third class.
+				<br><br>
+				
+				<b><a href="quizes/04/exercise_04_biomart.pdf"
+				title="Exercise 04 biomart" target="_blank">Exercise 04</a>&nbsp;<a href="quizes/04/exercise_04_biomart.R" target="_blank">[code]</a>&nbsp;</b>
+				<br>
+				Exercises for the fourth class.
+				<br><br>
+				
+				<b><a href="quizes/06/exercise_06_genome.pdf"
+				title="Exercise 06 genome" target="_blank">Exercise 06</a>&nbsp;<a href="quizes/06/exercise_06_genome.R" target="_blank">[code]</a>&nbsp;</b>
+				<br>
+				Exercises for the sixth class.
+				<br><br>
+				
+				<b><a href="quizes/08/biostring_exercise2.pdf"
+				title="Exercise 08 biostrings (v2)" target="_blank">Exercise 08</a>&nbsp;&nbsp;</b>
+				<br>
+				Exercises for the eight class.
+				<br><br>
+				
+				<b><a href="quizes/09/homewk.pdf"
+				title="Exercise 09 shortread" target="_blank">Exercise 09</a>&nbsp;&nbsp;</b>
+				<br>
+				Exercises for the ninth class.
+				<br><br>
+				
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen4">
+				  <span></span>
+				</div>
+			</div>
+		</div>
+
+		<div id=preamble>
+			<div id="respuestas" class="opciones" style="display:none;">
+				<h2><span>answers</span></h2><br>
+				Here you can find the expected answers to the exercises. If you don't understand something, please let us know thorugh the <a href="http://foros.nnb.unam.mx/viewforum.php?f=111">forum</a>. Thank you!
+				<br><br>
+				
+				<b><a href="quizes/01_answer/answer_01_review.pdf"
+				title="Exercise 01" target="_blank">01_answer_review.pdf</a>&nbsp;<a href="quizes/01_answer/answer_01_review.R" target="_blank">[code]</a>&nbsp;</b>
+				<br>
+				File with the expected answers for the 1st set of exercises.
+				<br><br>
+				
+				<b><a href="quizes/02_answer/answer_02_sweave.pdf"
+				title="Exercise 02" target="_blank">02_answer_sweave.pdf</a>&nbsp;<a href="quizes/02_answer/answer_02_sweave.R" target="_blank">[code]</a>&nbsp;</b>
+				<br>
+				File with the expected answers for the 2nd set of exercises.
+				<br><br>
+				
+				<b><a href="quizes/03_answer/answer_03_advplots.pdf"
+				title="Exercise 03" target="_blank">03_answer_advplots.pdf</a>&nbsp;<a href="quizes/03_answer/answer_03_advplots.R" target="_blank">[code]</a>&nbsp;</b>
+				<br>
+				File with the expected answers for the 3rd set of exercises.
+				<br><br>
+				
+				<b><a href="quizes/04_answer/answer_04_biomart.pdf"
+				title="Exercise 04 b" target="_blank">answer_04_biomart.pdf</a>&nbsp;<a href="quizes/04_answer/answer_04_biomart.R" target="_blank">[code]</a>&nbsp;</b>
+				<br>
+				File with the expected answers for the 4th set of exercises version b.
+				<br><br>
+				
+				<b><a href="quizes/05_answer/answer_05_rmysql.pdf"
+				title="Exercise 05" target="_blank">answer_05_rmysql.pdf</a>&nbsp;<a href="quizes/05_answer/answer_05_rmysql.R" target="_blank">[code]</a>&nbsp;</b>
+				<br>
+				File with the expected answers for the 5th set of exercises.
+				<br><br>
+				
+				<b><a href="quizes/06_answer/answer_06_genome.pdf"
+				title="Exercise 06" target="_blank">answer_06_genome.pdf</a>&nbsp;<a href="quizes/06_answer/answer_06_genome.R" target="_blank">[code]</a>&nbsp;</b>
+				<br>
+				File with the expected answers for the 6th set of exercises.
+				<br><br>
+				
+				<b><a href="quizes/08_answer/respuesta.pdf"
+				title="Exercise 08" target="_blank">respuesta.pdf</a>&nbsp;</b>
+				<br>
+				File with the expected answers for the 8th set of exercises.
+				<br><br>
+				
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen4">
+				  <span></span>
+				</div>
+			</div>
+		</div>
+		
+		<div id=preamble>
+			<div id="data" class="opciones" style="display:none;">
+			
+				<h2><span>data</span></h2><br>
+				Here you can find the data sets that we'll use in the classes and exercises.
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/data/stats.txt">stats.txt</a></b></u><br>
+				A Velvet output file that contains information on contigs from simulated E. coli reads.
+				<br><br>	
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/data/SuppTable01_kogenome6_double_end-clone_1132_742.csv">SuppTable01_kogenome6_double_end-clone_1132_742.csv</a></b></u><br>
+				A supplementary table from http://www.ncbi.nlm.nih.gov/pubmed/19587683 in csv format.
+				<br><br>	
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/data/SuppTable06_nsSnp_AK1.csv">SuppTable06_nsSnp_AK1.csv</a></b></u><br>
+				A supplementary table from http://www.ncbi.nlm.nih.gov/pubmed/19587683 in csv format.
+				<br><br>	
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/data/swirl/">swirl</a></b></u><br>
+				Swirl data.
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/data/areyes/">areyes</a></b></u><br>
+				Data for the ShortRead exercise.
+				<br><br>	
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/data/jmoreno/">jmoreno</a></b></u><br>
+				Data for the affy exercise by Víctor Moreno.
+				<br><br>	
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/data/jmoreno2/">jmoreno2</a></b></u><br>
+				Data for the second affy exercise by Víctor Moreno.
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/data/last/">simulated HTS case study</a></b></u><br>
+				Data for the last class.
+				<br><br>	
+	
+
+
+				</span></p>
+				
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen2con5">
+					<span></span>
+				</div>
+			</div>
+		</div>
+		
+		<div id=preamble>
+			<div id="video" class="opciones" style="display:none;">
+			
+				<h2><span>videos</span></h2><br>
+				In this section you can find the class videos. We'll upload them with a week delay due to the video processing procedure.
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/video/lcollado20090814.flv">lcollado20090814.flv</a></b></u><br>
+				Video record of the first class :) It's 1hr 14 mins 59 seconds long and is available on flv format as a 113 MB file.
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/video/lcollado20090821.mpg">lcollado20090821.mpg</a></b></u><br>
+				Video record of the second class. It's available on mpg format as a 390 MB file.
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/video/lcollado20090821.flv">lcollado20090821.flv</a></b></u><br>
+				Video record of the second class. It's available on flv format as a 143 MB file.
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/video/lcollado20090828.flv">lcollado20090828.flv</a></b></u><br>
+				Video record of the third class. It's available on flv format as a 353 MB file.
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/video/lcollado20090904.flv">lcollado20090904.flv</a></b></u><br>
+				Video record of the fourth class. It's available on flv format as a 359 MB file.
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/video/lcollado20090917.flv">lcollado20090917.flv</a></b></u><br>
+				Video record of the sixth class. It's available on flv format as a 259 MB file.
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/B/video/lcollado20090925.flv">lcollado20090925.flv</a></b></u><br>
+				Video record of the seventh class. It's available on flv format as a 339 MB file.
+				<br><br>
+				
+				<h2><span>download</span></h2><br>
+				We recommend you to download the videos by right clicking the link and choosing "save link as". Then use your prefered video player to watch the videos.
+				<br><br>
+				
+				<h2><span>thanks</span></h2><br>
+				We thank the support of the UATI group at LCG to record, edit and create the final video files.
+				<br><br>	
+
+				</span></p>
+				
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen2con5">
+					<span></span>
+				</div>
+			</div>
+		</div>
+		
+		<div id=preamble>
+			<div id="overview" class="opciones" style="display:none;">
+			
+				<h2><span>package overviews</span></h2><br>
+				In this section you can find the brief package overview presentations made by the students.
+				<br><br>
+				
+				<b><a href="overviews/jbuendia/Expo.pdf">Expo.pdf</a>&nbsp;
+				  <a href="overviews/jbuendia/Expo.R"
+				target="_blank">[code]</a>&nbsp;&nbsp;</b><br>
+				Jorge Buendia's geneplotter overview.
+				<br><br>
+				
+				<b><a href="overviews/lzepeda/PACKAGE.pdf">PACKAGE.pdf</a>&nbsp;
+				  <a href="overviews/lzepeda/PACKAGE.R"
+				target="_blank">[code]</a>&nbsp;
+				  <a href="overviews/lzepeda/my-qvalue-results.txt"
+				target="_blank">txt with results</a>&nbsp;</b><br>
+				Lisandra Zepeda's qvalue overview.
+				<br><br>
+				
+				<b><a href="overviews/ilopez/Biostrings_1.pdf">Biostrings.pdf</a>&nbsp;
+				  <a href="overviews/ilopez/Biostrings_1.R"
+				target="_blank">[code]</a>&nbsp;&nbsp;</b><br>
+				Isaac Lopez's Biostrings overview.
+				<br><br>
+				
+				<b><a href="overviews/mruizvel/Package_1.pdf">Package.pdf</a>&nbsp;
+				  <a href="overviews/mruizvel/Package_1.R"
+				target="_blank">[code]</a>&nbsp;&nbsp;</b><br>
+				Mariana Ruiz's Hardy-Weinberg overview.
+				<br><br>
+				
+				<b><a href="overviews/avargas/GeneR-avargas_1.pdf">GeneR-avargas.pdf</a>&nbsp;
+				  <a href="overviews/avargas/GeneR-avargas_1.rnw"
+				target="_blank">[.Rnw]</a>&nbsp;&nbsp;</b><br>
+				Amhed Vargas's GeneR overview.
+				<br><br>
+				
+				<b><a href="overviews/jzepeda/GeneR_1.pdf">GeneR_1.pdf</a>&nbsp;&nbsp;</b><br>
+				Jorge Zepeda and Fabricio López's GeneR overview.
+				<br><br>
+				
+				<b><a href="overviews/mortiz/expo_-1-_1.pdf">expo_-1-_1.pdf</a>&nbsp;&nbsp;</b><br>
+				Marco Ortiz and Augusto Berrocal's RmirR overview.
+				<br><br>
+				
+				<b><a href="overviews/yperez/HTqPCR_2.pdf">HTqPCR_2.pdf</a>&nbsp;
+				  <a href="overviews/yperez/HTqPCR_2.R"
+				target="_blank">[.R]</a>&nbsp;
+				  <a href="overviews/yperez/bn_1.pdf"
+				target="_blank">[pdf vignette style]</a>&nbsp;&nbsp;</b><br>
+				Daniela García and Yuvia Pérez's HTqPCR overview.
+				<br><br>
+				
+				<b><a href="overviews/mnoe/patter_1.pdf">patter_1.pdf</a>&nbsp;
+				<a href="overviews/mnoe/patter_1.R"
+				target="_blank">[.R]</a>&nbsp;
+				  <a href="overviews/mnoe/patter_1.rnw"
+				target="_blank">[.Rnw]</a>&nbsp;&nbsp;</b><br>
+				Ricardo Moreno and Melvin Noé's Splicegear overview.
+				<br><br>
+				
+				<b><a href="overviews/hmedina/expoMAIN_RUN_1.pdf">expoMAIN_RUN_1.pdf</a>&nbsp;
+				  <a href="overviews/hmedina/expoMAIN_RUN_1.R"
+				target="_blank">[.R]</a>&nbsp;&nbsp;</b><br>
+				Yael Fonseca and Héctor Medina's COSMO overview.
+				<br><br>
+				
+				<b><a href="overviews/fdiaz/gladglad_1.pdf">gladglad_1.pdf</a>&nbsp;&nbsp;</b><br>
+				Francisco Diaz and José Samaniego's GLAD overview.
+				<br><br>
+				
+				<b><a href="overviews/lsoto/mayepresent_1.pdf">mayepresent_1.pdf</a>&nbsp;&nbsp;</b><br>
+				Luz Mayela's Rolexa overview.
+				<br><br>
+				
+				<h2><span>credits</span></h2><br>
+				These were made thanks to the students :) and all credit goes to them.
+				<br><br>	
+
+				</span></p>
+				
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen2con5">
+					<span></span>
+				</div>
+			</div>
+		</div>
+
+		<div id=preamble>
+			<div id="resources" class="opciones" style="display:none;">
+			
+			<h2><span>supporting material</span></h2><br>
+			Here you can find links to different pdf files or urls which we used to create this course or that can help you as a reference.
+			<br><br>
+			
+			<b><a href="resources/R-lang.pdf" title="R lang" target="_blank">R language definition</a>&nbsp;</b><br><br>
+			<b><a href="resources/R-intro.pdf" title="R intro" target="_blank">An Introduction to R</a>&nbsp;</b><br><br>
+			<b><a href="resources/R_intro_easy.pdf" title="R intro"
+			target="_blank">An Easy Introduction to R</a>&nbsp;</b><br><br>
+			<b><a href="resources/not_so_short.pdf" title="R intro"
+			target="_blank">The Not so Short Introduction to LaTeX</a>&nbsp;</b><br><br>
+			<b><a href="resources/beameruserguide.pdf" title="R intro"
+			target="_blank">Beamer Userguide</a>&nbsp;</b><br><br>
+			<b><a href="resources/Symbols in Latex.pdf" title="R intro"
+			target="_blank">Symbols in LaTeX</a>&nbsp;</b><br><br>
+
+			<h2><span>websites</span></h2><br>
+			Here you can find several websites useful for and as reference for Statistics, R and/or Bioconductor.
+			<br><br>
+			<b><a href="http://bioconductor.org" 
+			      title="Bioconductor"
+			      target="_blank">
+			    Bioconductor's main site</a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="http://bioconductor.org/workshops/" 
+			      title="Bioconductor's official workshop site"
+			      target="_blank">
+			    Bioconductor's official workshops</a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="http://www.faculty.ucr.edu/~tgirke/Documents/R_BioCond/R_Programming.html" 
+			      title="Programming in R"
+			      target="_blank">
+			    Programming in R -- tgirke</a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="http://www.harding.edu/fmccown/R/" 
+			      title="Producing Simple Graphs with R"
+			      target="_blank">
+			    Producing Simple Graphs with R</a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="http://www2.warwick.ac.uk/fac/sci/moac/currentstudents/peter_cock/r/" 
+			      title="Peter's R Programming Pages"
+			      target="_blank">
+			    Peter's R Programming Pages </a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="http://zoonek2.free.fr/UNIX/48_R/02.html" 
+			      title="Programming in R -- zoonek"
+			      target="_blank">
+			    Programming in R -- zoonek </a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="http://www.statmethods.net/index.html" 
+			      title="Quick-R for SAS/SPSS/Stata Users"
+			      target="_blank">
+			    Quick-R for SAS/SPSS/Stata Users</a>&nbsp;
+			</b>
+			<br><br>
+
+
+			<h2><span>books</span></h2><br>
+			Here you can find several books on Statistics, R and/or Bioconductor.
+			<br><br>
+			Günther Sawitzki (2009).<br><b>Computational Statistics: An Introduction to R.</b><br>
+			CRC Press
+			<br><br>
+			Robert Gentleman (2008).<br><b>R Programming for Bioinformatics.</b><br>
+			CRC Press
+			<br><br>
+			John Chambers (2008).<br><b>Software for Data Analysis: Programming with R.</b><br>
+			Springer
+			<br><br>
+			R. Gentleman, V. Carey, W. Huber, R. Irizarry, and S. Dudoit (2005).<br><b>Bioinformatics and Computational Biology Solutions Using R and Bioconductor.</b><br>
+			Springer
+			<br><br>
+			F. Hahne, W. Huber, R. Gentleman, and S. Falcon (2008).<br><b>Bioconductor Case Studies.</b><br>
+			Springer
+			<br><br>
+			John Verzani (2005).<br><b>UsingR for Introductory Statistics.</b><br>
+			Chapman & Hall-CRC.
+			<br><br>
+			John Maindonald and John Braun (2007).<br><b>Data Analysis and Graphics Using R - an Example-Based Approach.</b><br>
+			Cambridge University Press.
+			<br><br>
+			Deborah Rumsey (2003).<br><b>Statistics for Dummies.</b><br>
+			Wiley Publishing, Inc.
+			<br><br>
+			Bernard Rosner (2006).<br><b>Fundamentals of Biostatistics.</b><br>
+			Thomson Books/Cole.
+			<br><br>
+			</span></p>
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen1">
+					<span></span>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div id=preambleMargen1>
+		<span><p>The format of this page is based on one created and with permission from <a href=mailto:bullard@berkeley.edu>James Bullard</a>. He taught a course on R and Bioconductor on January 2008 at LCG. You can check it <a href="http://wiki.biostat.berkeley.edu/~bullard/courses/T-mexico-08/">here</a>.</p><p>For more courses, workshops and events on R/Bioconductor, check the <a href="http://bioconductor.org/workshops/">official workshop</a> page or the Bioconductor <a href="http://bioconductor.org">main page</a>.</p></span>
+	</div>
+	<a href="http://www3.clustrmaps.com/counter/maps.php?url=http://www.lcg.unam.mx/~lcollado/B" id="clustrMapsLink"><img src="http://www3.clustrmaps.com/counter/index2.php?url=http://www.lcg.unam.mx/~lcollado/B" style="border:0px;" alt="Locations of visitors to this page" title="Locations of visitors to this page" id="clustrMapsImg" onerror="this.onerror=null; this.src='http://www2.clustrmaps.com/images/clustrmaps-back-soon.jpg'; document.getElementById('clustrMapsLink').href='http://www2.clustrmaps.com';" />
+</a>
+
+	<div id=footer_med>
+		<p><span id=dcha_med><i>Post your questions and commentaries on the <a class=up
+		href="http://foros.nnb.unam.mx/viewforum.php?f=111">forum.</a></i></span></p>
+	</div>
+</div>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-3152397-3");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</body>
+</html>

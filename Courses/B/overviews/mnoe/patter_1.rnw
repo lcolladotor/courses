@@ -1,0 +1,202 @@
+\documentclass{beamer}
+\usepackage{Sweave}
+\usepackage{fancyvrb}
+\usepackage{fancyhdr}
+\usepackage{beamerthemesplit}
+
+\title{\textbf{Seminar III: \texttt{R}/\texttt{Bioconductor}\\ \textbf{Splicegear} }}
+\author{Melvin Jesus Noe Gonzalez \\ Ricardo Romero Moreno}
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@
+
+
+\begin{document}
+
+
+
+\begin{frame}
+	\maketitle
+\end{frame}
+
+
+\section{Introduction to Splicegear}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Introduction}
+  \begin{itemize}
+	\item{With the advances in numerical processing of the data, the lowering of the costs and well defined experimental protocols, the reliability of data analysis has increased.}
+	\item{However little has been done to quantify how well the technique performs, how the existing oligonucleotide data could have been inuenced by alternative phenomenon and how it could contribute to discover novel splice variants.}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Introduction}
+  \begin{itemize}
+	\item{This package defines classes to handle probe expression values in an alternative splicing context.}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+	\frametitle{Installing and loading the package}
+<<eval=TRUE, echo=TRUE>>=
+
+library(splicegear)
+@
+\end{frame}
+
+\begin{frame}
+	\frametitle{Classes and plotting}
+	The plots are defined for the classes SPliceSites and SpliceExprSet.
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+	\frametitle{Classes and Plotting}
+<<eval=TRUE, echo=TRUE, fig=TRUE,height=5>>=
+data(spliceset)
+plot(spliceset)
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+	\frametitle{Classes and Plotting}
+<<eval=TRUE,echo=TRUE,fig=TRUE,height=5>>=
+data(spsites)
+plot(spsites)
+data(probes)
+plot(probes)
+@
+\end{frame}
+
+
+
+\begin{frame}[allowframebreaks, fragile]
+	\frametitle{Classes and Plotting}
+\begin{itemize}
+ \item{In these data sets you can find information used in the database of
+putative splice sites against the probes of Aymetrix U95A chips where
+you can find information about the levels of expression in cells from
+the liver and central nervous system.}
+\end{itemize}
+\end{frame}
+
+
+
+
+
+
+\section{A more complicated plot}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Using the classes}
+\begin{itemize}
+\item{in the firs part we described how to plot individual datasets, now lets try
+one plot a little bit more complicated in which we create a new object of the
+class SpliceExprSet as a result of the fussion of two datasets.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Using the classes}
+<<eval=TRUE,echo=TRUE,fig=TRUE,height=5>>=
+data(eset, package="splicegear")
+data(probes, package="splicegear")
+data(spsites, package="splicegear")
+spliset <- new("SpliceExprSet", eset=eset,
+probes=probes, spliceSites=spsites)
+plot(spliset)
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Different splice orders}
+	\begin{itemize}
+\item{Now lets create a new sequence in which you can find different splice orders}
+\item{We have to create an object of class SpliceSitesGenomic}
+\item{To make it possible we have to define the possible splice variants, the length
+of the sequence and the beggining positions of each possible splice site.}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Different splice orders}
+<<eval=TRUE,echo=TRUE,fig=TRUE,height=5>>=
+seq.length <- as.integer(10)
+spsiteIpos <- matrix(c(1, 3.5, 5, 9, 3, 4, 8, 10), nc=2)
+variants <- list(a=c(1,2,3,4), b=c(1,2,3), c=c(1,3,4))
+spvar <- new("SpliceSitesGenomic", spsiteIpos=spsiteIpos,
+variants=variants, seq.length=seq.length)
+plot(spvar)
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Different splice orders}
+	\begin{itemize}
+\item{Now to do this a bit more gentle to our eyes lets split de variants apart so you can see each one of them as if there where a plot for each one.}
+<<eval=TRUE,echo=TRUE,fig=TRUE,height=5>>=
+n.exons <- nrow(spsiteIpos)
+par(mfrow = c(3,1), mar = c(3.1, 2.1, 2.1, 1.1))
+plot(spvar, split=TRUE, col.exon=rainbow(n.exons))
+@
+\end{itemize}
+\end{frame}
+
+\section{Importing Data}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Using an xml view}
+	\begin{itemize}
+		\item{Now lets import a dataset and predict all its splice sites.}
+<<eval=TRUE, echo=TRUE>>=
+library(XML)
+filename <- system.file("data", "example.xml", package="splicegear")
+xml <- xmlTreeParse(filename, asTree=TRUE)
+spsites <- buildSpliceSites(xml)
+@
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Using XML}
+
+<<eval=TRUE, echo=TRUE>>=
+data(spliceset)
+dataf <- as.data.frame(spliceset)
+lm.panel <- function(x, y, ...) {
+points(x,y,...)
+p.lm <- lm(y~x); abline(p.lm)
+}
+@
+\end{frame}
+
+
+
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{And now?}
+	\begin{itemize}
+\item{Probe intensity values conditioned by the position of the probes on the mRNA}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{One interesting plot}
+<<eval=TRUE,echo=TRUE,fig=TRUE,height=5>>=
+coplot(log(exprs) ~ Material | begin, data=dataf, panel=lm.panel)
+
+@
+\end{frame}
+
+
+
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{The end}
+	\begin{itemize}
+\item{Thank you very much!}
+ \end{itemize}
+\end{frame}
+
+\end{document}

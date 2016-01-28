@@ -1,0 +1,916 @@
+\input{../header.tex}
+\begin{document}
+
+\SweaveOpts{prefix.string=plots/clase, height=5.7}
+
+%%% set up some options for Sweave and R %%%
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{\pl{Bioconductor}}
+  \tableofcontents
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Intro}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Motivación}
+  \begin{itemize}
+  \item \pl{Bioconductor} surgió por la gran cantidad de datos experimentales que estaban siendo generados. Son tal cantidad, que requerimos de la estadística y de la bioinformática para analizarlos.
+  \item Por otro lado, muchos laboratorios pierden tiempo re-escribiendo programas que ya otros habían hecho.
+  \item El otro problema es tener acceso a los programas que otros hacen. Por eso, \pl{Bioconductor} es de distribución libre. 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{De su funcionamiento}
+  \begin{itemize}
+  \item \pl{Bioconductor} empezó en el otoño del 2001.
+  \item Las personas principales que mantienen a \pl{Bioconductor} son del \pl{Fred Hutchinson Cancer Research Center} en Seattle, USA.
+  \item Salen dos versiones nuevas por año.
+  \item En sí, muchos de los paquetes de \pl{Bioconductor} están basados en la programación orientada a objetos y usan la clase S4.
+  \item Acuérdense de que \pl{R} puede ser útil para programar aunque muchos de los que mantienen a \pl{Bioconductor} tienen una formación fuerte en estadística.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Visitemos la página}
+  \begin{itemize}
+  \item Entren a la página de \myurlshort{www.bioconductor.org/}{Bioconductor} y navegen un poco.
+  \item Notarán que hay:
+  \begin{itemize}
+    \item Información sobre cursos.
+	\item Un FAQ.
+	\item Una sección donde te puedes registrar a las "mailing lists" por si quieres pedir ayuda y/o ayudar a otros.
+	\item Información sobre como instalar los paquetes.
+	\item Tal vez la sección más importante para nosotros es la parte de \myurlshort{www.bioconductor.org/packages/release/Software.html}{software}. Generalmente cada paquete tiene PDFs donde lo explican y/o ponen ejercicios demo.
+  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{CRAN}
+  \begin{itemize}
+  \item Mientras que \pl{Bioconductor} es el repositorio de información y paquetes más relacionado a la genómica, acuérdense de \myurlshort{cran.r-project.org/}{CRAN}.
+  \item Allí pueden encontrar paquetes útiles para ustedes, como es el \BIOCfunction{RMySQL} que veremos adelante.
+  \item En fin, en \pl{Bioconductor} pueden \myurlshort{www.bioconductor.org/download}{bajar} datos experimentales, software, etc.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{limma}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{limma: intro}
+  \begin{itemize}
+  \item Vamos a empezar con el paquete \BIOCfunction{limma} cuya información se encuentra \myurlshort{www.bioconductor.org/packages/release/bioc/html/limma.html}{aquí}.
+  \item \pl{limma} fue principalmente creado para analizar microarreglos, relaciones lineales y encontrar genes diferencialmente expresados.
+  \item Sus derivados gráficos son \pl{limmaGUI} y \pl{affylmGUI} mientras que de cierta forma su competencia es \pl{marray}.
+  \item En sí, solo vamos a ver una parte del paquete ya que es bastante extenso. Incluso su guía oficial no cubre todo.
+  \item Para ejemplificar este paquete y sus funciones, vamos a hacer una de las prácticas básicas.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Problema}
+  \begin{itemize}
+  \item En el caso básico de \pl{limma} trabajamos con 4 mediciones por gene en un microarreglo. Se usan dos colores: Cy3 y Cy5. Primero se hace una medición: WT Cy3, Experimento Cy5. Luego cambian los colores.
+  \item Tenemos datos de \emph{zebrafish}, ya que lo usan para estudiar el desarrollo temprano en vertebrados. Swirl es una mutante puntal del gene BMP2 que afecta al eje "dorsal/ventral" del cuerpo. Nuestro objetivo es usar los datos de este experimento para encontrar los genes con un nivel de expresión alterado en esta mutante comparado con el WT.
+  \item Las hibridaciones del experimento se hicieron en dos sets con tintes intercambiados, por lo que tenemos cuatro mediciones por gene. En cada microarreglo, compararon el RNA del pez mutante swirl con el del pez normal.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Datos}
+  \begin{itemize}
+  \item Para empezar, bajen los siguientes archivos a un directorio:
+  \begin{itemize}
+    \item fish.gal
+	\item swirl.1.spot
+	\item swirl.2.spot
+	\item swirl.3.spot
+	\item swirl.4.spot
+	\item SpotTypes.txt
+	\item SwirlSample.txt
+  \end{itemize}
+  \item Abran \pl{R} y cambien su directorio\footnote{Usen setwd.} a donde bajaron los archivos. Podríamos hacer todo vía Internet, pero esto nos va a ahorrar líneas de código.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{readTargets}
+  \begin{itemize}
+  \item Ahora, cargen el paquete \pl{limma} que ya debería estar instalado en los servidores\footnote{Si no lo tienen en su lap, siempren pueden instalarlo con las funciones que vimos la 1era clase}.
+  \item Usen la función \BIOCfunction{readTargets} para leer una tabla con información de nuestro experimento.
+<<eval=TRUE, echo=TRUE>>=
+library(limma)
+targets <- readTargets("SwirlSample.txt")
+targets
+@  
+  \item Claro, siempre podrían haber llenado esto a mano :P Pero bueno, ahora ya tenemos información sobre como fue el experimento.
+  \item En sí, nuestros archivos no son los más basicos, ya que los microarreglos fueron leídos por un escáner Axon para producir una imagen \pl{TIFF} que después fue analizada con el software \pl{SPOT}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{read.maimages}
+  \begin{itemize}
+  \item Vamos a usar la función \BIOCfunction{read.maimages} para leer los archivos generados por \pl{SPOT}.
+  \item Nos lee la intensidad \emph{foreground} y \emph{background} para los colores verde y rojo.
+<<eval=TRUE, echo=TRUE>>=
+RG <- read.maimages(targets$FileName, source="spot")
+@  
+  \item Usamos nuestro objeto \pl{targets} para obtener los nombres de los archivos. Ahora chequen su objeto \pl{RG}.
+<<eval=FALSE, echo=TRUE>>=
+RG
+@    
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{readGAL}
+  \begin{itemize}
+  \item De una vez nos podemos dar cuenta que los microarreglos de este experimento tienen 8448 puntos.
+  \item Como info aparte, los experimentalisatas usaron 768 puntos de control. Además, la impresora del arreglo funcionó con una cabeza de impresión de arreglo 4x4. Cada cuadrícula consiste de 22x24 puntos que se imprimieron con una punta de impresión.
+  \item En el archivo \pl{GAL} tenemos el nombre del gene asociado con dada punto. Usamos la función \BIOCfunction{readGAL} para leer esta info:
+<<eval=TRUE, echo=TRUE>>=
+RG$genes <- readGAL("fish.gal")
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{getLayout}
+  \begin{itemize}
+  \item Ahora, como se dieron cuenta, tenemos mucha información previa de como hicieron el microarreglo.
+  \item Podríamos pasar la información (las dimensiones) de la impresora del arreglo manualmente. Claro, es posible que nos equivoquemos :P
+  \item La función \BIOCfunction{getLayout} nos recupera esta información.
+<<eval=TRUE, echo=TRUE>>=
+RG$printer <- getLayout(RG$genes)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{imageplot}
+  \begin{itemize}
+  \item Una función del \pl{R} básico que nos ayuda a visualizar una matriz es \BIOCfunction{image}.
+  \item Para esto de los microarreglos hay una función similar (pero especializada) llamada \BIOCfunction{imageplot}.
+  \item Vamos a usar esa función para ver si hay variación en el \emph{background} de nuestros microarreglos.
+<<eval=FALSE, echo=TRUE>>=
+imageplot(log2(RG$Rb[,1]), RG$printer, low="white", high="red")
+imageplot(log2(RG$Gb[,1]), RG$printer, low="white", high="green")
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{imageplot: rojo}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+imageplot(log2(RG$Rb[,1]), RG$printer, low="white", high="red")
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{imageplot: verde}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+imageplot(log2(RG$Gb[,1]), RG$printer, low="white", high="green")
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{normalizeWithinArrays}
+  \begin{itemize}
+  \item Solo vimos la info del primer arreglo, pero nos dimos cuenta de que hay que normalizar los datos.
+  \item Usemos la función \BIOCfunction{normalizeWithinArrays}, la cual nos normaliza los datos con sus \emph{log-ratio} con tal de que la media de estos sea 0 en cada arreglo.
+<<eval=TRUE, echo=TRUE>>=
+MA <- normalizeWithinArrays(RG, method="none")
+@ 
+  \item Ahora veamos una imagen del primer arreglo ya normalizado: 
+<<eval=FALSE, echo=TRUE>>=
+imageplot(MA$M[,1], RG$printer, zlim=c(-3,3))
+@
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{imageplot: normalizado}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+imageplot(MA$M[,1], RG$printer, zlim=c(-3,3))
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{o\_O}
+  \begin{itemize}
+  \item La función \pl{imageplot} nos rota al arreglo, por lo que el grupo de hasta abajo a la izquierda es el primero.
+  \item En la última gráfica podemos ver que hay una raya roja. Esto nos dice que había polvo o que el microarreglo estaba rayado.
+  \item Los puntos que están en esa zona del artefacto, pues tendrán valores sospechosos.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{plotMA}
+  \begin{itemize}
+  \item Para esto de los microarreglos, sirve hacer una gráfica "MA".
+  \item En estas, vamos a graficar la razón R vs G contra la intensidad del punto. 
+  \item El valor $M$ está determinado por:
+  \begin{displaymath}M = log_{2}(R) - log_{2}(G)
+  \end{displaymath}
+  \item El valor $A$ representa la intensidad y está dado por:
+  \begin{displaymath}
+  A = (log_{2}(R) + log_{2}(G))/2
+  \end{displaymath}
+  \item Para hacer este tipo de gráficas, usamos \BIOCfunction{plotMA}.
+<<eval=FALSE, echo=TRUE>>=
+plotMA(MA)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{plotMA: del 1er arreglo}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+plotMA(MA)
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{plotPrintTipLoess}
+  \begin{itemize}
+  \item En la anterior gráfica podemos ver como esos valores derivados del artefacto salen en la esquina superior derecha.
+  \item Cuando tenemos muchos datos, luego nos distraemos por los \emph{outliers}. Por eso podemos usar las funciones de R \BIOCfunction{lowess} y \BIOCfunction{loess}. \pl{lowess} hace una "locally weighted polynomial regression". Es más vieja por lo que no utiliza la notación de fórmula.
+  \item Ahora vamos a usar \BIOCfunction{plotPrintTipLoess} para visualisar los datos completos de nuestro primer arreglo y la curva loess con la cual vamos a normalizarlos.
+<<eval=FALSE, echo=TRUE>>=
+plotPrintTipLoess(MA)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{plotPrintTipLoess: arreglo 1}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+plotPrintTipLoess(MA)
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Normalizando}
+  \begin{itemize}
+  \item Ahora normalizamos los datos con los parámetros default y volvemos a hacer el mismo tipo de gráfica.
+  \item En realidad, vamos a normalizar los valores $M$ para cada arreglo.
+<<eval=TRUE, echo=TRUE>>=
+MA <- normalizeWithinArrays(RG)
+@  
+<<eval=FALSE, echo=TRUE>>=
+plotPrintTipLoess(MA)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Grafica normalizado}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+plotPrintTipLoess(MA)
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Entre arreglos?}
+  \begin{itemize}
+  \item Una vez hecho lo anterior, nos podemos preguntar si es que hay que normalizar entre nuestros 4 microarreglos.
+  \item Para eso usamos la ya tan conocida función \pl{boxplot}:
+<<eval=FALSE, echo=TRUE>>=
+boxplot(MA$M~col(MA$M),names = colnames(MA$M))
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{boxplot: nuestra evidencia}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+boxplot(MA$M~col(MA$M),names = colnames(MA$M))
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{normalizeBetweenArrays}
+  \begin{itemize}
+  \item Ahora, como si hay evidencia de variación entre los arreglos, pues vamos a normalizarlos. Esto no se hace por rutina ya que muchas veces no es necesario.
+  \item Para eso usamos la función \BIOCfunction{normalizeBetweenArrays} y luego comprobamos el resultado con un \pl{boxplot}. Hay varios métodos los cuales pueden checar en la ayuda, pero solo usaremos el default.
+  \item Dicho método es el \pl{Aquantile} que se asegura de que los valores $A$ tengan la misma distribución empírica en los arreglos sin cambiar los valores $M$.
+<<eval=TRUE, echo=TRUE>>=
+MA <- normalizeBetweenArrays(MA,method="scale")
+@
+<<eval=FALSE, echo=TRUE>>=
+boxplot(MA$M~col(MA$M),names=colnames(MA$M))
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{normalizeBetweenArrays: res}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+boxplot(MA$M~col(MA$M),names=colnames(MA$M))
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{lmFit}
+  \begin{itemize}
+  \item Ahora vamos a hacer un modelo lineal para poder estimar el valor $M$ de cada gene.
+  \item Primero tenemos que especificar el diseño del experimento. Osea, cuando usaron que tinte.
+<<eval=TRUE, echo=TRUE>>=
+design <- c(-1,1,-1,1)
+@
+  \item Luego, hacemos nuestra regresión lineal con la función \BIOCfunction{lmFit} que está específicamente diseñada para microarreglos.
+  \item Dicha función nos va a regresar mucha información :)
+<<eval=TRUE, echo=TRUE>>=
+fit <- lmFit(MA,design)
+@
+  \item Corran el siguiente comando para obtener un despliegue con mayor información:
+<<eval=FALSE, echo=TRUE>>=
+fit
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Pruebas $t$}
+  \begin{itemize}
+  \item En el caso de nuestro objeto \pl{fit}, \pl{coefficients} es el valor $M$ promedio mientras que \pl{sigma} es la desviación estándar muestral para cada gene.
+  \item Podemos hacer pruebas $t$ comparar la mutante con el WT gene por gene así:
+<<eval=TRUE, echo=TRUE>>=
+ordinary.t <- fit$coef / fit$stdev.unscaled / fit$sigma
+@ 
+  \item Ahora hacemos una gráfica de los valores promedio $M$ y $A$ para cada gene.
+<<eval=FALSE, echo=TRUE>>=
+plotMA(fit)
+abline(0,0,col="blue")
+@ 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Promedio M vs A}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+plotMA(fit)
+abline(0,0,col="blue")
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{eBayes}
+  \begin{itemize}
+  \item De acuerdo a los creadores de \pl{limma} es mejor usar pruebas $t$ moderadas con Bayes empírico con la función \BIOCfunction{eBayes}.
+  \item Estos nos van a servir para encontrar los genes diferencialmente expresados. 
+  \item En sí, \pl{eBayes} utiliza la estimación de Bayes empírica para minimizar los errores estándares hacia un valor común.
+<<eval=TRUE, echo=TRUE>>=
+fit <- eBayes(fit)
+@  
+  \item Luego vamos a hacer una gráfica QQ para ver si tenemos genes diferencialmente expresados. Usamos \BIOCfunction{qqt} en vez de \pl{qq}, ya que queremos comparar nuestros cuantiles contra los de una distribución $t$ y no una normal.
+<<eval=FALSE, echo=TRUE>>=
+qqt(fit$t,df=fit$df.prior+fit$df.residual,pch=16,cex=0.2)
+abline(0,1)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{qqt}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+qqt(fit$t,df=fit$df.prior+fit$df.residual,pch=16,cex=0.2)
+abline(0,1)
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{topTable}
+  \begin{itemize}
+  \item En la anterior gráfica nos podemos dar cuenta de que tenemos muchos genes diferencialmente expresados en nuestro experimento.
+  \item Queremos saber cuales son, así que usamos la función \BIOCfunction{topTable}. Un argumento importante es \pl{adjust.method}, ya que aquí especificamos como vamos a corregir nuestros valores $p$.
+  \item Por ejemplo, con el siguiente código podemos ver los 30 (o el 1er) genes con una expresión diferencial más marcada ajustando los valores $p$ por FDR.
+<<eval=FALSE, echo=TRUE>>=
+options(digits=3) #para no tener tantos decimales. Es de R basico.
+topTable(fit,number=30,adjust="BH")
+@  
+<<eval=TRUE, echo=TRUE>>=
+topTable(fit,number=1,adjust="BH")
+@  
+  \item Como era de esperarse, nuestro gene con mayor diferencia es BMP2 ya que este lo tenemos mutado en la línea Swirl. A parte, salen otros que son controles.
+  \item También podemos ver los valores $p$ originales, los ajustados y los \emph{log odds} de la estadística empírica de Bayes.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Terminando con \pl{limma}}
+  \begin{itemize}
+  \item Ya para terminar con nuestra práctica de \pl{limma} vamos a marcar nuestros 30 genes en nuestra gráfica anterior.
+  \item Usaremos \BIOCfunction{order} y \BIOCfunction{text} del \pl{R} base para hacer esto.
+<<eval=FALSE, echo=TRUE>>=
+plotMA(fit)
+ord <- order(fit$lods,decreasing=TRUE)
+top30 <- ord[1:30]
+text(fit$Amean[top30],fit$coef[top30],labels=fit$genes[top30,"Name"],cex=0.8,col="blue")
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{\pl{limma}: FIN}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+plotMA(fit)
+ord <- order(fit$lods,decreasing=TRUE)
+top30 <- ord[1:30]
+text(fit$Amean[top30],fit$coef[top30],labels=fit$genes[top30,"Name"],cex=0.8,col="blue")
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{affy}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Una práctica}
+  \begin{itemize}
+  \item Hay un grupo muy fuerte que trabaja con \pl{R} para analizar sus microarreglos de \pl{Affimetrix}.
+  \item En sí, si checan el software de \pl{Bioconductor} verán muchos paquetes al respecto.
+  \item Vamos a hacer un ejercicio con datos de \pl{Affy}, aunque si quieren checar con más detalle la introducción pueden hacerlo \myurlshort{bioinfo.ucr.edu/~tgirke/HTML_Presentations/Manuals/Microarray/arrayBasics.pdf}{aquí}.
+  \item Para empezar, entramos a \pl{GEO}\footnote{Gene Expression Omnibus} y bajamos unos archivos en formato \pl{CEL} usando \pl{Arabidopsis[Organism] AND Atgenexpress[Title] AND light[Title]}. Para esta práctica, pueden bajarlos de \myurlshort{www.lcg.unam.mx/~lcollado/R/data/GSE5617/arabidopsis_CEL.zip}{arabidopsis\_CEL.zip}.
+  \item Por ahora quiero que chequen la descripción de los datos en \myurlshort{www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE5617}{GEO}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Targets}
+  \begin{itemize}
+  \item Hay que generar nuestro archivo "targets.txt" con la información de nuestros 9 archivos.
+  \end{itemize}
+  \begin{centering}
+  Name FileName Target\\
+DS REP1 GSM131177.CEL dark45m\\
+DS REP2 GSM131192.CEL dark45m\\
+DS REP3 GSM131207.CEL dark45m\\
+PS REP1 GSM131179.CEL red1m dark44m\\
+PS REP2 GSM131193.CEL red1m dark44m\\
+PS REP3 GSM131209.CEL red1m dark44m\\
+BS REP1 GSM131181.CEL blue45m\\
+BS REP2 GSM131195.CEL blue45m\\
+BS REP3 GSM131211.CEL blue45m\\
+  \end{centering}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Normalizaciones}
+  \begin{itemize}
+  \item Vamos a hacer 3 normalizaciones diferentes que no son sencillas. Pueden checar la liga anterior y encontrar los artículos relacionados.
+  \begin{itemize}
+    \item RMA: corrige el BG por el fondo del arreglo, normaliza por cuantiles y utiliza un modelo lineal robusto para resumir los datos.
+	\item GCRMA: corrige el BG por contenido de GC, normaliza por cuantiles y utiliza un modelo lineal robusto para resumir los datos.
+	\item MAS5: corrige el BG por regiones, normaliza al escalar por una constante, utiliza una correción MM y resume los datos utilizando un promedio bi-peso de Tukey.
+  \end{itemize}	
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{RMA}
+  \begin{itemize}
+  \item Primero cargamos los paquetes y leemos los datos. Una función nueva es \BIOCfunction{ReadAffy}.
+<<eval=TRUE, echo=TRUE>>=
+library(affy); library(limma); library(gcrma) # Loads required libraries.
+targets <- readTargets("targets.txt") # Import targets information.
+data <- ReadAffy(filenames=targets$FileName) # Import expression raw data and stores them as AffyBatch object.
+@  
+  \item Ahora normalizamos los datos con RMA y se los asignamos a un objeto \pl{exprSet}.
+<<eval=TRUE, echo=TRUE>>=
+eset_rma <- rma(data)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Visualizar}
+  \begin{itemize}
+  \item Ahora visualizamos nuestros datos crudos y los normalizados
+<<eval=FALSE, echo=TRUE>>=
+boxplot(data, col="red", main="Raw Data")
+boxplot(data.frame(exprs(eset_rma)), col="blue", main="RMA Normalized Data")
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{boxplot: datos crudos}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+boxplot(data, col="red", main="Raw Data")
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{boxplot: datos normalizados con RMA}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+boxplot(data.frame(exprs(eset_rma)), col="blue", main="RMA Normalized Data")
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Análisis GDE: RMA}
+  \begin{itemize}
+  \item Procedemos a encontrar los genes diferencialmente expresados.
+  \item Primero creamos nuestra matrix del diseño del experimento usando \BIOCfunction{model.matrix} y le agregamos mejores nombres.
+<<eval=TRUE, echo=TRUE>>=
+design <- model.matrix(~ -1+factor(c(1,1,1,2,2,2,3,3,3)))
+colnames(design) <- c("S1", "S2", "S3")
+@
+  \item Luego definimos las comparaciones que queremos hacer con \BIOCfunction{makeContrasts} y ajustamos cada gene a un modelo lineal.
+<<eval=TRUE, echo=TRUE>>=
+contrast.matrix <- makeContrasts(S2-S1, S3-S2, S3-S1, levels=design)
+fit <- lmFit(eset_rma, design)
+@  
+  \item Además, calculamos coeficientes estimados y errores estándares para nuesto conjunto de contrastes. Luego volvemos a usar \pl{eBayes}.
+<<eval=TRUE, echo=TRUE>>=
+fit2 <- contrasts.fit(fit, contrast.matrix) 
+fit2 <- eBayes(fit2)
+@  
+  \item Finalmente, filtramos nuestros resultados y los exportamos a un archivo \pl{Excel} usando la función nueva \BIOCfunction{rma\_deg\_result}.
+<<eval=TRUE, echo=TRUE>>=
+rma_deg_result <- topTable(fit2, coef=1, adjust="fdr", sort.by="B", number=50000)
+rma_deg_result <- rma_deg_result[rma_deg_result$adj.P.Val<=0.05,]
+write.table(rma_deg_result, "rma_deg_result.xls", quote=FALSE, row.names=FALSE, sep="\t")
+@ 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Venn: RMA}
+  \begin{itemize}
+  \item Finalmente creamos nuestro diagrama de Venn para todos los genes con un valor $p$ menor o igual a 0.05
+<<eval=TRUE, echo=TRUE>>=
+rma_venn <- decideTests(fit2, p.value=0.05)
+@  
+<<eval=FALSE, echo=TRUE>>=
+vennDiagram(rma_venn)
+@ 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Venn: RMA}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+vennDiagram(rma_venn)
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{GCRMA y MAS5}
+  \begin{itemize}
+  \item Ahora, hacemos lo mismo para GCRMA y MAS5. 
+  \item El código en sí es muy parecido aunque algunas funciones cambian de nombre. Por ejemplo, usamos \BIOCfunction{gcrma\_deg\_result} en vez de \pl{rma\_deg\_result}.
+<<eval=TRUE, echo=FALSE>>=
+## (A) Normalization: GCRMA
+eset_gcrma <- gcrma(data) # Normalizes the data with 'gcrma' function and assigns them to exprSet object.
+## (B) DEG Analysis for GCRMA Data
+fit <- lmFit(eset_gcrma, design) # Fits a linear model for each gene based on the given series of arrays.
+fit2 <- contrasts.fit(fit, contrast.matrix) # Computes estimated coefficients and standard errors for a given set of contrasts.
+fit2 <- eBayes(fit2) # Computes moderated t-statistics and log-odds of differential expression by empirical Bayes shrinkage of the standard errors towards a common value.
+gcrma_deg_result <- topTable(fit2, coef=1, adjust="fdr", sort.by="B", number=50000)
+gcrma_deg_result <- gcrma_deg_result[gcrma_deg_result$adj.P.Val<=0.05,]
+write.table(gcrma_deg_result, "gcrma_deg_result.xls", quote=FALSE, row.names=FALSE, sep="\t")
+## (C) Create Venn Diagram for GCRMA Data
+gcrma_venn <- decideTests(fit2, p.value=0.05)
+@  
+  \item La otra diferencia, es que para MAS5 hay que usar valores absolutos de las intensidades y no los logarítmicos.
+<<eval=TRUE, echo=TRUE>>=
+eset_mas5 <- mas5(data)
+exprs(eset_mas5) <- log2(exprs(eset_mas5))
+@  
+<<eval=TRUE, echo=FALSE>>=
+fit <- lmFit(eset_mas5, design) # Fits a linear model for each gene based on the given series of arrays.
+fit2 <- contrasts.fit(fit, contrast.matrix) # Computes estimated coefficients and standard errors for a given set of contrasts.
+fit2 <- eBayes(fit2) # Computes moderated t-statistics and log-odds of differential expression by empirical Bayes shrinkage of the standard errors towards a common value.
+mas5_deg_result <- topTable(fit2, coef=1, adjust="fdr", sort.by="B", number=50000)
+mas5_deg_result <- mas5_deg_result[mas5_deg_result$adj.P.Val<=0.05,]
+write.table(mas5_deg_result, "mas5_deg_result.xls", quote=FALSE, row.names=FALSE, sep="\t")
+## (C) Create Venn Diagram for MAS5 Data
+mas5_venn <- decideTests(fit2, p.value=0.05)
+@  
+  \item Obtenemos los siguientes diagramas de Venn:
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Venn: GCRMA}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+vennDiagram(gcrma_venn)
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Venn: MAS5}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+vennDiagram(mas5_venn)
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Sobrelape}
+  \begin{itemize}
+  \item Queremos ahora ver que tanto se sobrelapan los resultados de los diferentes métodos. Para eso usamos dos veces la función \BIOCfunction{merge}.
+  \item Finalmente creamos un archivo \pl{Excel} con la información resultante
+<<eval=TRUE, echo=TRUE>>=
+overlap2 <-(merge(rma_deg_result, gcrma_deg_result, by.x = "ID", by.y = "ID", all = FALSE))
+overlap3 <-(merge(overlap2, mas5_deg_result, by.x = "ID", by.y = "ID", all = FALSE))
+write.table(overlap3, "overlap.xls", quote=FALSE, row.names=FALSE, sep="\t")
+@  
+  \item Completamos nuestra comparación de métodos para encontrar los GDE :). Si se fijaron, usamos mucho a \pl{limma} para analizar los datos de \pl{Affy}.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{mcmc}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Paquete mcmc}
+  \begin{itemize}
+  \item Como les dije al principio, hay otros paquetes que les pueden ser interesantes en \pl{CRAN}.
+  \item Por ejemplo, está el paquete \BIOCfunction{mcmc} con el cual podemos hacer una cadena de Markov Monte Carlo para un vector de números al azar contínuos usando el algoritmo de Metropolis.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Un ejemplo básico}
+  \begin{itemize}
+  \item Primero llamamos al paquete y definimos una función para ver cuando cambiamos de punto:
+<<eval=TRUE, echo=TRUE>>=
+library(mcmc)
+h <- function(x) if (all(x >= 0) && sum(x) <= 1) return(1) else return(-Inf)
+@  
+  \item Además, lo corremos para generar 1000 datos usando un vector de cinco 0s.
+<<eval=TRUE, echo=TRUE>>=
+out <- metrop(h, rep(0, 5), 1000)
+@  
+  \item Podemos var el porcentaje de nuestros puntos que son aceptados de acuerdo a nuestra función \pl{h}.
+<<eval=TRUE, echo=TRUE>>=
+out$accept
+@   
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Mejorando}
+  \begin{itemize}
+  \item Como nuestra taza de aceptación es muy baja, lo corremos de nuevo. Pero ahora cambiamos el tamaño de la ventana sobre el cual estamos trabajando usando el argumento \pl{scale}.
+<<eval=TRUE, echo=TRUE>>=
+out <- metrop(out, scale = 0.1)
+out$accept
+@  
+  \item Como estamos cerca del 25 por ciento, pues ahora queremos hacer una gráfica de nuestros datos que generamos:
+<<eval=FALSE, echo=TRUE>>=
+plot(out$batch[ , 1])
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Con 25 \%}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+plot(out$batch[ , 1])
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Finalizando}
+  \begin{itemize}
+  \item Sin embargo, no tenemos suficientes datos por lo que volvemos a correr para generar 10 000 datos.
+  \item Ya con esta cantidad, podemos obtener nuestro histograma final, que es para lo que usamos este paquete.
+<<eval=TRUE, echo=TRUE>>=
+out <- metrop(out, nbatch = 1e4)
+out$accept
+@  
+<<eval=FALSE, echo=TRUE>>=
+plot(out$batch[ , 1])
+hist(out$batch[ , 1])
+@  
+  \item En sí, MCMC es complicado pero se los mencioné ya que Ziheng Yang les dio una plática donde usa el MCMC.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Histograma final}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+hist(out$batch[ , 1])
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{RMySQL}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Ligando a \pl{R} con \pl{MySQL}}
+  \begin{itemize}
+  \item Como nos lo pidieron los de la 4ta y 5ta, Osam y yo averiguamos sobre como enlazar \pl{R} con \pl{MySQL}.
+  \item La solución es usar el paquete \pl{RMySQL} que ya está instalado en los servidores. Sin embargo, este no es sencillo de instalar en una laptop con \pl{Windows}\footnote{Pondré los pasos a seguir en el foro}.
+  \item Con este paquete es fácil hacer consultas o simplemente bajar toda una tabla a \pl{R}.
+  \item La velocidad con la que leen una tabla dependerá si están en red local con el servidor o si están desde su casa.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Uso básico}
+  \begin{itemize}
+  \item En fin, podemos explorar ciertas funcionalidades del paquete con el siguiente comando o en su guía disponible en \pl{CRAN}.
+<<eval=FALSE, echo=TRUE>>=
+help(package = "RMySQL")
+@  
+<<eval=TRUE, echo=FALSE>>=
+library(RMySQL)
+@  
+  \item Es \alert{importante} que recuerden cerrar toda sesión de \pl{MySQL} que abran con \pl{R}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{dbConnect}
+  \begin{itemize}
+  \item Lo más básico es aprender a conectarse a su base de datos. Esto lo hacen con la función \BIOCfunction{dbConnect} y con sus argumentos \pl{user}, \pl{password}, \pl{dbname} y \pl{host}. Por ejemplo:
+<<eval=FALSE, echo=TRUE>>=
+con <- dbConnect(MySQL(), user="lcollado", password="LOL", dbname="BPdB", host="kabah.lcg.unam.mx")
+@  
+  \item Para desconectarse, simplemente usen \BIOCfunction{dbDisconnect}:
+<<eval=FALSE, echo=TRUE>>=
+dbDisconnect(con)
+@    
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Pasamos datos a R}
+  \begin{itemize}
+  \item Una vez conectados, pueden usar funciones como \BIOCfunction{dbListTables} y \BIOCfunction{dbReadTable} para ver sus tablas o descargarlas a R.
+<<eval=TRUE, echo=FALSE>>=
+con <- dbConnect(MySQL(), user="lcollado", password="lco771", dbname="BPdB", host="kabah.lcg.unam.mx")
+@  
+<<eval=TRUE, echo=TRUE>>=
+dbListTables(con)
+d <- dbReadTable(con, "phage")
+@  
+  \item Cual es la clase del objeto \pl{d}?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Usen sus datos!}
+  \begin{itemize}
+  \item \pl{d} es clase \pl{data.frame}. Estos son fáciles de manipular en \pl{R} y ya los hemos manejado muchas veces :)
+  \item Ya con sus datos en \pl{R} pueden utilizar herramientas que vimos en las anteriores clases para explorarlos.
+  \item Por ejemplo, usemos a \pl{lattice}
+<<eval=TRUE, echo=TRUE>>=
+library(lattice)
+table(factor(d$phage_topology))
+@
+<<eval=FALSE, echo=TRUE>>=
+densityplot( ~d$phage_gc_content | factor(d$phage_topology))
+qqmath( ~d$phage_gc_content | factor(d$phage_topology))
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{Explorando nuestros datos:}
+<<eval=TRUE, echo=FALSE>>=
+pdf(file="lattice1.pdf", height=5.7)
+densityplot( ~d$phage_gc_content | factor(d$phage_topology))
+dev.off()-> xx
+@  
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice1.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{QQplot: tenemos datos normales?}
+<<eval=TRUE, echo=FALSE>>=
+pdf(file="lattice2.pdf", height=5.7)
+qqmath( ~d$phage_gc_content | factor(d$phage_topology))
+dev.off()-> xx
+@  
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice2.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Nos desconectamos}
+  \begin{itemize}
+  \item Otra gráfica que pudimos hacer es:
+<<eval=FALSE, echo=TRUE>>=
+bwplot( d$phage_gc_content ~ factor(d$phage_topology))
+@  
+  \item En fin, hay que desconectarse!
+<<eval=TRUE, echo=TRUE>>=
+dbDisconnect(con)
+@   
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Fin de la clase}
+  \begin{itemize}
+  \item Como se dieron cuenta hoy, el universo de \pl{Bioconductor} es amplio y complicado. Hay paquetes sencillos como el \pl{GeneR} y otros mucho más avanzados com \pl{Biostrings} y \pl{Shortreads} que son más para manejar datos de \pl{Solexa}.
+  \item De tarea ya no les voy a dejar ejercicios puntuales, pues la idea es que empiezen a trabajar en la parte de \pl{R} de su proyecto.
+  \item Esta vez tienen que entregar vía la página de Cursos un solo código por equipo. En dicho código tienen que hacer 3 gráficas, o pruebas de estadística, etc. y poner en comentarios las conclusiones que saquen\footnote{No tienen que ser conclusiones complicadas}. Evidentemente tienen que usar datos de su proyecto.
+  \item Suerte!
+  \end{itemize}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

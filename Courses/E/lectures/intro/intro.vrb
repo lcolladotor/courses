@@ -1,0 +1,6 @@
+\frametitle {Una gráfica de mosaicos}
+  \begin{figure}[htbp]
+  \begin{centering}
+  \includegraphics[height=3in]{mosaicplot_tissuesAssoc.jpg}
+  \end{centering}
+  \end{figure}

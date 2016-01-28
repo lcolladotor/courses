@@ -1,0 +1,647 @@
+\input{../header.tex}
+\begin{document}
+
+\SweaveOpts{prefix.string=plots/clase, height=5.7}
+
+%%% set up some options for Sweave and R %%%
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Pruebas Estadísticas}
+  \tableofcontents
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Poblaciones}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Unos conceptos}
+  Recuerden algunos conceptos:
+  \begin{itemize}
+  \item La \BIOCfunction{inferencia estadística} es el proceso de hacer juicios sobre una población con base en una muestra.
+  \item Una \BIOCfunction{variable aleatoria} puede tener un valor observado o un potencial de valores descritos por su distribución de probabilidades.
+  \item La \BIOCfunction{media poblacional} de la variable aleatoria $X$ es igual a $\mu$ y al valor esperado de $X$.
+  \item La \BIOCfunction{varianza poblacional} se denomina $\sigma^2$ y la desviación estándar es su raíz: $\sigma$.
+  \item Si $f(x)$ es la \BIOCfunction{función de densidad de probabilidad}\footnote{Es función de distribución de probabilidad si $X$ es discreta; o función de densidad de probabilidad si $X$ es contínua.} para $X$, para toda $b$, $P(X \geq b)$ es igual al área bajo $f$ que está a la izquierda de $b$.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Muestreo}
+  \begin{itemize}
+  \item Para hacer inferencia estadística necesitamos una muestra de la población; osea, una secuencia de variables aleatorias.
+  \item Estas pueden estar idénticamente distribuidas si tienen la misma distribución. Además, generalmente asumimos que son independientes.
+  \item En \pl{R} podemos obtener muestras de una población dada con la función \BIOCfunction{sample}. Puede ser con o sín remplazo dependiendo del valor del argumento \Rcode{replace}.
+  \item Por ejemplo, tiramos 10 veces un dado de 20 lados\footnote{Se usan en \myurlshort{www.wizards.com/default.asp?x=Dnd/welcome}{DnD}}
+<<eval=TRUE, echo=TRUE>>=
+sample(1:20, size=10, replace=TRUE)
+@
+  \item En realidad trabajaremos con distribuciones muestrales. Estas pueden ser muy complicadas pero unas se relacionan con distribuciones poblacionales. Por ejemplo, la desviación estándar muestral es igual a $\sigma/\sqrt{n}$.  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Funciones sobre distribuciones}
+  \begin{itemize}
+  \item En \pl{R} hay toda una gama de distribuciones. Estas generalmente van a tener 4 funciones:
+  \begin{itemize}
+    \item Con la función \BIOCfunction{d} obtenemos la función función de densidad de probabilidad.
+	\item \BIOCfunction{p} nos regresa la función de densidad de probabilidad acumulada.
+	\item \BIOCfunction{q} nos da los los cuantiles de una distribución.
+	\item \BIOCfunction{r} nos da valores aleatorios que siguen a la distribución especificada.
+  \end{itemize}
+  \item Por ejemplo, aquí jugamos un poco con la distribución uniforme en $[0,3]$:
+<<eval=TRUE, echo=TRUE>>=
+dunif(x=1, min=0, max=3)
+punif(q=2, min=0, max=3)
+qunif(p=1/2, min=0, max=3)
+runif(n=1, min=0, max=3)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Distribuciones}
+  \begin{itemize}
+  \item \pl{R} tiene ya varias poblaciones con las que podemos jugar :) como pueden ver con el siguiente comando:
+<<eval=FALSE, echo=TRUE>>=
+help.search("distribution", package ="stats")
+@
+  \item Para la Bernoulli pueden usar la función \Rcode{sample}.
+  \item La binomial usa \BIOCfunction{binom}. Por ejemplo:
+<<eval=TRUE, echo=TRUE>>=
+dbinom(5, size=10, prob=1/2)
+@  
+  \item Para la normal, usamos \BIOCfunction{norm}.
+  \item La uniforme ya la conocen: \BIOCfunction{unif}.
+  \item La distribución lognormal es con \BIOCfunction{lnorm}. Tiene un sesgo importante hacia la derecha.
+  \item Las distribuciones $t$, $F$ y $\chi^2$ sirven para describir distribuciones muestrales. Se usan con \BIOCfunction{t}, \BIOCfunction{f} y \BIOCfunction{chisq}.
+  \item Cada una tiene argumentos diferentes, así que chequen la sección de ayuda :)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Teorema del límite central}
+  Recordando:
+  \begin{itemize}
+  \item Ley de los grandes números: \emph{En un contexto estadístico, las leyes de los grandes números implican que el promedio de una muestra al azar de una población de gran tamaño tenderá a estar cerca de la media de la población completa.}\footnote{De acuerdo a wiki}
+  \item Con esta ley en mente, el teorema del límite central nos dice que si tienes muchos datos, estos se aproximarán a una normal.
+  \item Más rigurosamente, este teorema dice que para cualquier población padre con media $\mu$ y desviación estándar $\sigma$, la distribución muestral de $\overline X$ con $n$ grande satisface:
+  \begin{displaymath}
+   P(\frac{\overline X - \mu}{\sigma/\sqrt{n}} \leq b) \approx P(Z \leq b)
+  \end{displaymath}
+  donde Z es una variable aleatoria normal estándar. Osea, que si $n$ es suficientemente grande, la distribución de $\overline X$ una vez estandarizada es aproximadamente una distribución normal estándar.
+  \item Pueden reemplazar a $\sigma$ con la desviación estándar muestral $s$ y funciona.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Simulaciones}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Simulaciones}
+  \begin{itemize}
+  \item Algo que podría parecer muy loco es repetir lo mismo muchas veces esperando obtener resultados diferentes. Bueno, en estadística luego es bueno hacer simulaciones.
+  \item Con simulaciones podemos obtener información la forma, las colas, la media y la varianza de una distribución.
+  \item A continuación hacemos simulaciones para justificar la $n$ del teorema del límite central.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{TLC: simulación}
+<<eval=FALSE, echo=TRUE>>=
+m <- 200; p <- 1/2; n <- c(5, 15, 25, 100)
+par(mfrow=c(2,2))
+for (i in 1:4) {
+res <- rbinom(m, n[i],  p)
+hist(res, prob=TRUE, main=n[i])
+}
+par(mfrow=c(1,1))
+@
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{TLC: simulación}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+m <- 200; p <- 1/2; n <- c(5, 15, 25, 100)
+par(mfrow=c(2,2)) -> xx
+for (i in 1:4) {
+res <- rbinom(m, n[i],  p)
+hist(res, prob=TRUE, main=n[i])
+}
+par(mfrow=c(1,1)) -> xx
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Ahora con medianas de \Rcode{exp}}
+<<eval=FALSE, echo=TRUE>>=
+m <- 500
+res.25 <- c(); res.100 <- c(); res.400 <- c()
+f <- function(n) median(rexp(n))
+for(i in 1:m) res.25[i] <- f(25)
+for(i in 1:m) res.100[i] <- f(100)
+for(i in 1:m) res.400[i] <- f(400)
+plot(density(res.400), xlim = range(res.25), type="l", main="", xlab = "Medianas")
+lines(density(res.100))
+lines(density(res.25))
+@
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Medianas de \Rcode{exp}}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+m <- 500
+res.25 <- c(); res.100 <- c(); res.400 <- c()
+f <- function(n) median(rexp(n))
+for(i in 1:m) res.25[i] <- f(25)
+for(i in 1:m) res.100[i] <- f(100)
+for(i in 1:m) res.400[i] <- f(400)
+plot(density(res.400), xlim = range(res.25), type="l", main="", xlab = "Distribuciones muestrales para la mediana con n=25, 100, 400", col="red")
+lines(density(res.100), col="blue")
+lines(density(res.25), col="forest green")
+legend(1, 6, c("400", "100", "25"), col=c("red", "blue", "forest green"), lty=1)
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Bootstrap}
+  \begin{itemize}
+  \item La idea es crear una nueva muestra del mismo tamaño que la original.
+  \item Lo podemos hacer con un muestro con remplazo usando la función \BIOCfunction{sample}.
+  \item Con este tipo de muestras podemos estimar ciertos parámetros, como la media y la varianza. Usemos el set de datos \pl{bycatch} de \pl{UsingR}.
+<<eval=TRUE, echo=TRUE>>=
+library(UsingR)
+data(bycatch)
+hauls <- rep(bycatch$no.albatross, bycatch$no.hauls)
+n <- length(hauls)
+xbarstar <- c()
+for (i in 1:1000) {
+ boot.samp <- sample(hauls, n, replace = TRUE)
+ xbarstar[i] <- mean(boot.samp)
+}
+mean(xbarstar)
+sd(xbarstar) 
+@  
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Intervalos de Confianza}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Para que sirven}
+  \begin{itemize}
+  \item Un intervalo de confianza nos da un rango donde se encuentra el valor de un parámetro con cierta probabilidad.
+  \item Por ejemplo, de acuerdo a \pl{age.universe} de \pl{UsingR}, la edad del universo es de 13.7 mil millones de años con un margen de error de 1% y 95% de confianza. Esto quiere decir que la edad del universo se encuentra en el interval (13.56, 13.84) con alta probabilidad (0.95).
+  \item Los intervalos de confianza nos van a servir para estimar parámetros desconocidos. Para más info chequen en \myurlshort{es.wikipedia.org/wiki/Intervalo_de_confianza}{wikipedia}.
+  \item Podemos usar varias funciones: \BIOCfunction{prop.test} para proporciones donde $np > 5$ y $n(1-p) > 5$. \BIOCfunction{binom.test} también puede servirnos si queremos usar la distribución binomial.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{\BIOCfunction{prop.test}}
+  \begin{example}
+  Imaginemos que tenemos 10000 bolas con valores 1 ó 0; 5600 tienen 1s. 1000 veces seleccionamos 100 de estas al azar y contamos cuantos 1s encontramos. Queremos encontrar el intervalo de confianza usando \Rcode{prop.test} de 95\% para la proporción de bolas marcadas con 1 en la población. Luego comparenlo con proporción real.
+<<eval=FALSE, echo=TRUE>>=
+pop <- rep(0:1, c(10000 - 5600, 5600))
+res <- c()
+for (i in 1:1000) res[i] <- sum(sample(pop, 100))
+prop.test(mean(res), 100, conf.level = 0.95)
+@  
+  \end{example}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Una sola cola}
+  \begin{itemize}
+  \item En \pl{R} podemos usar el argumento \Rcode{alt} para especificar si queremos un intervalo de confianza de una sola cola. Puede ser \pl{"less"} o \pl{"greater"}.
+  \item Además de las funciones que vimos, está la \BIOCfunction{t.test}.
+  \item Para que usar t.test? Acuérdense de que la distribución $t$ nos sirve si $n$ es pequeña.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{t.test}  
+  \begin{example}
+  Le dicen a Pepe que la temperatura ideal para servir el café es de 180 grados Farenheit. Tenemos 5 mediciones y queremos encontrar un intervalo de 90\% de la forma $(-\infty , b]$ para la temperatura media:
+  \end{example} 
+  Así lo pueden resolver:
+<<eval=TRUE, echo=TRUE>>=
+x <- c(175, 185, 170, 184, 175)
+t.test(x, conf.level = 0.9, alt="less")
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Más intervalos}
+  \begin{itemize}
+  \item Pueden usar la $\chi^2$ para encontrar valores de intervalo de varianzas, en vez de medias como lo veníamos haciendo.
+  \item Para comparar dos proporciones y checar si vienen de la misma población, podemos volver a usar \Rcode{prop.test}. Noten que usa una correción por continuidad.
+  \end{itemize}
+  \begin{example}
+  En el transcurso de dos semanas se hizo la misma encuesta. En la primera 560 de 1000 digeron que sí, en la segunda 570 de 1200 digeron que sí. Cual es el intervalo de confianza para la diferencia de proporciones?
+<<eval=FALSE, echo=FALSE>>=
+# Para resolverlo
+prop.test(x=c(560, 570), n=c(1000, 1200), conf.level=0.95)
+@  
+  \end{example}
+  \begin{itemize}
+  \item Concluyen que hay o no hay una diferencia real en los parametros de la población?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Diferencia de medias}
+  \begin{itemize}
+  \item Si quieren encontrar un intervalo de confianza para una diferencia de medias, tienen que usar la distribución $t$.
+  \item Acuérdense que al hacer esto vamos a tener que escoger entre suponer que las varianzas son iguales o que son diferentes.
+  \item Eso afecta a nuestra fórmula del error estándar y de los grados de libertad. 
+  \item A parte, hay que asumir que las variables son independientes o dependientes en cuyo caso deben usar el argumento \Rcode{paired} o usar la notación de fórmula.
+  \item Aquí les muestro un ejemplo de variables independientes.
+  \end{itemize}
+<<eval=FALSE, echo=TRUE>>=
+x <- c(0, 0, 0, 2, 4, 5, 13, 14, 14, 14, 15, 17, 17)
+y <- c(0, 6, 7, 11, 13, 16, 16, 16, 17, 18)
+boxplot(list(placebo=x, medicina=y))
+t.test(x,y, var.equal=TRUE)
+@  
+\end{frame}  
+
+\begin{frame}[fragile]
+  \frametitle{Checando igualdad de varianza}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+x <- c(0, 0, 0, 2, 4, 5, 13, 14, 14, 14, 15, 17, 17)
+y <- c(0, 6, 7, 11, 13, 16, 16, 16, 17, 18)
+boxplot(list(placebo=x, medicina=y), col="gray")
+t.test(x,y, var.equal=TRUE) -> xx
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Unas no paramétricas}
+  \begin{itemize}
+  \item Queremos encontrar el intervalo de confianza para la mediana, lo cual es útil si nuestros datos tienen un sesgo considerable.
+  \item Por un lado, podemos usar la binomial y ordenar nuestros datos de la siguiente forma:
+<<eval=TRUE, echo=TRUE>>=
+x <- c(110, 12, 2.5, 98, 1017, 540, 54, 4.3, 150, 432) # Son datos de una muestra al azar de los top 200 CEOs en el 2000 en USA. Los números son 10 000 de USD en bonificaciones que les dieron.
+n <- length(x)
+j <- qbinom(0.05, n, 1/2)
+sort(x)[c(j, n+1-j)] # Es el intervalo de confianza de 95%
+@  
+  \item Otra opción es usar la estadística de signo ordenada de Wilcoxon. Esta la pueden usar con \BIOCfunction{signrank} aunque tienen que especificar el argumento \Rcode{conf.int=TRUE}.
+  \item Con esta prueba tenemos que asumir simetría con respecto a la mediana. Claro, si no son simétricas podemos transformar los datos y luego transformar el intervalo de regreso como a continuación:
+<<eval=FALSE, echo=TRUE>>=  
+boxplot(scale(x), scale(log(x)), names=c("CEO", "log.CEO"))
+@
+<<eval=TRUE, echo=TRUE>>=
+wilcox.test(log(x), conf.int=TRUE, conf.level = 0.9) -> xx
+exp(xx$conf.int)
+@  
+  \item Comparen los dos intervalos de confianza!
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Cual es simétrica vs la mediana?}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+boxplot(scale(x), scale(log(x)), names=c("CEO", "log.CEO"), main="Boxplot de los datos de CEO y su log", col="gray")
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Pruebas de hipótesis}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Definiciones}
+  \begin{itemize}
+  \item Los intervalos de confianza son una forma de inferencia estadística. Las pruebas de significancia o pruebas de hipótesis son otra que asumen un valor exacto para el parámetro de la población en vez de un rango.
+  \item Ya con el valor, estas pruebas calculan una probabilidad basado en una muestra dado el valor asumido.
+  \item Vamos a tener que definir una hipótesis nula $H_0$ que contrastamos con la hipótesis alternativa $H_A$. Con la prueba de hipótesis queremos ver si $H_0$ es razonable dado los datos que tenemos. Nunca aceptamos $H_A$ pero podemos rechazar $H_0$ en favor de $H_A$.
+  \item El \alert{valor $p$} se calcula con las asunciones de $H_0$ y es la probabilidad de que la prueba estadística\footnote{Es generada por un experimento que reemplaza a nuestra evidencia} es el valor observado o uno más extremo descrito con la hipótesis alternativa.
+  \item \BIOCfunction{valor $p$ = P(probabilidad de obtener un valor como el observado o más extremo dado $H_0$)}
+  \item Si el valor $p$ es pequeño, la prueba es estadísticamente significativa lo cual nos indica que es poco probable que $H_0$ genere valores más extremos del observado. Por lo tanto, terminamos rechazando $H_0$.
+  \item \pl{R} te pone símbolos a tus valores $p$ si llegan a cierto rango de "pequeño". Por ejemplo, para valores $p$ en $(0.01, 0.05]$ te pone un *.
+  \item Cuando rechazamos una $H_0$ en realidad no hemos probado que $H_0$ está mal o que $H_A$ está bien.
+  \item Una vez que especificamos un nivel de significancia, podemos encontrar la región de rechazo y los valores críticos.
+  \item Podemos cometer errores:
+  \begin{itemize}
+    \item Si rechazamos $H_0$ cuando era cierta, es un error tipo I.
+	\item Si $H_0$ es falsa y la aceptamos, cometemos un error tipo II.
+  \end{itemize}	
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Diferencia de proporciones}
+  \begin{itemize}
+  \item A veces conocemos una proporción para cierta variable. Luego medimos esta proporción para alguna muestra y queremos saber si es diferente a la conocida.
+  \item Podemos usar como $H_A$ que $p < p_0$, $p > p_0$ o $p  \neq p_0$. Osea, podemos usar la cola izquierda, la derecha o las dos.
+  \item Podemos hacer esta prueba con \BIOCfunction{prop.test}.  
+  \end{itemize}  
+  \begin{example}
+  En USA, 11.3\% era pobre en el 2000 de acuerdo a un censo. Para el 2001 estimaron que el 11.7\% era pobre. Digamos que el tamaño de su muestra fue de 50 000 personas. Queremos investigar si el valor de 11.7\% representa un incremento entre el año 2000 y 2001. Usen \Rcode{prop.test}.
+  \end{example}   
+\end{frame}
+
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Resolviendo el ejemplo}
+  \begin{itemize}
+  \item Para resolver el ejemplo, usamos $H_0 : p = 0.113$ y $H_A : p > 0.113$
+  \item Como es de solo una cola (la derecha), obtenemos el resultado así:
+<<eval=TRUE, echo=TRUE>>=
+prop.test(x=0.117*50000, n=50000, p=0.113, alt="greater") -> xx
+xx$p.value
+@ 
+  \item Nuestro valor $p$ es muy significativo. Por lo que rechazamos $H_0$ en favor de $H_A$.
+  \item NOTA: hagan \BIOCfunction{\Rcode{attributes(xx)}} para aprender más de la función \Rcode{prop.test}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Para la media}
+  \begin{itemize}
+  \item Si asumen que sus datos se distribuyen como normal y no están fuertemente sesgados\footnote{Grafiquen sus datos previamente}, con la función \BIOCfunction{t.test} podemos probar la $H_0 : \mu = \mu_0$ vs $H_A : \mu < \mu_0$, $\mu > \mu_0$ o $\mu \neq \mu_0$
+  \item Por ejemplo, sospechan que su nueva SUV no da el kilometraje anunciado de 17 km por litro. Llenan su tanque 10 veces y obtienen los siguientes valores: 11.4, 13.1, 14.7, 15, 15.5, 15.6, 15.9, 16, 16.8. Hacemos una \Rcode{t.test}:
+<<eval=TRUE, echo=TRUE>>=
+kpl <- c(11.4, 13.1, 14.7, 15, 15.5, 15.6, 15.9, 16, 16.8)
+t.test(kpl, mu = 17, alt="less") -> xx
+xx$p.value
+@
+  \item Dado que el valor $p$ es significativo, rechazamos $H_0$ en favor de $H_A$.
+  \item Si se fijaron, estamos usando las mismas funciones para obtener los intervalos de confianza y hacer las pruebas de hipótesis. Es que estamos usando la misma estadística para los dos.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Prueba del signo}
+  \begin{itemize}
+  \item Si sus datos no se distribuyen como normal (o cerca de), podemos hacer unas pruebas no paramétricas con la mediana.
+  \item Por ejemplo, podemos hacer la prueba de signo donde solo asumimos que la distribución es contínua y positiva usando \Rcode{sum} y \Rcode{pbinom}. Nuestra hipótesis son:
+  \begin{itemize} 
+    \item $H_0$: mediana = $m$
+    \item $H_A$: mediana < $m$, mediana > $m$ o mediana $\neq m$
+  \end{itemize}
+  \item Un ejemplo. Digamos que hicimos llamadas de 2, 1, 3, 3, 3, 3, 1, 3, 16, 2, 2, 12, 20, 3 y 1 minutos. Tenemos $H_0$: mediana = 5 y $H_A$: mediana < 5.
+<<eval=TRUE, echo=TRUE>>=
+llamadas <- c(2, 1, 3, 3, 3, 3, 1, 3, 16, 2, 2, 12, 20, 3, 1)
+obs <- sum(llamadas > 5)
+n <- length(llamadas)
+1 - pbinom(n-obs-1, n, 1/2)
+@  
+  \item Rechazamos $H_0$ con $\alpha = 0.05$. Para dos colas podríamos hacer:
+<<eval=TRUE, echo=TRUE>>=
+k <- max(obs, n - obs)
+2 * (1 - pbinom(k-1, n, 1/2))
+@   
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Wilcoxon signo ordenado}
+  \begin{itemize}
+  \item Si sus datos son símetricos y contínuos pueden usar esta prueba con \BIOCfunction{wilcox.test}.
+  \end{itemize}
+  \begin{example}
+  Usemos \pl{salmon.rate} de \pl{UsingR}. Hagan una gráfica para ver la distribución. Luego hagan una con los valores log. Tenemos $H_0$: mediana = log(0.005) y $H_A$: mediana > log(0.005). Qué concluyen?
+<<eval=TRUE, echo=TRUE>>=
+wilcox.test(log(salmon.rate), mu=log(0.005), alt="greater") -> xx
+xx$p.value
+@  
+  \end{example}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Dos proporciones}
+  \begin{itemize}
+  \item Estábamos comparando un estimado de un parametro vs el poblacional. Ahora si queremos comparar dos parametros como podrían ser dos prociones podemos usar \Rcode{prop.test}.
+  \item Vamos a tener $H_0$: $p_1 = p_2$ y $H_A$: $p_1 < p_2$, $p_1 > p_2$ ó $p_1 \neq p_2$.
+  \item Siguiendo el ejemplo de la pobreza, digamos que tenemos para el 2002 un porcentaje de 12.1\% de pobres con una muestra de 60 000.
+  \end{itemize}
+<<eval=TRUE, echo=TRUE>>=
+phat <- c(.117, .121)
+n <- c(50000, 60000)
+prop.test(n*phat, n, alt="less") -> xx
+xx$p.value
+@  
+\end{frame}
+
+\begin{frame}[allowframebreaks,]
+  \frametitle{Pruebas de centro}
+  \begin{itemize}
+  \item Al igual que comparamos proporciones, ahora podemos comparar medidas centrales de dos poblaciones. Si asumimos:
+  \begin{itemize}
+    \item que las 2 son independientes y normales podemos usar una prueba $t$.
+	\item si no están distribuidas como normales podemos usar la Wilcoxon.
+	\item si las muestras no son independientes y están pareadas de alguna forma podemos usar una prueba de pares.
+  \end{itemize}
+  \item Tendremos $H_0$: $\mu_x = \mu_y$ y $H_A$ $\mu_x < \mu_y$, $\mu_x > \mu_y$ ó $\mu_x \neq \mu_y$.
+  \item Básicamente usamos \Rcode{t.test} con diferentes valores para los argumentos \Rcode{paired} y \Rcode{var.equal} ó \Rcode{wilcox.test}. La diferencia principal es que ahora usamos los argumentos $x$ y \alert{$y$} en vez de solo $x$.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Bondad de Ajuste}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Más estadística!}
+  \begin{itemize}
+  \item Bueno, ahora regresamos a los datos categóricos. Ya no vamos a usar tablas de contingencia como vimos anteriormente.
+  \item Este tipo de pruebas nos dicen qué tan bien se asemejan nuestros datos observados a unos valores esperados. Por eso llevan el nombre de "Bondad de Ajuste".
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{La famosa $\chi^2$}
+  \begin{itemize}
+  \item Primero necesitamos tener $k$ categorías de datos donde la suma de sus probabilidades sea igual a 1; por ejemplo, $1/k$. Podemos escoger una categoría con esas probabilidades lo cual nos da un $Y_i$. Esto lo hacemos $n$ veces, las cuales se distribuyen conjuntamente como multinomial.
+  \item No es fácil usar la multinomial directamente para encontrar un valor $p$, pues nuestras variables $Y_i$ van a estar correlacionadas.
+  \item Lo que sí podemos hacer es comparar el valor observado contra el esperado y luego normalizar de alguna forma para obtener algo que se parezca a una distribución conocida como la estadística $\chi$ cuadrada de Pearson:
+  \begin{displaymath}
+  \chi^2 = \sum_{i=1}^{k} \frac{(Y_i - np_{i})^2}{np_i} = \sum \frac{(observado - esperado)^2}{esperado}
+  \end{displaymath}
+  \item Tendremos $H_0$: $p_1 = \pi_{1}, ..., p_k = \pi_k$ y $H_A$: $p_i \neq \pi_i$ para al menos $i$. Esta prueba la podemos hacer con la función \BIOCfunction{chisq.test}.
+  \item También podemos hacer comparaciones entre solo dos categorías, pueden hacer la prueba "manualmente" o fijarse bien en los grados de libertad.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Un ejemplo}
+  \begin{itemize}
+  \item Usemos \pl{samhba} de \pl{UsingR}. Queremos checar si las proporciones observadas (donde 1 es que fuma diario y 7 que nunca) están de acuerdo con nuestras probabilidades $p_1 = .15$, $p_2 = .05$,  $p_3 = .05$,  $p_4 = .05$,  $p_5 = .1$,  $p_6 = .2$,  $p_7 = .4$
+<<eval=TRUE, echo=TRUE>>=
+y <- table(samhda$amt.smoke[samhda$amt.smoke < 98])
+p <- c(.15,.05,.05,.05,.10,.2,.4)
+chisq.test(y, p=p) -> xx
+xx$p.value
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Independencia}
+  \begin{itemize}
+  \item Si luego quieren hacer una prueba de independencia para dos variables categóricas, pueden usar la $\chi^2$. 
+  \item Tienen que encontrar la tabla de contingencia para sus datos y usar:
+  \begin{itemize}
+    \item \Rcode{chisq.test(x)} si x es una matriz o una tabla
+	\item \Rcode{chisq.test(x,y)} si tienen las variables separadas y los valores $x_i$ y $y_i$ son del mismo individuo $i$.
+	\item O pueden resumir sus datos y usarlos así: \Rcode{chisq.test(table(x,y))}.
+  \end{itemize}
+  \item $H_0$ será que las 2 variables son independientes. $H_A$ que sean dependientes.
+  \item Pueden usar el argumento \Rcode{simulate.p.value=TRUE} si quieren estimar su valor $p$ con una simulación de Monte Carlo. Es útil en el caso de que sus valores esperados en frecuencia absoluta sean muy pequeños.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Prueba de homogeneidad}
+  \begin{itemize}
+  \item Aunque $H_0$ sea que las 2 variables son iguales y $H_A$ que son diferentes, en realidad se encuentra el valor $p$ de la misma forma que en la prueba de independencia.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Para distribuciones contínuas}
+  \begin{itemize}
+  \item Digamos que obtenemos $n$ muestras $X$\footnote{sin empates} de una distribución contínua. Estas nos dan una distribución empírica con la cual podemos encontrar la probabilidad de que una muestra tenga un valor igual a $x$ es $F_{n}(x) = \frac{i: X_i \leq x}{n}$.
+  \item Podemos encontrar esta probabilidad usando la función \BIOCfunction{ecdf}.
+  \item Tendremos $H_0$: $F(x) = F_{0}(x)$ y $H_A$: $F(x) \neq F_{0}(x)$. Podríamos usar una $\chi^2$ pero su desempeño es pobre para esto, así que usamos una Kolmogorov-Smirnov donde $D =$ máximo en $x$ de $|F_{x}(x) - F(x)|$
+  \item En \pl{R} hacemos esta prueba con \BIOCfunction{ks.test(x, y="name", ...)} donde \pl{"name"} es el nombre de la función que regresa la función de probabilidad acumulada. Por ejemplo, \pl{pnorm}.
+  \item Si tenemos muestras $X$ y $Y$ de dos distribuciones contínuas, podemos utilizar \Rcode{ks.test(x,y)}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Shapiro}
+  \begin{itemize}
+  \item La Kolmogorov-Smirnov funciona para datos univariados cuando la hipótesis nula es especificada antes de ver a los datos. Ninguna asunción de los parámetros debe depender de los datos ya que esto arruina a la prueba (cambia la distribución de muestro).
+  \item Con la prueba Shapiro-Wilk podemos ver la distribución padre de nuestra muestra es normal.
+  \item Tendremos $H_0$: distribución padre es normal vs $H_A$: la distribución padre no es normal.
+  \item En \pl{R} se usa con \BIOCfunction{shapiro.test(x)}.
+  \item En el caso de que falle, todavía pueden usar la prueba $t$ si su $n$ no es muy grande. En estos caso, la $t$ es más resistente a pequeños cambios en las asunciones de la distribución padre.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Una función útil!}
+  \begin{itemize}
+  \item El paquete \pl{MASS} tiene una función llamada \BIOCfunction{fitdistr}. Con esta podemos estimar parámetros de una muestra después de graficarlos.
+  \item La idea es que con la gráfica puedes inferir un poco el tipo de distribución. \Rcode{fitdistr} te regresa valores estimados con errores estándar los cuales te pueden servir para construir intervalos de confianza.
+  \item Les recomiendo que hagan los siguientes comandos:
+<<eval=FALSE, echo=TRUE>>=
+library(MASS)
+?fitdistr
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{ANOVAs}
+  \begin{block}{Funciones}
+  \begin{itemize}
+    \item \BIOCfunction{oneway.test}
+    \item \BIOCfunction{aov}
+    \item \BIOCfunction{kruskal.test(x $\sim$ f, data=..., subset=...)}: para igualdad de medias. No paramétrica.
+    \item \BIOCfunction{lm} junto con \BIOCfunction{summary} es un tipo de ANOVA.
+    \item De forma parecida a la anterior o con \BIOCfunction{anova} pueden hacer ANCOVAs.
+    \item Para ANOVAs de dos sentidos usen \BIOCfunction{anova}
+    \item \BIOCfunction{interaction.plot} les puede servir para probar interacciones.
+  \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Un ejemplo}
+  \begin{itemize}
+  \item Acuérdense de que las ANOVAs son una generalización de la prueba $t$.
+  \item En fin, escogimos a 15 individuos y los separamos al azar en 3 grupos; 1 mes por grupo. Luego medimos cuantas calorías consumieron un día al azar los individuos de cada grupo.
+  \item Queremos saber si las diferencias observadas se deben a una variación natural en nuestro muestreo o a una diferencia real entre las poblaciones originales. Usemos \BIOCfunction{oneway.test}.
+<<eval=TRUE, echo=TRUE>>=
+mayo <- c(2166, 1568, 2233, 1882, 2019)
+sep <- c(2279, 2075, 2131, 2009, 1793)
+dic <- c(2226, 2154, 2583, 2010, 2190)
+d <- stack(list(mayo=mayo, sep=sep, dic=dic))
+oneway.test(values ~ ind, data=d, var.equal=TRUE)
+@  
+  \item El valor $p$ no es significativo, por lo que las diferencias observadas se pueden explicar por simple variación en las muestras.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Sweave}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Que es}
+  \begin{itemize}
+  \item Unos me han preguntado como hice las presentaciones. Bueno, en \pl{R} hay una función que te pasa archivos a formato \pl{LaTeK}. Una vez que tienes tu archivo en ese formato, puedes crear tus PDFs.
+  \item La idea de los creadores fue unificar la forma en que se reportan los trabajos realizados en \pl{R} y ha tenido tal impacto que practicamente todos los manuales de ayuda y reportes nuevos salen con ese formato.
+  \item Empecemos con nuestro archivo \pl{.Rnw}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Estructura básica}
+  Un archivo básico tiene las siguientes cuatro etiquetas:
+  \begin{itemize}
+  \item $\backslash$documentclass
+  \item $\backslash$usepackage
+  \item $\backslash$begin\{document\}
+  \item $\backslash$end\{document\}
+  \end{itemize}
+  Además, pueden usar el \pl{begin} y \pl{end} para:
+  \begin{itemize}
+  \item poner una ecuación con \pl{equation}.
+  \item poner alguna fórmula con \pl{displaymath}.
+  \item poner un listado con \pl{itemize}.
+  \item poner una enumeración con \pl{enumerate}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Los comandos!}
+  \begin{itemize}
+  \item Ya con esta estructura básica, podemos hacer nuestros reportes en PDF.
+  \item Bajen el archivo \myurlshort{www.lcg.unam.mx/~lcollado/R/lectures/pruebas/sweave/templado.Rnw}{templado.Rnw} a un folder vacio.
+  \item Ahora corran los siguientes comandos (en orden):
+  \begin{itemize}
+    \item \pl{R CMD Sweave templado.Rnw}
+	\item \pl{R CMD pdflatex templado.tex}
+  \end{itemize}
+  \item Ya tienen su PDF listo! Chequen su folder que estaba vacio :P Por algo no es recomendable tener más de un archivo \pl{.Rnw} en el mismo folder.
+  \item Pueden cambiar el comando \pl{Sweave} por \pl{Stangle} para obtener un archivo \pl{templado.R} que tiene el código \pl{R} que usaron en su reporte.
+  \item Si quieren bajar algún archivo \pl{.Rnw} de los que hice, usen la misma ruta para los PDFs pero cambien la extensión final. Yo aprendí comparando los \pl{.Rnw} de James Bullard y sus presentaciones PDF. En el material de apoyo del curso hay documentos muy buenos para aprender más al respecto :).
+  \item \alert{Disfrutenlo!}
+  
+  \item Bueno, ahora hagan los Ejercicios 4. Suerte!
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}

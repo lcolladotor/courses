@@ -1,0 +1,123 @@
+\documentclass[letterpaper,12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Standard Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage{fancyvrb}
+\usepackage{caption}
+\usepackage{comment}
+\usepackage{fancyhdr}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Adapted from Sweave %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\DefineVerbatimEnvironment{Rcode}{Verbatim}{fontshape=sl, frame=single, 
+  framesep=2mm, fontsize=\small, baselinestretch=.5}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%% My macros (which of course are borrowed from a million ... %%
+\def\argmax{\operatornamewithlimits{arg\,max}}
+\def\argmin{\operatornamewithlimits{arg\,min}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%% Page and Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\addtolength{\oddsidemargin}{-0.875in}
+\addtolength{\topmargin}{-0.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\textheight}{1.75in}
+
+\captionsetup{margin=15pt,font=small,labelfont=bf}
+
+\renewcommand{\topfraction}{0.9}        % max fraction of floats at top
+\renewcommand{\bottomfraction}{0.8}     % max fraction of floats at bottom
+
+% Parameters for TEXT pages (not float pages):
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}             % 2 may work better
+\setcounter{dbltopnumber}{2}            % for 2-column pages
+\renewcommand{\dbltopfraction}{0.9}     % fit big float above 2-col. text
+\renewcommand{\textfraction}{0.07}      % allow minimal text w. figs
+
+% Parameters for FLOAT pages (not text pages):
+\renewcommand{\floatpagefraction}{0.7}          % require fuller float pages
+
+% N.B.: floatpagefraction MUST be less than topfraction !!
+\renewcommand{\dblfloatpagefraction}{0.7}       % require fuller float pages
+
+
+%%%%%%%%%%%%%%%%%%%%%%% options for sweave %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%% headers and footers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy} 
+\renewcommand{\footrulewidth}{\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plainnat}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%% Now Edit %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fancyhead[L]{\em Leonardo Collado Torres}
+\fancyhead[R]{\em ej1}
+\fancyfoot[L]{\em \today}
+\fancyfoot[C]{}
+\fancyfoot[R]{\em \thepage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%% opening %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Ejercicios 3}
+\author{Leonardo Collado Torres}
+
+\usepackage{Sweave}
+\begin{document}
+\maketitle
+
+\bigskip
+Entrega tu código para resolver los siguientes ejercicios vía la página de cursos. Tu código debe ser portable y tiene que tener un nombre como lcollado.R
+\bigskip
+
+\begin{enumerate}
+  
+  \item Usen el set de datos \texttt{diamond} del paquete \texttt{UsingR}.
+  \begin{enumerate}
+    \item Hagan un scatterplot de las variables \texttt{carat} y \texttt{price}.
+	\item Añadenle la línea de regresión lineal simple.
+	\item Haz una predicción del valor de un diamante de un tercio de carat con esta regresión.
+  \end{enumerate}
+  \bigskip
+
+  \item Usen el set de datos \texttt{cancer} del paquete \texttt{UsingR}. 
+  \begin{enumerate}
+    \item Haz una gráfica con los boxplots de las variables \texttt{stomach}, \texttt{bronchus}, \texttt{colon}, \texttt{ovary} y \texttt{breast}.
+	\item Cual tiene la cola más larga?
+	\item Cual es la más compacta?
+	\item Todos los centros son similares?	
+  \end{enumerate}
+  \bigskip
+  
+  \item Usa el set de datos \texttt{kid.weights} del paquete \texttt{UsingR}.
+  \begin{enumerate}
+    \item Explora la relación entre el peso y la edad usando \texttt{lattice}.
+    \item Particiona a las edades en intervalos de 0-3, 3-6, 6-9 y 9-12. Se mantiene la misma relación en los grupos?
+  \end{enumerate}
+  \bigskip
+  
+  \item Usa el set de datos \texttt{female.inc} del paquete \texttt{UsingR}. Son datos de mujeres en el 2001 en USA.
+  \begin{enumerate}
+    \item Hay alguna diferencia del ingreso entre las razas? Usa boxplots con \texttt{lattice} para ayudarte a responder la pregunta.
+	\item Encuentra el resumen de estadísticas para cada grupo racial.
+  \end{enumerate}
+  \bigskip
+  
+  \bigskip
+\end{enumerate}
+
+
+\end{document}

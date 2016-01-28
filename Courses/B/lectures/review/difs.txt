@@ -1,0 +1,102 @@
+1c1
+< \input{../header_1_en.tex}
+---
+> \input{../header_1_esp.tex}
+3c3
+< \SweaveOpts{prefix.string=plots/fig,eps=FALSE,echo=FALSE}
+---
+> \SweaveOpts{prefix.string=plots/figura,eps=FALSE,echo=FALSE}
+18c18
+<   \frametitle{C—mo usar \pl{R}}
+---
+>   \frametitle{Cómo usar \pl{R}}
+30c30
+<   \item Todo el material esta disponible en ingl\'es y espanol
+---
+>   \item Todo el material esta disponible en ingl\'es y español
+32c32
+<   \item Asistentes Alejandro, Jos\'e and V\'ictor
+---
+>   \item Asistentes Alejandro, Jos\'e y V\'ictor
+42c42
+<   \item Proyecto: Buscar art’culos deBioconductor
+---
+>   \item Proyecto: Buscar artículos de Bioconductor
+159c159
+<   \item Una buena herramienta es el buscador de ayuda que se acciona mediante la funci\'on \BIOCfunction{help.start}.Durante la sesi\'on, las p\'aginas de ayuda se abrir\'an en tu browser.
+---
+>   \item Una buena herramienta es el buscador de ayuda que se acciona mediante la funci\'on \BIOCfunction{help.start}.Durante la sesi\'on, las p\'aginas de ayuda se abrir\'an en tu navegador.
+177c177
+<   \item Lee la \emph{posting guide}. Usar la funci\'on \BIOCfunction{sessionInfo} es muy importante.
+---
+>   \item Lee la \emph{posting guide}. Usar la funci\'on \BIOCfunction{sessionInfo} es muy importante. \scriptsize
+180a181
+> \normalsize
+236c237
+<   \item Son muy \'utiles cuando los datos se pueden categorizar. Por ejemplo, ni–os, adultos y personas mayores.
+---
+>   \item Son muy \'utiles cuando los datos se pueden categorizar. Por ejemplo, niños, adultos y personas mayores.
+271c272
+<   \item Los \emph{data frames} son rectangulares como las matrices pero cada columna (variable) puede tener distitntos tipos de datos.
+---
+>   \item Los \emph{data frames} son rectangulares como las matrices pero cada columna (variable) puede tener distintos tipos de datos.
+292c293
+<   \item \normalsize The above line works fine for me, but my file path is different from yours.\footnote{We use the file.path function to be plataform independent} We can solve this simply by reading the file from the web :) 
+---
+>   \item \normalsize La línea de arriba funciona bien para mí, pero mi estructura de archivos es diferente de la tuya.\footnote{Usamos la función file.path para no depender de la plataforma} Podemos resolver esto simplemente leyendo el archivo del Internet :) 
+305c306
+<   \item Pu\'ebalas :)
+---
+>   \item Pru\'ebalas :)
+332c333
+< \subsection{Plot}
+---
+> \subsection{Gráfica}
+341c342
+< \subsection{Lines}
+---
+> \subsection{Líneas}
+353c354
+< \subsection{Barplot}
+---
+> \subsection{Gráfica de barras}
+364c365
+< \subsection{Histogram}
+---
+> \subsection{Histograma}
+373c374
+< \subsection{Density}
+---
+> \subsection{Densidad}
+376c377
+<   \frametitle{Plotting the density}
+---
+>   \frametitle{Graficando la densidad}
+383c384
+< \subsection{Boxplot}
+---
+> \subsection{Diagrama de caja y brazos}
+386c387
+<   \frametitle{Graphical view of the summary}
+---
+>   \frametitle{Resumen gráfico}
+396c397
+<   \frametitle{Great for table with 3 dims}
+---
+>   \frametitle{Excelente para tablas con 3 dims}
+402c403
+< \subsection{Image}
+---
+> \subsection{Imagen}
+405c406
+<   \frametitle{Helps visualize your matrix}
+---
+>   \frametitle{Te ayuda a visualizar tu matriz}
+436c437
+<   \item \BIOCfunction{While}es muy f\'acil de usar: \pl{while (cond) expr}
+---
+>   \item \BIOCfunction{While} es muy f\'acil de usar: \pl{while (cond) expr}
+475c476
+<   \item As\'i como puede aceptar muchos argumentos de entrada, s\'olo regresa\alert{un} objeto que puede ser un vector.
+---
+>   \item As\'i como puede aceptar muchos argumentos de entrada, s\'olo regresa \alert{un} objeto que puede ser un vector.

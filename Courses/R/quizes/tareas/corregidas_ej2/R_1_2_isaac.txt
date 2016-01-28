@@ -1,0 +1,32 @@
+Ejercicio 1
+library(MASS)
+arch <- DDT
+hist(arch)
+hist(arch, col="gray", border="yellow", main="DDT", xlab="Pesticida", ylab="Freq")
+boxplot(arch, col="lightblue", xlab="Pesticida", ylab="Freq", main="DDT")
+sd(arch)
+mean(arch)
+statistics <- summary(DDT)
+#>text(rep(1.3,5),statistics,labels=c(print(statistics))) ------> creo que esto es redundante =P
+#podria haberlo escrito en el area de las x, como xlab="Pesticida mean=3.28 ds=0.437"
+
+Ejercicio 2
+library(UsingR)
+arch2 <- lawsuits
+pdf("jrodrigu.pdf", height=5, width=10)
+colors <- c("black","darkblue","blue", "lightblue","darkgray","gray","white")
+par(mfrow=c(1,2))
+hist(arch2, col=colors, main="lawsuits")
+hist(log10(arch2), col=colors, main="lawsuits-logs")
+dev.off()
+
+
+Ejercicio 3
+http://dgb.unam.mx/sbusite/usorecelect/2006/grafica01.jpg
+data <- c(377312, 769309, 806302, 1057975, 1323976, 1617832, 1859077)
+names <-c ("2000", "2001", "2002", "2003", "2004", "2005", "2006")
+colors2 <- c("black", "darkgreen", "forestgreen", "green")
+barplot(data, main="consultas", xlab="año", ylab="freq", col=colors2, names=names)
+
+# Bien, aunque pudiste cambiar el eje Y para reflejar los 2 millones en vez de quedarte con el ylim automático.
+

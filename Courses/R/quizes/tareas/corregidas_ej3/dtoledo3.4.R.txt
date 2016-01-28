@@ -1,0 +1,99 @@
+# Carat vs price
+
+library(UsingR) 
+pdf(file="grafica3.1'.pdf")
+plot((diamond$price ~ diamond$carat), main="Ejercicio 3.1", col.main="pink", xlab="carat", ylab="price")
+reg <-lm(diamond$price ~ diamond$carat)
+reg
+lm(formula=diamond$price ~ diamond$carat)
+abline(reg, col="pink", lwd=2)
+dev.off()
+predict(reg, .33)
+
+# La predicción se hace así:
+library(UsingR)
+attach(diamond)
+predict(lm(price ~ carat), data.frame(carat = 1/3))
+detach(diamond)
+
+
+#  El precio de un diamante de 0.3333 de carat es aproximadamente de 970 (968.3123)
+
+
+
+library(UsingR) 
+
+pdf(file="grafica3.2.pdf")
+
+boxplot(cancer$stomach,cancer$bronchus,cancer$colon,cancer$ovary,cancer$breast, names=c("Stomach","Bronchus","Colon","Ovary","Breast"), main="Grafica 3.2", col=c("pink","orange","blue","green","purple"))
+
+dev.off()
+
+
+# Cual tiene la cola mas larga?  Breast cancer
+# Cual es la mas compacta?  Bronchus cancer
+# Todos los centros son similares?  No, el de stomach y bronchus se asemejan; a la vez que colon y ovary se encuentran proximos: sin embargo, ambos pares est'an considerablemente alejados del de breast.
+
+
+
+
+library(UsingR) 
+
+library(lattice)
+
+pdf(file="grafica3.3.pdf")
+
+par(mfrow=c(1,2))
+
+xyplot(kid.weights$weight ~ kid.weights$age, xlab="Age", ylab="Weight", data = kid.weights)
+
+reg<- lm(kid.weights$weight~kid.weights$age)
+
+abline(reg, col="pink")
+
+
+Age <- equal.count(kid.weights$age, number=4, overlap=0.0)
+
+xyplot(kid.weights$weight ~ kid.weights$age | Age, data = kid.weights)
+
+
+dev.off() -> xx
+
+
+
+# Encuentran que el peso es directamente proporcional a la edad, a mayor edad mayor pesoç
+
+# Te faltó concluir que la relación se pierde con el grupo entre 9 y 12 años. Bueno, se vuelve una relación cuadrática en vez de una lineal.
+
+
+
+
+
+
+
+
+
+library(lattice)
+
+data(female.inc, package = "UsingR")
+
+pdf(file="grafica3.4.pdf")
+
+boxplot(female.inc$income~female.inc$race, ylab="Income") # La idea era usar lattice, pero bueno, está bien.
+
+dev.off() -> xx
+
+table(female.inc$income,female.inc$race)
+
+i<-1
+
+while(i<4){
+
+	print(summary(female.inc$income[which(unclass(female.inc$race)==i,arr.ind=T)]));i=i+1;
+
+}
+
+
+# Se ve que las medias de blancas y negras estan ligeramente sobre hispanas, pero hay que tomar en cuenta el numero el tamanho de cada una de las muestras.
+
+# Te faltó concluir lo de los outliers... pues la mayoría son blancas.

@@ -1,0 +1,115 @@
+\documentclass{beamer}
+
+\usepackage[latin1]{inputenc}
+\usepackage{Sweave}
+
+\title{Un acercamiento a \LaTeX{}, \emph{BEAMER} y \emph{Sweave}}
+\author{José Reyes \\ \emph{jreyes@lcg.unam.mx}}
+\date{8 de Agosto del 2009}
+\institute{Centro de Ciencias Gen\'omicas \\ Universidad Nacional Aut\'onoma de M\'exico}
+\usetheme{Marburg}
+
+%%%Es importante definir las opciones de Sweave para que se lleven a cabo las operaciones
+%%%Para correr el script sw.bat, debes tener Sweave.sty en tu carpeta, y tener la ruta R/.../bin en el PATH
+\SweaveOpts{prefix.string=plots/plot, height=5.6}
+
+\begin{document}
+
+%%% set up some options for Sweave and R %%%
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@ 
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}
+	\frametitle{Outline}
+	\tableofcontents
+\end{frame}
+
+\section{Introducci\'on}
+\subsection{Motivaci\'on}
+\begin{frame}
+	\frametitle{Motivaci\'on}
+	\begin{itemize}
+		\item{Esta presentaci\'on servir\'a para familiarizarme con la herramienta 
+			\LaTeX{}/BEAMER/Sweave para la generaci\'on de documentaci\'on.} \\
+		\item{Es un primer acercamiento a lo que har\'e en el curso de R/Bioconductor 
+			para la sexta generaci\'on durante el semestre Ago-Dic del 2009.}
+	\end{itemize}
+\end{frame}
+
+\subsection{Objetivos}
+\begin{frame}
+	\frametitle{Objetivos}
+	En esta presentaci\'on aprender\'e a:
+	\begin{enumerate}
+		\item{Generar f\'ormulas complejas}
+		\item{Insertar im\'agenes}
+		\item{Insertar cuadros de texto}
+		\item{Generar c\'odigo de R \ldots{} Probablemente}
+	\end{enumerate}
+\end{frame}
+
+\section{F\'ormulas}
+\subsection{Teorema de Bayes}
+\begin{frame}
+	\frametitle{Teorema de Bayes}
+	\begin{equation} \label{eq:1.1}
+		P(A_{i}|B) = 
+			\frac{P(B|A_{i})P(A_{i})}{P(B)} = 
+			\frac{P(B|A_{i})P(A_{i})}{\displaystyle\sum_{j=1}^n P(B|A_{j})P(A_{j})}
+	\end{equation}
+\end{frame}
+
+\subsection{Cambio por selecci\'on}
+\begin{frame}
+	\frametitle{Cambio de frecuencia al\'elica por selecci\'on}
+	\begin{equation} \label{eq:1.2}
+		\Delta_{s}p = \frac{pqs[ph-q(1-h)]}{1-2pqsh-q^{2}s}
+	\end{equation}	
+	Donde, \\
+	$p =$ Frecuencia de $A_{1}$ \\
+	$q =$ Frecuencia de $A_{2} = 1 - p$ \\
+	$s =$ Coeficiente de selecci\'on \\
+	$h =$ Efecto del heterocigoto \\
+\end{frame}
+
+\subsection{Informaci\'on mutua}
+\begin{frame}
+	\frametitle{Informaci\'on mutua}
+	\begin{equation} \label{eq:3}
+		MI = \displaystyle\sum_{i=1}^N\sum_{j=1}^M P(a_{i},b_{j})log\left(\frac{P(a_{i},b_{j})}{P(a_{i})P(b_{j})}\right)
+	\end{equation}
+	Donde, \\
+	$N = $ el n\'umero de estados posibles en el vector $A$ \\
+	$M = $ el n\'umero de estados posibles en el vector $B$
+\end{frame}
+
+\section{Sweave}
+\subsection{Una suma}
+%%%Si no pones [allowframebreacks, fragile] marca un error de fancyvrb "extraneous input"
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Ejercicio de R}
+\framesubtitle{Un rápido ejercicio}
+<<echo=TRUE, eval=TRUE>>=
+a<-1+2+3
+a
+@
+\end{frame}
+\subsection{Una gráfica}
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Ejercicio de R}
+\framesubtitle{Un rápido ejercicio}
+<<echo=TRUE, eval=TRUE>>=
+a<-rnorm(10000, 0, 1)
+a<-sample(a)
+dim(a)<-c(100,100)
+@
+<<fig=TRUE, echo=TRUE>>=
+	image(a, main="Un heatmap aleatorio", col=rainbow(1000));
+@
+\end{frame}
+\end{document}

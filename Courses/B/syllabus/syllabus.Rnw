@@ -1,0 +1,291 @@
+%\VignetteIndexEntry{Syllabus of Seminar III: R/Bioconductor}
+%\VignetteDepends{}
+%\VignetteKeywords{R, Bioconductor}
+%\VignettePackage{SIII: R/Bioc}
+\documentclass[letterpaper,12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Standard Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{epsfig}
+%\usepackage{graphicx}
+%\usepackage{graphics}
+%\usepackage{amssymb}
+%\usepackage{amsmath}
+%\usepackage{mathrsfs}
+%\usepackage{caption}
+%\usepackage{comment}
+\usepackage{fancyvrb}
+\usepackage{fancyhdr}
+
+\usepackage[a4paper]{geometry}
+\usepackage{hyperref,graphicx}
+
+%\usepackage[spanish]{babel}
+%\selectlanguage{spanish}
+%\usepackage[utf8]{inputenc}
+
+%%%%%%%%%%%%%%%%%%%%%% some personal commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\pl}[1]{\texttt{#1}}
+\newcommand{\myurlshort}[2]{\href{http://#1}{{\textsf{#2}}}}
+
+%%%%%%%%%%%%%%%%%%%%%% headers and footers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy} 
+\renewcommand{\footrulewidth}{\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plainnat}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% sweave options  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\SweaveOpts{prefix.string=plots/fig,eps=FALSE,echo=FALSE}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%% opening %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\textbf{Seminar III: \texttt{R}/\texttt{Bioconductor}\\August-December 2009}}
+\author{Leonardo Collado Torres\\[1em]Graduated from the Undergraute Program on Genomic Sciences (LCG),\\ UNAM, Cuernavaca, Mexico\\[1em]\texttt{lcollado@lcg.unam.mx}\\[1em]\url{http://www.lcg.unam.mx/~lcollado/index_en.php}}
+
+\begin{document}
+\maketitle
+
+\medskip
+\noindent{\small\textbf{Assistants:} Alejandro Reyes \pl{areyes@lcg.unam.mx}, Jos\'e Reyes \pl{jreyes@lcg.unam.mx} and V\'ictor Moreno \pl{jmoreno@lcg.unam.mx}}
+
+\medskip
+\begin{abstract}
+The course Seminar III: R/Bioconductor will be taught at the \emph{Licenciatura de Ciencias Gen\'omicas} (LCG) at UNAM on Fridays from 12:00 to 14:00. This course will give an overview of Bioconductor which is a set of public tools, built on top of \pl{R} and developed for the study of genomic sciences. To take this course it's a prerequisite to have a basic understanding of Statistics and \pl{R}. A basic \pl{R} introduction course was taught to the sixth LCG generation which is public at \url{http://www.lcg.unam.mx/~lcollado/E/} (Spanish only). The order in which the material will be covered and the project associated to this course will be integrated and directly related to the course \emph{Bioinformatics and Statistics I} from the LCG.
+\\* \indent The oficial page of the course is \url{http://www.lcg.unam.mx/~lcollado/B/}. There you can find the presentations, code associated to the presentations, exercises, expected answers, supporting material, and the data sets that we'll use.
+\\* \indent For any doubt, question, suggestion or to ask for an advice session, please do so through the forum of the National Node of Bioinformatics (NNB) located \myurlshort{foros.nnb.unam.mx/viewforum.php?f=111}{here}.
+\end{abstract}
+
+\newpage{}
+\tableofcontents
+\newpage{}
+
+\section{Objectives}
+  \begin{itemize}
+  \item Introduce the students to the world of Bioconductor so that they'll use the most updated set of tools for genomics built on \pl{R}.
+  \item Expand their knowledge and skills to make plots with three variables and of genomic order.
+  \item Learn how to import public data sets into \pl{R} using Bioconductor.
+  \item Learn the basics to analyze microarrays using Bioconductor.
+  \item Manage sequences and the software developed for the analysis of data derived from high throughput sequencing methods using Bioconductor.
+  \item Build the bases for reproducible research and practice sharing data through a Bioconductor package.
+  \item Train and prepare the future heirs of \pl{R} and Bioconductor at LCG. In a year the current assistants will be the professors and some of the students will become assistants.
+  \end{itemize}
+
+\section{Project}
+During the current semester, the students will develop in teams a project involving \pl{Perl}, \pl{MySQL} and \pl{PHP} for the course of \emph{Bioinformatics and Statistics I}. The project of Seminar III: R/Bioconductor will consist doing an statistical analysis of the data from the other project and on building an experimental data package for Bioconductor. Said package will have to comply with all the prerequisites that Bioconductor outlines. These include a documentation of the \emph{vignette} type built with \pl{Sweave} and \LaTeX. This file, written in English\footnote{Everything has to be in English including the names of the variables}, has to explain how the idea/question was conceived that motivated the project, how to get the data, the analysis done including \pl{R} code, graphs and conclusions. The data can be imported from the \pl{MySQL} data base using the \pl{RMySQL} package. The question(s) that motivated the project can be simple but the data mining process and/or the statistical analysis should not be trivial. You will have to present this project on the final website of the other project either on the \emph{vignette} format or in a format of your choice.
+\\* \indent In other words, the project will be a real exercise that you will contribute to the international community through Bioconductor.
+
+\section{A sample class}
+A \emph{normal} class will follow this dynamic. On the first minutes, the assistants or the professor will ask one or several students what subject(s) they found interesting that were discussed that week on the Bioconductor mailing list or from a Bioconductor related paper. Meanwhile, one of two students will prepare themselves\footnote{Turn on, connect their lap and set up their presentation} and then will briefly talk about a Bioconductor package\footnote{Without repeating them}:
+  \begin{itemize}
+  \item describing for what it is used
+  \item showing some images that can be derived from its use
+  \item what they found appealing from the package
+  \item for what type of analysis workflow it is used
+  \item which other Bioconductor packages complement it or may partially overlap its functionality
+  \end{itemize}
+The student(s) that gave the brief talk will hand in a \emph{vignette} file in English with the previous information which we'll share through the offical course page. Then we'll move unto the class subject which in general will include a description of a package, examples and a practice lab. Finally, the students will have to do a more complete/advanced practice which they will most likely finish as homework.
+\\* \indent All the classes will be video recorded and the official language inside the classes will be English.\footnote{If you need some English lession ask Iliana}
+
+\section{Evaluation}
+Although it might seem very strict, we prefer to leave it as clear as possible at the beginning. As long as you hand in a minimum of 10 homeworks and your project, your grade will depend on four factors:
+  \begin{description}
+  \item[Participation] 20 \% \\Your class participations, reading the Bioconductor mailing list and/or finding papers of interest, asking questions inside our \myurlshort{foros.nnb.unam.mx/viewforum.php?f=111}{forum}.
+  \item[Homeworks] 30 \% \\Every homework shall have a 9 am deadline\footnote{Server time!!} on the next Friday. You have to do them individually unless specified and late homeworks will only be accepted up to one week after the due date. They shall be portable, meaning that the code doesn't depend on your folder structure and the data is available online\footnote{Either on a website, through a package like \pl{biomaRt} or simply on your \pl{public\_html} folder at the LCG server}. For each homework you'll hand in two files: the \pl{pdf} file generated using \pl{Sweave} and \LaTeX; the .R script created with \pl{Stangle}. These files have to be named like this: \emph{username\_XX\_descrip} where \emph{XX} is the homework number and \emph{descrip} is whatever you want. For example: \pl{lcollado\_01\_review.pdf} and \pl{lcollado\_01\_review.R}.
+  \item[Presenting a Bioconductor package] 10 \% \\This presentation has to meet the requirements mentioned at \emph{A sample class}. It consists of a brief 5 min talk and the \emph{vignette} file with the information (in English). 
+  \item[The project] 40 \% \\ Create an experimental data package for Bioconductor and use the data for a statistical analysis. It has to meet their requirements\footnote{Everything (variables, functions, text, etc) in English} and the \emph{vignette} file that in reality is a report. Meaning that it has:
+  \begin{itemize}
+  \item An abstract-
+  \item An introduction explaining where you got the idea/question and what it is-
+  \item Describe how you did the data mining process. How you got the data and why you chose x, y, z source/variable.
+  \item The analysis of your data inclusing the \pl{R} code, graphs and results\footnote{Don't forget your interpretation!!}.
+  \item Conclusions-
+  \end{itemize}
+  \end{description}
+
+\section{\emph{Tentative} class calendar}
+
+\begin{itemize} 
+
+\item[14 Aug] Class I
+  \begin{description}
+  \item[Review] Initiating the course, \pl{R} review and the apply function family
+  \begin{enumerate}
+  \item Course description including the project and evaluation.
+  \item How to look for help in \pl{R}
+  \item Exercise using \pl{for} and a couple of graphs.
+  \item Apply function family.
+  \end{enumerate}
+  \end{description}
+  
+  \item[21 Aug] Class II
+  \begin{description}
+  \item[Bioconductor and documentation] Promoting reproducible research
+  \begin{enumerate}
+  \item Intro to \myurlshort{bioconductor.org}{Bioconductor}
+  \item Help inside Bioconductor: \emph{mailing lists}
+  \item Basic package installation
+  \item Basis for doing reproducible research and examples of the \emph{vignette} style
+  \item \pl{Sweave} as an interface of \pl{R} with \LaTeX{}
+  \item Short introduction to \LaTeX{} and Beamer
+  \end{enumerate}
+  \end{description}
+  
+  \item[28 Aug] Class III
+  \begin{description}
+  \item[Plots] Advanced plotting
+  \begin{enumerate}
+  \item Overview of the graphs you can make using \pl{lattice}
+  \item Some graph examples using \pl{Plotrix}
+  \end{enumerate}
+  \end{description}
+  
+  \item[4 Sept] Class IV
+  \begin{description}
+  \item[Public Data] \myurlshort{biomart.org}{biomart}, \myurlshort{ncbi.nlm.nih.gov/geo/}{GEO} and \myurlshort{ebi.ac.uk/microarray-as/ae/}{ArrayExpress}
+  \begin{enumerate}
+  \item Exploring \pl{biomaRt}
+  \item Basic \pl{GEOquery} usage
+  \item Usage of \pl{ArrayExpress}
+  \item A series of examples
+  \end{enumerate}
+  \end{description}
+  
+  \item[11 Sept] Class V
+  \begin{description}
+  \item[Interacting with \pl{MySQL}] \pl{RMySQL} usage and overview of \pl{annotationdbi}
+  \begin{enumerate}
+  \item Installing \pl{RMySQL}
+  \item Connecting to a data base using \pl{RMySQL}
+  \item Using \pl{R} to construct \pl{MySQL} queries
+  \item Quick overview of the \pl{RSQLite} package
+  \item Description of the \pl{annotationdbi} package
+  \end{enumerate}
+  \end{description}
+  
+  \item[18 Sept] Class VI
+  \begin{description}
+  \item[\emph{Genomic} graphs] Visualizing loads of data at once
+  \begin{enumerate}
+  \item Overview of the \pl{GenomeGraphs} package
+  \item Linking \pl{GenomeGraphs} to \pl{biomaRt}
+  \item Interacting with \emph{Genome Browsers} like the one from \pl{UCSC} through \pl{rtracklayer}
+  \end{enumerate}
+  \end{description}
+  
+  \item[25 Sept] Class VII
+  \begin{description}
+  \item[Microarrays] The first Bioconductor stronghold
+  \begin{enumerate}
+  \item Basis of linear regressions
+  \item Basic correlations
+  \item Using \pl{limma} to find diferentially expressed genes
+  \item \pl{affy} package
+  \end{enumerate}
+  \end{description}
+  
+  \item[2 Oct] Class VIII
+  \begin{description}
+  \item[Sequence analysis] The basic tools
+  \begin{enumerate}
+  \item Using \pl{IRanges}
+  \item Generating \emph{views}
+  \item Manipulating sequences using \pl{Biostrings}
+  \item Alingning and mapping using \pl{Biostrings}
+  \end{enumerate}
+  \end{description}
+  
+  \item[9 Oct] Class IX
+  \begin{description}
+  \item[\pl{R} and \emph{HTS}\footnote{High Throughput Sequencing}] Quality control and some analysis
+    \begin{enumerate}
+      \item Quality control of \pl{Solexa} data using \pl{ShortRead}
+      \item An HTS case: \pl{chipseq} workflow
+    \end{enumerate}
+  \end{description}
+  
+  \item[16 Oct] Class X
+  \begin{description}
+  \item[Bioc packages] Building your \pl{Bioc} package
+  \begin{enumerate}
+  \item Basic structure of an \pl{R} package
+  \item Requirements for an experimental data package in Bioconductor
+  \item \pl{Qt} plotting demo
+  \end{enumerate}
+  \end{description}
+  
+  \item[23 Oct] Class XI
+  \begin{description}
+  \item[GOs] GO analysis
+  \begin{enumerate}
+  \item Using \pl{BLAST}
+  \item Several GO analysis using \pl{R}
+  \end{enumerate}
+  \end{description}  
+  
+  \item[30 Oct] Class XII
+  \begin{description}
+  \item[Statistics] misc
+  \begin{enumerate}
+  \item Lowess and loess
+  \item Multiple testing corrections
+  \end{enumerate}
+  \end{description}
+  
+  \item[6 Nov] Class XIII
+  \begin{description}
+  \item[Microarrays II] A more detailed session
+  \begin{enumerate}
+  \item \pl{multtest} package
+  \item Getting into the detail
+  \end{enumerate}
+  \end{description}  
+    
+  \item[13 Nov] Class XIV
+  \begin{description}
+  \item[HTS: a case] \emph{E. coli} transcriptome
+  \begin{enumerate}
+  \item Detailing an analysis workflow
+  \end{enumerate}
+  \end{description}
+  
+  \item[20 Nov] Class XV
+  \begin{description}
+  \item[Undefined class] Guest?
+  \begin{enumerate}
+  \item Hoping to get a guest from abroad.
+  \end{enumerate}
+  \end{description}
+    
+  \item[27 Nov] Class XVI
+  \begin{description}
+  \item[Undefined class] Open to suggestions
+  \begin{enumerate}
+  \item to be decided
+  \end{enumerate}
+  \end{description}
+  
+  \item[30 Nov - 4 Dec] First Exam Week
+  \begin{description}
+  \item[Advice] Wrapping up your analysis
+  \begin{enumerate}
+  \item Advice sessions to detail the statistical analysis of your project
+  \item Advice to build your Bioconductor data package
+  \end{enumerate}
+  \end{description}
+  
+  \item[7-11 Dec] Second Exam Week
+  \begin{description}
+  \item[Projects] Hand in and evaluation
+  \begin{enumerate}
+  \item Hand in your project\footnote{Most likely on Monday}
+  \item Project evaluation
+  \item Checking and correcting the project
+  \item Send to Bioconductor\footnote{Most likely on Friday}
+  \end{enumerate}
+  \end{description}
+
+  
+\end{itemize}
+
+\end{document}

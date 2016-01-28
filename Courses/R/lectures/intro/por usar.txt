@@ -1,0 +1,22 @@
+
+fact <- function(x=1) {
+ret<- 1
+for(i in 1:x) {
+ret = ret *i
+}
+return(c(x,ret))
+}
+fact()
+fact(x=5)
+fact(6)
+
+
+mifun3 <- function(x1) {
+if (x1>0) {print(x1)}
+else if (x1==0) { warning("Value needs to be > 0") }
+else {stop("This function did not finish, because x1 < 0")}
+}
+mifun3(x1=0)
+mifun3(x1=-2)
+
+\usepackage[spanish]{Babel}

@@ -1,0 +1,145 @@
+\documentclass[letterpaper,12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Standard Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage{fancyvrb}
+\usepackage{caption}
+\usepackage{comment}
+\usepackage{fancyhdr}
+%Use the latin1 encoding http://fontignie.blogspot.com/2006/04/accents-in-latex.html
+\usepackage[latin1]{inputenc}
+%accents
+\usepackage[cyr]{aeguill}
+%yes, I am french
+\usepackage[spanish]{babel}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Adapted from Sweave %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\DefineVerbatimEnvironment{Rcode}{Verbatim}{fontshape=sl, frame=single, 
+  framesep=2mm, fontsize=\small, baselinestretch=.5}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%% My macros (which of course are borrowed from a million ... %%
+\def\argmax{\operatornamewithlimits{arg\,max}}
+\def\argmin{\operatornamewithlimits{arg\,min}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%% Page and Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\addtolength{\oddsidemargin}{-0.875in}
+\addtolength{\topmargin}{-0.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\textheight}{1.75in}
+
+\captionsetup{margin=15pt,font=small,labelfont=bf}
+
+\renewcommand{\topfraction}{0.9}        % max fraction of floats at top
+\renewcommand{\bottomfraction}{0.8}     % max fraction of floats at bottom
+
+% Parameters for TEXT pages (not float pages):
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}             % 2 may work better
+\setcounter{dbltopnumber}{2}            % for 2-column pages
+\renewcommand{\dbltopfraction}{0.9}     % fit big float above 2-col. text
+\renewcommand{\textfraction}{0.07}      % allow minimal text w. figs
+
+% Parameters for FLOAT pages (not text pages):
+\renewcommand{\floatpagefraction}{0.7}          % require fuller float pages
+
+% N.B.: floatpagefraction MUST be less than topfraction !!
+\renewcommand{\dblfloatpagefraction}{0.7}       % require fuller float pages
+
+
+%%%%%%%%%%%%%%%%%%%%%%% options for sweave %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%% headers and footers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy} 
+\renewcommand{\footrulewidth}{\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plainnat}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%% Now Edit %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fancyhead[L]{\em Leonardo Collado Torres y María Gutiérrez Arcelus}
+\fancyhead[R]{\em Ejercicios de Introducción a R: parte II}
+\fancyfoot[L]{\em \today}
+\fancyfoot[C]{}
+\fancyfoot[R]{\em \thepage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%% opening %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Ejercicios de Introducción a R: parte II}
+\author{Leonardo Collado Torres y María Gutiérrez Arcelus}
+
+\usepackage{Sweave}
+\begin{document}
+\maketitle
+\begin{enumerate} 
+  \item Usen el conjunto de datos \texttt{islands} que viene en \texttt{R}. Este contiene el tamaño de los bloques de tierra cuya área excede las 10 mil millas cuadradas. Encuentren las 7 más grandes y las 2 más chicas.
+  Les recomendamos que usen lo visto en índices de vectores y la función \texttt{sort}.
+  \bigskip
+  
+  \item Con \texttt{read.table} lean la tabla de datos '10biggestPhages.txt' \footnote{Chequen la presentación si tienen dudas de como leer la tabla.} y encuentren lo siguiente:
+  \begin{enumerate}
+	\item \textquestiondown{}Todos los "Taxid" son únicos? Usen la función \texttt{unique}.
+	\item \textquestiondown{}Cúal es el tamaño de genoma más chico en la tabla? Usen la función \texttt{sort} o la función \texttt{min}.
+	\item \textquestiondown{}Cúal es el nombre de ese fago? Les puede ayudar la función \texttt{which}.
+  \end{enumerate}
+  \bigskip
+  
+  \item \textquestiondown{}Cúantas combinaciones por pares diferentes pueden hacer con Fernando, Sur y Mariana? :P
+
+En \texttt{R} podemos usar la función \texttt{combn} para hacer combinaciones.
+\begin{Schunk}
+\begin{Sinput}
+> combn(c("Fer", "Sur", "Mariana"), 2)
+\end{Sinput}
+\end{Schunk}
+  \bigskip
+  
+  \item Digamos que al ir a una fiesta puedes salir en terminar en 4 estados diferentes:
+  \begin{itemize}
+    \item 'Sobrio' con probabilidad de 0.2
+	\item 'Happy' con probabilidad de 0.4
+	\item 'Pedo' con probabilidad de 0.3
+	\item 'Muerto' con probabilidad de 0.1
+  \end{itemize}
+Respondan las siguientes preguntas:
+  \begin{enumerate}
+    \item \textquestiondown{}Cúal es la probabilidad de que en la fiesta 1 alguien termine 'Happy' y en la fiesta 2 esa misma persona termine 'Pedo'?  
+	\item \textquestiondown{}Cúal es la probabilidad de que en la fiesta 2 alguien termine 'Muerto' dado que en la fiesta 1 estuvo 'Sobrio'?
+  \end{enumerate}
+Pueden apoyarse en la siguiente tabla que generamos con R para responder las preguntas.
+\begin{Schunk}
+\begin{Sinput}
+> fiesta.1 <- c(0.2, 0.4, 0.3, 0.1)
+> names(fiesta.1) <- c("Sobrio", "Happy", "Pedo", "Muerto")
+> fiesta.2 <- NULL
+> for (i in 1:4) fiesta.2 <- rbind(fiesta.2, fiesta.1 * fiesta.1[i])
+> rownames(fiesta.2) <- names(fiesta.1)
+> fiesta.2
+\end{Sinput}
+\begin{Soutput}
+       Sobrio Happy Pedo Muerto
+Sobrio   0.04  0.08 0.06   0.02
+Happy    0.08  0.16 0.12   0.04
+Pedo     0.06  0.12 0.09   0.03
+Muerto   0.02  0.04 0.03   0.01
+\end{Soutput}
+\end{Schunk}
+  \bigskip
+  
+\end{enumerate}
+
+
+\end{document}

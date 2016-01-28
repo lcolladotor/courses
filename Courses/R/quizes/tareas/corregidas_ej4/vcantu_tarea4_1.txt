@@ -1,0 +1,44 @@
+##1
+x<-550
+n<-1000
+p<-0.5
+q<-0.5
+mu<-p*n
+sigma<-sqrt(p*q*n)
+xn<-(x-mu)/sigma
+1-pnorm(xn) ##da 0.0007827011
+
+# Ok :) Tambien podias hacerlo de forma empírica:
+muestra <- NULL
+for (i in 1:10000) muestra[i] <- sum(sample(c(0,1),1000, replace=TRUE, prob=c(0.5,0.5)))
+1-pnorm(550, mean(muestra), sd(muestra)) # Nota que mean(muestra) =~ 500 y sd(muestra) =~ sqrt(250)
+
+##2
+xexp<-c()
+par(mfrow=c(2,2))->xx
+for(i in 0:3){
+n<-5*10^i
+for(j in 1:n) xexp[j]<-mean(rexp(n))
+hist(xexp, main=n)
+}
+par(mfrow=c(1,1))->xx
+
+# ¿Entonces cual es la n?
+# Aprox es 25
+
+
+##3 
+library(UsingR)
+wilcox.test(cabinet$est.tax.savings, conf.int=TRUE,conf.lecel=0.9)
+
+# HAHA!! no es lecel :P
+
+##4
+library(UsingR)
+t.test(babies$dage,babies$age,var.equal=FALSE, alternative="greater")
+t.test(babies$dage,babies$age,var.equal=FALSE, alternative="greater")$p.value # bien, pero podrias usar paired=TRUE
+
+##5
+library(UsingR)
+chisq.test(table(pi2000),p=rep(0.1,10))  # :D
+

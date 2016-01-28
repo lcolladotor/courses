@@ -1,0 +1,48 @@
+Investigation Title	RNAi knock down using siRNAs targeting PROX1 or GFP in human colon carcinoma cells
+Experimental Design	cellular_modification_design	co-expression_design	in_vitro_design
+Experiment Design Term Source REF		The MGED Ontology
+Experimental Factor Name	RNAi
+Experimental Factor Type	RNAi
+Experimental Factor Term Source REF
+Person Last Name	Nykänen
+Person First Name	Antti
+Person Mid Initials
+Person Email	antti.z.nykanen@helsinki.fi
+Person Phone	+358919125527
+Person Fax
+Person Address	Haartmaninkatu 8, Helsinki, n/a, 00014, Finland
+Person Affiliation	University of Helsinki
+Person Roles	submitter
+Person Roles Term Source REF	MGED Ontology
+Quality Control Type	biological_replicate	spike_quality_control
+Quality Control Term Source REF	The MGED Ontology	mo
+Replicate Type
+Replicate Term Source REF
+Normalization Type
+Normalization Term Source REF
+Date of Experiment
+Public Release Date	2008-12-30
+PubMed ID
+Publication DOI
+Publication Author List
+Publication Title	Homeobox transcription factor PROX1 induces malignant progression of colon cancer by promoting the transition from benign to highly dysplastic phenotype
+Publication Status
+Publication Status Term Source REF
+Experiment Description	siRNA transfection using either two different siRNAs targeting PROX1 or GFP
+Protocol Name	P-MTAB-1514	P-MTAB-1515	P-MTAB-1517	P-AFFY-2	Affymetrix:Protocol:Hybridization-EukGE-WS2v4_450	P-AFFY-6	P-MTAB-1516
+Protocol Type	nucleic_acid_extraction	specified_biomaterial_action	grow	labeling	hybridization	feature_extraction	bioassay_data_transformation
+Protocol Description	Total RNA was isolated and DNAseI treated in RNeasy columns (Qiagen) according to manufacturers recommendations<br>(Parameters: Extracted product = total_RNA, Amplification = none)	For the analysis of gene expression after PROX1 knockdown, SW480R cells were transfected with 20nM PROX1 siRNA A16, A25, GFP siRNA A18 or, total RNA was isolated 48 h later from two biological replicates and processed for array hybridization	Cells cultured at +37 in 5% CO2, culture medium RPMI-1640 containing 10%     FCS (heat inactivated), 2 mM glutamine, penicillin (100 U/ml), streptomycin (100 g/ml)<br><br><br>(Parameters: time unit = seconds, min temperature = 37, temperature unit = C, media = RPMI-1640)				Cell Intensity Files (CEL) and Chip files (CHP) were generated from images of the scanned probe arrays using Affymetrix Gene Chip Operating Software  (Affymetrix, Santa Clara, CA) using the default settings recommended by the manufacturer. Hybridisation performance of the arrays was assessed using the R software, version 2.4.1, freely available from http://www.r-project.org/. CEL files were imported into R and various functions included in the affy, simpleaffy, affyPLM and affyQCReport packages were used to verify absence of anomalies in the data registered for the spike-in controls probes, the cross-species hybridization control probes and the housekeeping probe controls. Quality control metrics were also computed in order to assess the presence of spatial artifacts, RNA degradation or more general outlier behavior for any array. Further analysis of the data was done using various functions of the R packages affy and limma and separate analyses were performed for the two different siRNA:s with respect to controls. First, raw data from CEL files were normalized by application of the GC-RMA algorithm (Wu and Irizarry, 2006) with default settings. Information on detection calls, available from the CHP files, were then used for excluding less reliable data by requiring a present call in all arrays included in each of the two separate comparisons between siRNA treated samples and controls. To prevent exclusion of data pertaining to potentially interesting genes completely inactivated in one of the experiment conditions, genes called absent or marginal in all siRNA samples, while present in the controls, or vice-versa, were also included.<br><br><br><br>Zhijin Wu, Rafael A. Irizarry. Stochastic Models Inspired by Hybridization Theory for Short Oligonucleotide Arrays. Journal of Computational Biology. Jul 2005, Vol. 12, No. 6: 882-893 <br><br>
+Protocol Parameters				Quantity of starting RNA (ug)	Wash A3 Recovery Mixes;Number of Wash A1 Cycles;Wash A2 Recovery Mixes;Wash A3 Temperature (C);Stain Temperature (C);Wash B Recovery Mixes;Mixes per Wash B Cycle;Number of Wash A2 Cycles;Mixes per Wash A1 Cycle;Mixes per Wash A2 Cycle;Third Stain Time (seconds);Mixes per Wash A3 Cycle;First Stain Time (seconds);Number of Wash B Cycles;Wash A1 Recovery Mixes;Holding Temperature (C);Wash A2 Temperature (C);Wash A1 Temperature (C);Second Stain Time (seconds);Wash B Temperature (C);Number of Wash A3 Cycles	PercentileSpread;featureHeight;OutlierRatioHighPercentile;ExtendPoolWidth;Outlier high;Lower left corner y coordinate;featureWidth;Lower left corner x coordinate;Cell margin;HalfCellRowsDivisor;Outlier low;featureRows;ExtendPoolHeight;IgnoreShiftRowOutliers;Lower right corner y coordinate;Upper right corner x coordinate;CellIntensityCalculationType;OutlierRatioLowPercentile;Upper left corner x coordinate;Lower right corner x coordinate;CEL Algorithm name;HalfCellRowsRemainder;Upper left corner y coordinate;featureColumns;Percentile;Upper right corner y coordinate
+Protocol Hardware
+Protocol Software						MicroArraySuite 5.0
+Protocol Contact
+Protocol Term Source REF	MGED Ontology	MGED Ontology	MGED Ontology		mo		MGED Ontology
+SDRF File	E-MEXP-1422.sdrf.txt
+Term Source Name	NCI_thesaurus		The MGED Ontology	ncbitax	mo	ArrayExpress
+Term Source File	ncithesaurus.obo.alt		http://mged.sourceforge.net/ontologies/MGEDontology.php	http://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html	http://mged.sourceforge.net/ontologies/MGEDontology.php	http://www.ebi.ac.uk/arrayexpress
+Term Source Version						
+Comment[AEMIAMESCORE]	4
+Comment[SecondaryAccession]	
+Comment[ArrayExpressReleaseDate]	2008-12-30
+Comment[ArrayExpressAccession]	E-MEXP-1422
+Comment[MAGETAB TimeStamp_Version]	27-08-2008 11:46:15 Last Changed Rev: 4907

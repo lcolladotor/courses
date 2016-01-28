@@ -1,0 +1,164 @@
+\documentclass[letterpaper,12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Standard Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage{fancyvrb}
+\usepackage{caption}
+\usepackage{comment}
+\usepackage{fancyhdr}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Adapted from Sweave %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\DefineVerbatimEnvironment{Rcode}{Verbatim}{fontshape=sl, frame=single, 
+  framesep=2mm, fontsize=\small, baselinestretch=.5}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%% My macros (which of course are borrowed from a million ... %%
+\def\argmax{\operatornamewithlimits{arg\,max}}
+\def\argmin{\operatornamewithlimits{arg\,min}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%% Page and Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\addtolength{\oddsidemargin}{-0.875in}
+\addtolength{\topmargin}{-0.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\textheight}{1.75in}
+
+\captionsetup{margin=15pt,font=small,labelfont=bf}
+
+\renewcommand{\topfraction}{0.9}        % max fraction of floats at top
+\renewcommand{\bottomfraction}{0.8}     % max fraction of floats at bottom
+
+% Parameters for TEXT pages (not float pages):
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}             % 2 may work better
+\setcounter{dbltopnumber}{2}            % for 2-column pages
+\renewcommand{\dbltopfraction}{0.9}     % fit big float above 2-col. text
+\renewcommand{\textfraction}{0.07}      % allow minimal text w. figs
+
+% Parameters for FLOAT pages (not text pages):
+\renewcommand{\floatpagefraction}{0.7}          % require fuller float pages
+
+% N.B.: floatpagefraction MUST be less than topfraction !!
+\renewcommand{\dblfloatpagefraction}{0.7}       % require fuller float pages
+
+%%%%%%%%%%%%%%%%%%%%%% headers and footers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy} 
+\renewcommand{\footrulewidth}{\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plainnat}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%% opening %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Curso sobre R/Bioconductor -- Cuernavaca, Oct-Nov 2008}
+\author{Leonardo Collado y Osam Yanez}
+
+\begin{document}
+\maketitle
+
+\begin{itemize} 
+\item[28-29 Oct] Primera Clase
+  \begin{description}
+  \item[Introduccion y R basico] conociendo el lenguaje
+    \begin{enumerate}
+      \item Usar R, workspace
+      \item Como obtener ayuda
+	  \item Estructuras de control
+	  \item Leer un archivo, directorio
+      \item Definir una funcion
+	  \item Como instalar paquetes
+    \end{enumerate}
+  \end{description}
+
+\item[30-31 Oct] Segunda Clase
+  \begin{description}
+  \item[Datos Univariados] R y estadistica
+    \begin{enumerate}
+      \item apply, sapply, ...
+      \item list
+      \item funciones basicas
+    \end{enumerate}
+  \item[Graficas] lo basico
+	\begin{enumerate}
+	  \item graficas de lineas
+	  \item graficas de barras
+	  \item histogramas
+	  \item misc
+	\end{enumerate}
+  \end{description}
+
+\item[4-5 Nov] Tercera clase
+  \begin{description}
+  \item[Cont. Estadistica] Datos bi y multivariados
+    \begin{enumerate}
+      \item Scatter Plots
+      \item Ejercicio tipo Iris
+      \item Boxplots
+    \end{enumerate}
+  \item[Lattice] un paquete util para graficas
+    \begin{enumerate}
+      \item Introduccion rapida al paquete
+	  \item Ejercicio con Chem97
+      \item Ejercicios basados en el lab de lattice
+    \end{enumerate}
+  \end{description}
+
+\item[6-7 Nov] Cuarta clase
+  \begin{description}
+  \item[Pruebas de Estadistica] un poco de parametricas y no parametricas
+    \begin{enumerate}
+      \item F
+	  \item Chi
+      \item Kolmogorov-Smirnoff
+      \item Wilcoxon
+	  \item Otras pruebas
+	  \item (tentativo) Intervalos de confianza, ANOVAs
+    \end{enumerate}
+  \item[limma] Regresiones lineales con este paquete
+    \begin{enumerate}
+    \item Una intro al paquete
+    \item Ejercicios del lab de limma
+    \end{enumerate}
+  \end{description}
+
+\item[11-12 Nov] Quinta clase
+  \begin{description}
+  \item[Bioconductor] vamos de lleno sobre BioC 
+    \begin{enumerate}
+      \item Panorama general de los paquetes disponibles
+      \item (tentativo) Ejercicio sobre GOs
+	  \item (tentativo) Paquete de mcmc
+      \item Microarreglos
+    \end{enumerate}
+  \end{description}
+
+\item[13-14 Nov] Sexta clase
+  \begin{description}
+  \item[Clustering] revisar varias formas de hacerlo 
+    \begin{enumerate}
+      \item Una intro basica al clustering
+      \item hclust
+      \item kmeans
+      \item Ejercicio para compararlos
+    \end{enumerate}
+   \item[Mas paquetes de R/BioC] si nos queda tiempo
+     \begin{enumerate}
+	   \item Paquete de DBI para R
+	   \item GeneR
+	   \item Un paquete que une varias DBs
+	 \end{enumerate}
+  \end{description}
+
+	
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,51 @@
+\textquestiondown 
+
+## para texto normal
+\begin{frame}[allowframebreaks]
+  \frametitle{titulo}
+  \begin{itemize}
+  \item vacio6 
+  \end{itemize}
+\end{frame}
+
+### para usar código
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{titulo}
+  \begin{itemize}
+  \item vacio6
+<<eval=TRUE, echo=TRUE>>=
+@  
+  \end{itemize}
+\end{frame}
+
+#### para meter una imagen de R
+\begin{frame}[fragile]
+  \frametitle{titulo}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+#### para meter una imagen fuera de R
+\begin{frame}[fragile]  
+  \frametitle{titulo}
+<<eval=TRUE, echo=FALSE>>=
+pdf(file="latticeX.pdf", height=5.7)
+##grafica##
+dev.off()-> xx
+@  
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{latticeX.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{vacio-sec2}

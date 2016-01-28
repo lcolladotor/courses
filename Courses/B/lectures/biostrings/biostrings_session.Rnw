@@ -1,0 +1,298 @@
+\documentclass{beamer}
+
+\usepackage[latin1]{inputenc}
+
+\title{Biostrings}
+\author{José Reyes}
+\date{August 29, 2009}
+\institute{Centro de Ciencias Genómicas \\ Universidad Nacional Autónoma de México}
+\usetheme{Marburg}
+
+\SweaveOpts{prefix.string=plots/plot, height=5.6}
+\setbeamercolor{box}{bg=blue!3}
+\newcommand{\question}[1]{\textcolor{blue}{#1}}
+\newcommand{\code}[1]{\textcolor{gray}{#1}}
+
+\begin{document}
+
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@ 
+
+\begin{frame}
+	\maketitle
+\end{frame}
+
+\begin{frame}
+	\frametitle{Outline}
+	\tableofcontents
+\end{frame}
+
+\section{What is a Biostring?}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Introduction}
+  \begin{itemize}
+	\item{Bioinformatics is focus on the analysis of the informational molecules that give origin to living organisms.}
+	\item{What aspects of these sequences can make limit our ability to analyze them?}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Introduction}
+  \begin{itemize}
+	\item{The Biostrings package was created to provide an efficient way for representing and analyzing these sequences.}
+	\item{There are three main types of Biostrings:}
+	\begin{itemize}
+		\item{DNAString}
+		\item{RNAString}
+		\item{AAString}
+	\end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+	\frametitle{Packages for this session}
+<<eval=TRUE, echo=TRUE>>=
+library(Biostrings)
+library(BSgenome)
+library(biomaRt)
+library(GenomeGraphs)
+@
+\end{frame}
+
+\begin{frame}
+	\frametitle{Creating a random string}
+	To begin the session, we need to create a DNA sequence. \\
+	\question{How would you generate a random DNA string in R?}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+	\frametitle{Creating a random string}
+<<eval=TRUE, echo=TRUE>>=
+DNA_ALPHABET
+@
+<<eval=TRUE, echo=TRUE>>=
+seq <- sample(DNA_ALPHABET[1:4], size = 24, replace = TRUE)
+seq <- DNAString(paste(seq, collapse = ""))
+seq
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+	\frametitle{Basic Biostrings functions}
+	\begin{itemize}
+		\item{\question{alphabetFrequency}}
+<<eval=TRUE, echo=TRUE>>=
+alphabetFrequency(seq, baseOnly = T, as.prob = T)
+@
+		\item{\question{reverseComplement}}
+<<eval=TRUE, echo=TRUE>>=
+reverseComplement(seq)
+@
+		\item{\question{translate}}
+<<eval=TRUE, echo=TRUE>>=
+translate(seq)
+@
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+	\frametitle{Obtaining a subsequence}
+	You can access certain positions by using normal subset operators:
+<<eval=TRUE, echo=TRUE>>=
+seq[3:10]
+@
+	However, Biostrings provide the \question{subseq} function. 
+	This functions follows the \question{SEW} interface, meaning that the subsequence can be defined by \alert{two} out of \alert{three} possible parameters:
+	\begin{itemize}
+		\item{start}
+		\item{end}
+		\item{width}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+	\frametitle{Obtaining a subsequence}
+<<eval=TRUE, echo=TRUE>>=
+subseq(seq, start = 3, end = 10)
+subseq(seq, start = 3, width = 8)
+subseq(seq, end = 10, width = 8)
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Obtaining a subsequence}
+This function if very versatile. It even allows \question{negative positions}:
+<<eval=TRUE, echo=TRUE>>=
+subseq(seq, start = 1, end = -4)
+@
+\question{What does a negative position mean?}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Collections of Biostrings}
+	\begin{itemize}
+		\item{The Biostrings package also provides another type of object, named \question{XStringSet} (The X can stand for DNA, RNA or AA).}
+		\item{Let's create a DNAStringSet object:}
+<<eval=TRUE, echo=TRUE>>=
+set <- NULL
+for(i in c(1:4)) 
+	set <- c(set, paste(sample(DNA_ALPHABET[1:4], 30, replace = T), collapse = ""))
+set
+set <- DNAStringSet(set)
+set
+@
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Collections of Biostrings}
+	\begin{itemize}
+		\item{You can use the \question{reverseComplement}, \question{alphabetFrequency} and \question{subseq} over all the Biostrings in your collection.}
+		\item{\question{length} now returns the number of sequences, and \question{width} returns the length of each sequence.}
+		\item{An useful thing is that you can put \question{names} to the sequences.}
+	\end{itemize}
+<<eval=TRUE, echo=TRUE>>=
+names(set) <- seq(4)
+set
+@
+\end{frame}
+
+\section{Sources of biological sequences}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Reading FASTA files}
+	\begin{itemize}
+		\item{There is a special function for reading FASTA files and creating a XStringSet: \question{read.DNAStringSet} (you can also read proteins by changing the prefix)}
+		\item{The function for writing a FASTA file from an XStringSet is \question{write.XStringSet}}
+		\item{Using this function can save you a lot of time in your phylogenies project, for example, by editing the names of your sequences, creating a subfile with just some organisms or editing the alignment to eliminate gaps.}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Preprocessed genomes}
+	\begin{itemize}
+		\item{A package that is related to Biostrings is \alert{BSgenome}}
+		\item{BSgenome provides preprocessed genomes from some model organisms, as Biostrings.}
+<<eval=FALSE, echo=TRUE>>=
+available.genomes()
+@
+		\item{In this session we will use the \emph{Escherichia coli APEC O1} genome (NC\_008563), so:}
+<<eval=TRUE, echo=TRUE>>=
+require(BSgenome.Ecoli.NCBI.20080805)
+eco <- Ecoli$NC_008563
+@
+	\end{itemize}
+\end{frame}
+
+\section{Exploring a sequence}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Generating views}
+	\begin{itemize}
+		\item{An object of \question{XStringViews} represents a set of "subsequences" from a subject string that are defined by the \question{StartEndWidth} interface.}
+		\item{The views are generated by the function \question{Views} and can be defined in different ways:}
+\scriptsize
+<<eval=TRUE, echo=TRUE>>=
+Views(eco, start = c(10, 20, 30, 40), end = c(50, 60, 70, 80))
+Views(eco, start = c(10, 20, 30, 40), end = c(50, 60))
+Views(eco, start = c(10, 20, 30, 40), width = c(100))
+@
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Small exercise}
+	\begin{enumerate}
+		\item{Sample the E. coli genome by generating 1000 random views of variable width (50 - 500).}
+		\item{Use the \question{alphabetFrequency} function over these views}
+		\item{Repeat the previous steps, but this time do them with only 100 samples.}
+		\item{Use the same function to obtain the composition of the whole chromosome and compare the results.}
+	\end{enumerate}
+	\scriptsize
+<<eval=TRUE, echo=TRUE>>=
+v1 <- Views(eco, start = sample(seq(length(eco)), size = 1000, replace = TRUE), width = sample(50:500, size = 1000, replace = TRUE))
+v2 <- Views(eco, start = sample(seq(length(eco)), size = 100, replace = TRUE), width = sample(50:500, size = 100, replace = TRUE))
+alphabetFrequency(v1, baseOnly = T, as.prob = T, collapse = T)
+alphabetFrequency(v2, baseOnly = T, as.prob = T, collapse = T)
+alphabetFrequency(eco, baseOnly = T, as.prob = T)
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{The sliding windows}
+	\begin{itemize}
+		\item{Bioinformaticians love to use sliding windows for their analysis. Briefly, sliding windows are overlapping fragments of a sequence, generated by "walking" through it.}
+		\item{How would you create a set of windows of \question{width} = 100, and \question{sliding step} = 10, of the first 10kb of E. coli's genome?}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{The sliding windows}
+	I know two ways, but I'm sure there are more:
+	\scriptsize
+<<eval=TRUE, echo=TRUE>>=
+v1 <- Views(eco, start = seq(from = 1, to = 9901, by = 10), width = 100)
+v2 <- successiveViews(eco, from = 1, width = rep(100, 991), gapwidth = -90)
+head(v1)
+tail(v2)
+@
+	\normalsize
+	\question{What kind of analysis do you think you can make with an approach like this one?}
+\end{frame}
+
+\section{Pattern matching}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Last but not least}
+	\begin{itemize}
+		\item{Biostrings provide useful pattern matching functions:}
+		\begin{itemize}
+			\item{\question{matchPattern}: For matching one pattern to one string.}
+			\item{\question{vmatchPattern}: For matching one pattern to several strings (StringSet).}
+			\item{\question{matchPDict}: For matching a dictionary of \alert{equal length} patterns to a string.}
+			\item{\question{vmatchPDict}: For matching a dictionary of patterns to a collection of strings.}
+		\end{itemize}
+		\item{\question{Check the help of Biostrings and look for other interesting pattern matching functions.}}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Exercise}
+	\question{How many restriction fragments do you expect to have if you digest the first 10kb of E. coli genome with EcoR1 (GAATTC)?}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{matchPattern}
+\scriptsize
+<<eval=TRUE, echo=TRUE>>=
+motif <- DNAString("GAATTC")
+tail(matchPattern(motif, eco))
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Two restriction enzymes}
+	\question{What would you do if you wanted to digest also with BamH1 (GGATCC)?}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{matchPDict}
+\scriptsize
+<<eval=TRUE, echo=TRUE>>=
+m1 <- DNAStringSet("GAATTC")
+m2 <- DNAStringSet("GGATCC")
+dict <- PDict(append(m1, m2))
+restrict <- matchPDict(dict, eco)
+restrict
+tail(restrict[[1]])
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{The end}
+	This is the end of the lecture. You can practice some of the functions I just told you about with some exercises.
+\end{frame}
+
+\end{document}

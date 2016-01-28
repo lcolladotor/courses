@@ -1,0 +1,54 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% The basic tex file for the header of all the lectures. 
+%%
+
+\documentclass{beamer}
+\usetheme[hideallsubsections]{Berkeley}
+
+\usepackage{color}
+\usepackage{amsfonts}
+
+\definecolor{myblue}{rgb}{0.25, 0, 0.75}
+\definecolor{mygold}{rgb}{1,0.8,0.2}
+\definecolor{gray}{rgb}{0.5, 0.5, 0.5}
+\definecolor{lucia}{rgb}{0.8,0.4,0.7} 
+
+\newcommand{\myurl}[1]{\href{http://#1}{\textcolor{gray}{\texttt{#1}}}}
+\newcommand{\myem}[1]{\structure{#1}}
+\newcommand{\RPack}[1]{\textcolor{gray}{\textsf{#1}}}
+\newcommand{\pl}[1]{\texttt{#1}}
+\newcommand{\Rcode}[1]{\texttt{#1}}
+\newcommand{\Rfunction}[1]{\href{http://www.statmethods.net/search/index.asp?QU=#1&search=Search&Action=Search}{\textcolor{orange}{\textsf{#1}}}}
+\newcommand{\myurlshort}[2]{\href{http://#1}{\textcolor{gray}{\textsf{#2}}}}
+\newcommand{\RClass}[1]{\textcolor{mygold}{\textsf{#1}}}
+\newcommand{\BIOCfunction}[1]{\textcolor{orange}{#1}}
+
+\setbeamercolor{example text}{fg=lucia}
+\setbeamertemplate{sections/subsections in toc}[ball unumbered]
+\setbeamertemplate{frametitle continuation}[from second][]
+\setbeamertemplate{itemize subitem}[triangle]
+\setbeamertemplate{footline}[page number]
+\setbeamertemplate{caption}[numbered]
+
+\renewcommand{\footnotesize}{\fontsize{6.10}{12}\selectfont}
+
+\def\argmax{\operatornamewithlimits{arg\,max}}
+\def\argmin{\operatornamewithlimits{arg\,min}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{R / Bioconductor: Curso Intensivo}
+
+\author[]{\myem{Leonardo Collado Torres}\\
+  Licenciatura en Ciencias Genómicas, UNAM\\
+  \myurl{www.lcg.unam.mx/\string~lcollado/index.php}\\
+}
+
+\date{
+  Cuernavaca, México\\
+  Oct-Nov, 2008
+}
+
+

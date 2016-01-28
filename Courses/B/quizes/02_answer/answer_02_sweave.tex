@@ -1,0 +1,201 @@
+%\VignetteIndexEntry{Exercise 02 from Seminar III: R/Bioconductor}
+%\VignetteDepends{}
+%\VignetteKeywords{R, Bioconductor}
+%\VignettePackage{SIII: R/Bioc}
+\documentclass[letterpaper,12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Standard Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{fancyvrb}
+\usepackage{fancyhdr}
+
+\usepackage[a4paper]{geometry}
+\usepackage{hyperref,graphicx}
+
+%\usepackage[spanish]{babel}
+%\selectlanguage{spanish}
+%\usepackage[utf8]{inputenc}
+
+%%%%%%%%%%%%%%%%%%%%%% some personal commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\pl}[1]{\texttt{#1}}
+\newcommand{\myurlshort}[2]{\href{http://#1}{{\textsf{#2}}}}
+
+%%%%%%%%%%%%%%%%%%%%%% headers and footers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy} 
+\renewcommand{\footrulewidth}{\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plainnat}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% sweave options  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%% opening %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\textbf{Seminar III: \texttt{R}/\texttt{Bioconductor}\\ \small August-December 2009}}
+\author{Leonardo Collado Torres\\[1em]Bachelor in Genomic Sciences (LCG),\\ UNAM, Cuernavaca, Mexico\\[1em]\texttt{lcollado@lcg.unam.mx}\\[1em]\url{http://www.lcg.unam.mx/~lcollado/}}
+
+\usepackage{Sweave}
+\begin{document}
+\maketitle
+
+\medskip
+\noindent{\small\textbf{Assistants:} Alejandro Reyes \pl{areyes@lcg.unam.mx}, Jos\'e Reyes \pl{jreyes@lcg.unam.mx} and V\'ictor Moreno \pl{jmoreno@lcg.unam.mx}}
+
+\medskip
+\noindent{\small\textbf{Note:} Questions through the \myurlshort{foros.nnb.unam.mx/viewforum.php?f=111}{forum} please. Those who are not from the sixth LCG generation send us an email so we can register you on the forum.}
+
+\medskip
+\begin{abstract}
+Expected solutions for the second set of exercises. Note that your template \pl{.Rnw} file should just be a much simpler file than the one used to make this pdf file: \pl{answer\_02\_sweave.Rnw}
+\end{abstract}
+
+\section{Sweave}
+  \begin{enumerate}
+  \item Create your own template Sweave document.
+  \begin{itemize}
+  \item Title: course name, homework number
+  \item Author: name, email, include a link to your personal academic webpage if you have one. \footnote{You will probably make one this semester on the PHP course.}
+  \item Abstract: short description on the homework and any notes you might want to add
+  \item A sample homework solution: meaning a short description and some code. For example, how to sum $2 + 3$.
+\begin{Schunk}
+\begin{Sinput}
+> 2 + 3
+\end{Sinput}
+\begin{Soutput}
+[1] 5
+\end{Soutput}
+\end{Schunk}
+  \end{itemize}
+  \item For a proper template check: \url{http://www.lcg.unam.mx/~lcollado/B/quizzes/02_answer/answer_02_template.Rnw} which generates \url{http://www.lcg.unam.mx/~lcollado/B/quizzes/02_answer/answer_02_template.pdf}
+  \end{enumerate}
+
+\section{ALL dataset}
+  \begin{itemize}
+  \item You'll have to explore the ALL dataset\footnote{John Quackenbush mentioned it on Monday as the most studied dataset.} and create your first homework as a vignette document.
+  \item Install the \pl{ALL} package and explore the \pl{ALL} object.
+\begin{Schunk}
+\begin{Sinput}
+> library(ALL)
+> data(ALL)
+> ALL
+\end{Sinput}
+\begin{Soutput}
+ExpressionSet (storageMode: lockedEnvironment)
+assayData: 12625 features, 128 samples 
+  element names: exprs 
+phenoData
+  sampleNames: 01005, 01010, ..., LAL4  (128 total)
+  varLabels and varMetadata description:
+    cod:  Patient ID
+    diagnosis:  Date of diagnosis
+    ...: ...
+    date last seen:  date patient was last seen
+    (21 total)
+featureData
+  featureNames: 1000_at, 1001_at, ..., AFFX-YEL024w/RIP1_at  (12625 total)
+  fvarLabels and fvarMetadata description: none
+experimentData: use 'experimentData(object)'
+  pubMedIds: 14684422 16243790 
+Annotation: hgu95av2 
+\end{Soutput}
+\begin{Sinput}
+> varLabels(ALL)
+\end{Sinput}
+\begin{Soutput}
+ [1] "cod"            "diagnosis"      "sex"            "age"           
+ [5] "BT"             "remission"      "CR"             "date.cr"       
+ [9] "t(4;11)"        "t(9;22)"        "cyto.normal"    "citog"         
+[13] "mol.biol"       "fusion protein" "mdr"            "kinet"         
+[17] "ccr"            "relapse"        "transplant"     "f.u"           
+[21] "date last seen"
+\end{Soutput}
+\end{Schunk}
+  \item Select the samples from the B-cell tumors.\footnote{What's the name of the function to look for text in Unix? Well, a function with the same name is available in \pl{R}. Use it}
+\begin{Schunk}
+\begin{Sinput}
+> bcell <- grep("^B", as.character(ALL$BT))
+\end{Sinput}
+\end{Schunk}
+  \item Select those of molecular type \pl{BCR/ABL} or \pl{NEG}.\footnote{A binary operator such as \%in\% is useful here}
+\begin{Schunk}
+\begin{Sinput}
+> subset.mol.biol <- ALL$mol.biol %in% c("BCR/ABL", "NEG")
+\end{Sinput}
+\end{Schunk}
+  \item Combine the previous two subsets and keep the \emph{intersect}ion
+\begin{Schunk}
+\begin{Sinput}
+> subset.pos <- intersect(bcell, which(subset.mol.biol == TRUE))
+> ALL.work <- ALL[, subset.pos]
+\end{Sinput}
+\end{Schunk}
+  \item Eliminate unused factor levels on your resulting subset.
+\begin{Schunk}
+\begin{Sinput}
+> ALL.work$BT <- factor(ALL.work$BT)
+> ALL.work$mol.biol <- factor(ALL.work$mol.biol)
+\end{Sinput}
+\end{Schunk}
+  \item Use the \pl{nsFilter} function from the \pl{genefilter} package to keep those with \emph{entrez} ID, \emph{GOBP}, remove duplicate \emph{entrez} and the following arguments:
+\begin{Schunk}
+\begin{Sinput}
+> library(genefilter)
+> library(hgu95av2.db)
+> filtered <- nsFilter(ALL.work, var.fun = IQR, var.cutoff = 0.5, 
++     feature.exclude = "^AFFX", require.entrez = TRUE, require.GOBP = TRUE, 
++     remove.dupEntrez = TRUE)
+\end{Sinput}
+\end{Schunk}
+  \item Meaning that we'll use the interquantile range with a variance cutoff of 0.5 to eliminate those with small variation and by excluding \pl{AFFX} we'll take out the controls AFFY probes.
+  \item How many:
+  \begin{enumerate}
+  \item duplicates were removed?
+\begin{Schunk}
+\begin{Sinput}
+> filtered$filter.log$numDupsRemoved
+\end{Sinput}
+\begin{Soutput}
+[1] 2653
+\end{Soutput}
+\end{Schunk}
+  \item control features were excluded?
+\begin{Schunk}
+\begin{Sinput}
+> filtered$filter.log$feature.exclude
+\end{Sinput}
+\begin{Soutput}
+[1] 19
+\end{Soutput}
+\end{Schunk}
+  \item had low variance (small variation)?
+\begin{Schunk}
+\begin{Sinput}
+> filtered$filter.log$numLowVar
+\end{Sinput}
+\begin{Soutput}
+[1] 3873
+\end{Soutput}
+\end{Schunk}
+  \item had no GO?
+\begin{Schunk}
+\begin{Sinput}
+> filtered$filter.log$numNoGO.BP
+\end{Sinput}
+\begin{Soutput}
+[1] 1528
+\end{Soutput}
+\end{Schunk}
+  \item had no entrez ID?
+\begin{Schunk}
+\begin{Sinput}
+> filtered$filter.log$numRemoved.ENTREZID
+\end{Sinput}
+\begin{Soutput}
+[1] 679
+\end{Soutput}
+\end{Schunk}
+  \end{enumerate}
+  \end{itemize}
+
+\end{document}

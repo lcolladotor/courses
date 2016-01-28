@@ -1,0 +1,195 @@
+\input{../header.tex}
+
+\SweaveOpts{prefix.string=plots/anova, height=5.7}
+
+\begin{document}
+
+%%% set up some options for Sweave and R %%%
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{ANOVA}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Intro}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Objetivos}
+  \begin{itemize}
+    \item Hoy vamos a ver como resolver una ANOVA en \pl{R}
+	\item Terminaremos con unos problemas para que los resuelvan :)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Definiendo ANOVA}
+  \begin{itemize}
+    \item Es un método para comparar medias basado en variaciones de la media.
+	\item La sencilla, \emph{one-way}, es una generalización de la prueba $t$ para dos muestras independientes que nos permite comparar varias muestras independientes.
+	\item Tenemos $k$ poblaciones con una muestra de cada una, siendo las poblaciones independientes. Si la media de la población $i$ es $\mu_i$ y la desviación estándar es $\sigma_{i}$ \footnote{Si son iguales usamos solo $\sigma$}, nuestro modelo estadísto es:
+	\begin{displaymath}
+	X_{ij} = \mu_{i} + \varepsilon_{ij}
+	\end{displaymath}
+	\item donde los términos de error, $\varepsilon_{ij}$, son independientes con una distribución Normal $(o, \sigma)$
+  \end{itemize}
+\end{frame}
+ 
+\begin{frame}[allowframebreaks]
+  \frametitle{Hipótesis en prueba}
+  \begin{itemize}
+  \item Los modelos se van a hacer más complicados, pero por ahora nuestras hipótesis son las siguientes:
+  \begin{enumerate}
+    \item $H0$: $\mu_{1}$ $=$ $\mu_{2}$ ... $=$ $\mu_{k}$
+	\item $HA$: $\mu_{i}$ $\neq$ $\mu_{j}$ para al menos un par $i$ y $j$.
+  \end{enumerate}
+  \item \textquestiondown Por qué? Simplemente porque estamos asumiendo que todas nuestras poblaciones se distribuyen normalmente. \footnote{En wiki viene como el "modelo de efectos fijos".}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{ANOVA como Fisher}
+  \begin{itemize}
+  \item En sí una ANOVA es una prueba que utiliza la estadística $F$ de Fisher. Para esto, tenemos los siguientes términos\footnote{SST, SSE y SSTr en inglés}:
+  \begin{itemize}
+    \item Suma total de cuadrados, STC = $\sum_{i}\sum_{j}(x_{ij} - \bar{x})^2$
+	\begin{itemize}
+	  \item Mide la cantidad de variación desde el centro de todos los datos.
+	\end{itemize}
+	\item Suma de errores cuadrados, SEC = $\sum{i}\sum{j}(x_{ij} - \bar{x}_{i})^2$
+	\begin{itemize}
+	  \item Mide la variación dentro del grupo $i$.
+	\end{itemize}
+	\item Suma de tratamientos cuadrados, STrC = $\sum_{i} n_{i}(\bar{x}_{i} - \bar{x})^2$
+	\begin{itemize} 
+	  \item Compara la media de cada grupo con la media total.
+	\end{itemize}
+  \end{itemize}
+  \item La estadística $F$ como tal es así:
+  \begin{displaymath}
+  F = \frac{STrC / (k -1)}{SEC / (n - k)}
+  \end{displaymath}
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{En \pl{R}}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{oneway.test}
+  \begin{itemize}
+  \item Todo el rollo de la ANOVA es que no sabemos si la variación que observamos está dada porque nuestra $H0$ es falsa o porque se deba a la variación entre las muestras. 
+  \item Es por eso que usamos la $F$, y bueno, ya conociendo nuestras hipótesis, la función más directa para este tipo de ANOVA es la \BIOCfunction{oneway.test}. Chequen la ayuda :)
+<<eval=FALSE, echo=TRUE>>=
+?oneway.test
+@  
+  \item Como ven, el objeto resultante es de clase \BIOCfunction{htest}.
+  \item Fíjense bien que los datos se los pasamos en tipo "formula". Claro, si quieren siempre pueden hacerlo paso a paso con las fórmulas que les puse anteriormente :p
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{}
+  \begin{example}[Primera ANOVA]
+  Supongamos que medimos el tiempo (en segundos) que 15 personas toman para completar la misma entrevista de trabajo. Por cuestiones logísticas, los dividieron en grupos de 5 para entrevistarlos en 3 días diferentes y estos fueron sus tiempos:
+  \begin{enumerate}
+    \item 2166, 1568, 2233, 1882, 2019
+	\item 2279, 2075, 2131, 2009, 1793
+	\item 2226, 2154, 2583, 2010, 2190
+  \end{enumerate}
+  Asumimos que nuestros datos se distribuyen normalmente con la misma varianza. Nuestras $H0$ y $HA$ son iguales a las que acabamos de ver. Hagan una prueba de ANOVA y encuentren el valor $p$.
+  \end{example}
+  \begin{itemize}
+    \item Así lo podemos resolver:
+<<eval=TRUE, echo=TRUE>>=
+datos <- stack(list(dia1 = c(2166, 1568, 2233, 1882, 2019), dia2 = c(2279, 2075, 2131, 2009, 1793), dia3 = c(2226, 2154, 2583, 2010, 2190)))
+names(datos)
+oneway.test(values ~ ind, data=datos, var.equal=T)
+@ 
+    \item \textquestiondown Qué concluímos?
+    \item \alert{Noten} que usamos una nueva función, \BIOCfunction{stack}, para agrupar nuestros datos en un \pl{data.frame} pero manteniendo la información de nuestros 3 días.
+	\item Les recomiendo que luego chequen como se ve el objeto \pl{datos} con y sin \pl{stack}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{aov}
+  \begin{itemize}
+  \item Existe otra función para hacer ANOVAs sencillas, \emph{oneway}, aunque también sirve para otras más complicadas. Se llama \BIOCfunction{aov}.
+  \item Si checan la ayuda se van a dar cuenta de que es mucho más complicada, así que mejor sigamos con nuestro ejemplo. Es que usa modelos lineales que no hemos visto, los \pl{lm}.
+<<eval=FALSE, echo=TRUE>>=
+?aov
+@  
+<<eval=TRUE, echo=TRUE>>=
+dos <- aov(values ~ind, data = datos)
+@ 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Utilidad de aov}
+  \begin{itemize}
+  \item \textquestiondown Para que usamos \BIOCfunction{aov}? Simplemente porque podemos imprimir más datos con ella. Podemos ver cierta info usando \pl{print} o llamando el objeto. Además podemos obtener la tabla de resumen usando \pl{summary}.
+<<eval=TRUE, echo=TRUE>>=
+dos
+summary(dos)
+@  
+  \item "Residuals" es lo mismo que "Error".
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Ejercicios}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Problema 1}
+  \begin{itemize}
+  \item Ahora quiero que resuelvan los siguientes ejercicios. Tienen que subir a la página de Cursos su script con comentarios\footnote{No olviden sus conclusiones!!}. Por problema, deben hacer un \pl{boxplot} u otra gráfica antes para ver si pueden asumir varianzas iguales o no.
+  \item Problema 1. El set de datos de \pl{morley} contiene mediciones de la velocidad de la luz hechas por Michaelson y Morley. Hicieron 5 experimentos, cada uno con varias repeticiones. Hagan una ANOVA simple para ver si los 5 experimentos tienen la misma media poblacional.
+  \item Les recomiendo que usen \BIOCfunction{head} y \BIOCfunction{tail} para explorar sus datos en cada problema.
+<<eval=TRUE, echo=TRUE>>=
+head(morley)
+@ 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Problema 2}
+  \begin{itemize}  
+  \item Usando el set de datos \pl{Cars93} del paquete \pl{MASS}, hagan una ANOVA simple para las variables \pl{MPG.highway} y \pl{DriveTrain}. \textquestiondown Sus datos apoyan a la $H0$ de medias poblacionales iguales?
+  \item Tienen que cargar la librería \pl{MASS} con el siguiente comando para poder usar \pl{Cars93}.
+<<eval=TRUE, echo=TRUE>>=
+library(MASS)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Problema 3}
+  \begin{itemize}  
+  \item Una compañía necesita de cierto químico como materia prima y está buscando donde mandarlo a hacer. Antes de tomar una decisión, le pide a 4 laboratorios que le hagan 5 muestras. Vemos los resultados en alguna métrica en la siguiente tabla. 
+  \item \textquestiondown Hay una diferencia entre las medias de las poblaciones?
+<<eval=TRUE, echo=FALSE>>=
+library(xtable)
+mat <- matrix(c(4.13, 4.07, 4.04, 4.07, 4.05, 3.86, 3.85, 4.08, 4.11, 4.08, 4, 4.02, 4.01, 4.01, 4.04, 3.88, 3.89, 3.91, 3.96, 3.92), 4, 5, byrow=T)
+rownames(mat) <- c("Lab 1", "Lab 2", "Lab 3", "Lab 4")
+@
+<<results=tex, fig=FALSE, echo=FALSE>>=
+print(xtable(mat, caption="Producción de un químico"), include.colnames=F)
+@  
+  \end{itemize}
+\end{frame}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

@@ -1,0 +1,123 @@
+\documentclass[letterpaper,12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Standard Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage{fancyvrb}
+\usepackage{caption}
+\usepackage{comment}
+\usepackage{fancyhdr}
+%Use the latin1 encoding http://fontignie.blogspot.com/2006/04/accents-in-latex.html
+\usepackage[latin1]{inputenc}
+%accents
+\usepackage[cyr]{aeguill}
+%yes, I am french
+\usepackage[spanish]{babel}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Adapted from Sweave %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\DefineVerbatimEnvironment{Rcode}{Verbatim}{fontshape=sl, frame=single, 
+  framesep=2mm, fontsize=\small, baselinestretch=.5}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%% My macros (which of course are borrowed from a million ... %%
+\def\argmax{\operatornamewithlimits{arg\,max}}
+\def\argmin{\operatornamewithlimits{arg\,min}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%% Page and Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\addtolength{\oddsidemargin}{-0.875in}
+\addtolength{\topmargin}{-0.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\textheight}{1.75in}
+
+\captionsetup{margin=15pt,font=small,labelfont=bf}
+
+\renewcommand{\topfraction}{0.9}        % max fraction of floats at top
+\renewcommand{\bottomfraction}{0.8}     % max fraction of floats at bottom
+
+% Parameters for TEXT pages (not float pages):
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}             % 2 may work better
+\setcounter{dbltopnumber}{2}            % for 2-column pages
+\renewcommand{\dbltopfraction}{0.9}     % fit big float above 2-col. text
+\renewcommand{\textfraction}{0.07}      % allow minimal text w. figs
+
+% Parameters for FLOAT pages (not text pages):
+\renewcommand{\floatpagefraction}{0.7}          % require fuller float pages
+
+% N.B.: floatpagefraction MUST be less than topfraction !!
+\renewcommand{\dblfloatpagefraction}{0.7}       % require fuller float pages
+
+
+%%%%%%%%%%%%%%%%%%%%%%% options for sweave %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\SweaveOpts{prefix.string=templado}
+
+%%%%%%%%%%%%%%%%%%%%%% headers and footers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy} 
+\renewcommand{\footrulewidth}{\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plainnat}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%% Now Edit %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fancyhead[L]{\em Leonardo Collado Torres y María Gutiérrez Arcelus}
+\fancyhead[R]{\em Ejercicios de Introducción a R: parte I}
+\fancyfoot[L]{\em \today}
+\fancyfoot[C]{}
+\fancyfoot[R]{\em \thepage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%% opening %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Ejercicios de Introducción a R: parte I}
+\author{Leonardo Collado Torres y María Gutiérrez Arcelus}
+
+\begin{document}
+\maketitle
+\begin{enumerate}
+  \item Empiezen por hacer el ejercicio simple que les pusimos en la clase. \emph{Entendemos que el de los números de Fibonnaci es más complicado}.
+  \bigskip
+  
+  \item Abran \texttt{R} y utilicen los datos \texttt{2 5 4 10 8} para:
+  \begin{enumerate}
+    \item Almacenarlos en un vector de datos x.
+	\item Encuentren el cuadrado de cada número.
+	\item Substraigan 3 de cada número.
+	\item Substraigan 5 de cada número y luego encuentren su raíz.
+  \end{enumerate}
+  Hagan esto usando funciones (aprovéchense del reciclaje).
+  \bigskip
+  
+  \item Siendo \texttt{x} \& \texttt{y}:
+<<eval=FALSE, echo =TRUE>>=
+x <- c(1,3,5,7,9)
+y <- c(2,3,5,7,11,13)
+@
+  Sin correr los comandos, cual es el resultado de:
+  \begin{enumerate}
+    \item x+1
+    \item y*2
+	\item length(x) y length(y)
+	\item x + y (hay reciclaje)
+	\item sum(x>5) y sum(x[x>5])
+	\item sum(x>5 | x<3)
+	\item y[3]
+	\item y[-3]
+	\item y[x] (\textquestiondown{}Qué es NA?)
+	\item y[y>=7]
+  \end{enumerate}
+  \bigskip
+  
+\end{enumerate}
+
+
+\end{document}

@@ -1,0 +1,453 @@
+\input{../header.tex}
+\begin{document}
+
+\SweaveOpts{prefix.string=plots/clase, height=5.7}
+
+%%% set up some options for Sweave and R %%%
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{\pl{Bioconductor}}
+  \tableofcontents
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{heatmap}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Nuestro problema a reproducir}
+  \begin{itemize}
+  \item Para empezar la clase de hoy vamos a continuar un poco sobre la línea de microarreglos.
+  \item Vamos a usar el paquete \BIOCfunction{ALL} que contiene la información para nuestro ejercicio.
+  \item Para entender un poco más, lean el \myurlshort{www.ncbi.nlm.nih.gov/pubmed/14684422?dopt=Abstract}{abstract} del artículo del cual vienen los datos y nuestro objetivo es reproducir la figura 2 de este otro \myurlshort{genomebiology.com/2004/5/10/R80}{artículo}\footnote{Si quieren aprender más sobre los orígenes de Bioconductor pueden leer u hojear este artículo :)}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Explorando la info}
+  \begin{itemize}
+  \item Cargemos nuestra información y explorenla :)
+<<eval=TRUE, echo=TRUE>>=
+library("ALL")
+data(ALL)
+@    
+<<eval=FALSE, echo=TRUE>>=
+ALL
+@  
+  \item Por ejemplo, podemos ver los resultados de las 128 muestras para una prueba molecular.
+<<eval=TRUE, echo=TRUE>>=
+ALL$mol.biol[1:10]
+@ 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Datos para la figura}
+  \begin{itemize}
+  \item En nuestra práctica solo nos interesan los que tienen una translocación entre los cromosomas 9 y 22 (BCR/ABL) o entre los cromosomas 4 y 11 (ALL11/AF4). Así que filtramos nuestros datos:
+<<eval=TRUE, echo=TRUE>>=
+eset <- ALL[, ALL$mol.biol %in% c("BCR/ABL", "ALL1/AF4")]
+@ 
+  \item Nos quedamos con 47 muestras donde cada una tiene información de 12 625 genes. Es demasiada información para correr un \pl{heatmap}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Genes Diferencialmente Expresados}
+  \begin{itemize}
+  \item Ahora usamos a \BIOCfunction{limma} para encontrar los genes diferencialmente expresados.
+<<eval=TRUE, echo=TRUE>>=
+library(limma)
+f <- factor(as.character(eset$mol.biol))
+design <- model.matrix(~f)
+fit <- eBayes(lmFit(eset,design))
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Figura 1}
+  \begin{itemize}
+  \item Ya con esta información podemos reproducir la figura 1 del artículo
+<<eval=TRUE, echo=TRUE>>=
+topTable(fit, coef=2)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Seleccionamos nuestros genes}
+  \begin{itemize}
+  \item Solo queremos los genes con un valor $p$ menor a 0.05.
+  \item Nos quedamos con los 165 genes que cumplen esto y hacemos el heatmap :)
+<<eval=TRUE, echo=TRUE>>=
+selected  <- p.adjust(fit$p.value[, 2]) <0.05
+esetSel <- eset [selected, ]
+@
+<<eval=FALSE, echo=TRUE>>=
+heatmap(exprs(esetSel))
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{heatmap básico}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+heatmap(exprs(esetSel))
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{heatmap: arreglamos los colores}
+  \begin{itemize}
+  \item Ahora personalizamos la gráfica para que se parezca más a la del artículo.
+  \item Primero, usamos los mismos colores:
+<<eval=FALSE, echo=TRUE>>=
+heatmap(exprs(esetSel), col=topo.colors(100))
+@  
+  \item Sin embargo, a esta gráfica le falta la barrita roja con azul. En el artículo la usan para enfatizar una diferencia entre 10 pacientes y los otros 37. 
+  \item Para hacer la barrita usamos el argumento \BIOCfunction{ColSideColors} y creamos una función para mapear la información de la prueba molecular.
+<<eval=TRUE, echo=TRUE>>=
+color.map <- function(mol.biol) { if (mol.biol=="ALL1/AF4") "#FF0000" else "#0000FF" }
+patientcolors <- unlist(lapply(esetSel$mol.bio, color.map))
+@
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{heatmap: con colores similares}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+heatmap(exprs(esetSel), col=topo.colors(100))
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Agregamos la barra}
+  \begin{itemize}
+  \item Ya con nuestra función, hacemos una gráfica MUY similar a la del artículo.
+  \item Para que los nombres no se vean tan apachurrados, usamos el argumento \BIOCfunction{cexRow}.
+<<eval=FALSE, echo=TRUE>>=
+heatmap(exprs(esetSel), col=topo.colors(100), ColSideColors=patientcolors, cexRow=0.5)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{heatmap prácticamente idéntico}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+heatmap(exprs(esetSel), col=topo.colors(100), ColSideColors=patientcolors, cexRow=0.5)
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Créditos}
+  \begin{itemize}
+  \item Listo!
+  \item En sí el ejercicio lo tomé de Peter Cock: \myurlshort{www2.warwick.ac.uk/fac/sci/moac/currentstudents/peter_cock/r/heatmap/}{Using R to draw a Heatmap from Microarray Data}.
+  \item Me pareció sencillo e interesante :). Allí les explica de la función \BIOCfunction{heatmap.2} del paquete \BIOCfunction{gplots} con la cual pueden manipular más a su \pl{heatmap}. Por ejemplo, le pueden añadir una leyenda explicando la relación entre los valores y los colores.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Clustering}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Definición}
+  \begin{itemize}
+  \item Hacer un \emph{clustering} es el proceso por el cual clasificas objetos en diferentes grupos llamados \emph{clusters} con el fin de que cada grupo comparta un rasgo común. Generalmente agrupas tus objetos dada una medida de distancia.
+  \item El \emph{clustering} de datos es muy usado en análisis estadísticos, en campos como el \emph{machine learning}, \emph{data mining}, reconocimiento de patrones, análisis de imágenes y pues en la bioinformática :D.
+  \item Hay muchos métodos y formas de agrupar tus datos. Usamos \pl{R} por su eficiencia para manejar estructuras de datos y funciónes para el clustering, por los ambientes eficientes que ofrece para probar algoritmos y por la cantidad de paquetes y funciones relacionadas disponibles.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Info de apoyo}
+  \begin{itemize}
+  \item En sí, el \emph{clustering} es muy complejo ya que el método a usar depende de tus datos y el problema que buscas resolver.
+  \item En esta \myurlshort{cran.at.r-project.org/web/views/Cluster.html}{página} pueden encontrar una lista de diferentes paquetes en \pl{R} relacionados al clustering con breves explicaciones.
+  \item Si les interesa esto del \emph{machine learning}, chequen esta \myurlshort{cran.at.r-project.org/web/views/MachineLearning.html}{página} homóloga.
+  \item En fin, \myurlshort{en.wikipedia.org/wiki/Data_clustering}{wiki} también puede serles útil.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Transformaciones de Datos}
+  \begin{itemize}
+  \item Bueno, antes de usar los métodos de clustering, hay que decidir si transformamos nuestros datos previamente o no.
+  \item Centrar y estandarizar:
+  \begin{itemize}
+	\item Substraes la media a cada dato.
+	\item Divides tus datos por la desviacion estándar.
+	\item Tus datos tendrán media 0 y desviación estándar 1.
+  \end{itemize}
+  \item Centrar y escalar tus datos usando \BIOCfunction{scale}.
+  \begin{itemize}
+	\item Substraes la media a cada dato.
+	\item Divides tus datos por la raíz de la media cuadrada.
+	\item Tus datos tendrán media 0 y desviación estándar 1.
+  \end{itemize}
+  \item Transformar con \pl{log}.
+  \item Cambiar los valores de tus datos por su \emph{rank}.
+  \item Sin transformar :)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Calcular la distancia}
+  \begin{itemize}
+  \item El siguiente paso es escoger el método de distancia a usar. Hay muchos y cada uno tiene ventajas y desventajas.
+  \item La opción básica es el método Euclidiano. Esta ya la conocen desde la prepa aunque noten que no sirve para correlaciones negativas y no es invariante de escala.
+  \item Algo que nos dejó muy en claro Arturo Medrano es que no importa que uses, vas a recuperar cluster. Pero son los buenos? Pues el problema principal es escoger bien que usar de acuerdo a tus datos.
+  \item Hay dos distancias basadas en correlación: la Pearson y la Spearman. Su problema principal es que es sensible a los \emph{outliers}.
+  \item En fin, otras distancias son la binaria, Manhattan, Máxima, Minowski, etc. En \pl{R} pueden obtener más información con \BIOCfunction{\pl{?dist}}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Métodos de clustering}
+  \begin{itemize}
+  \item Ya entrando al clustering, hay que diferenciar los métodos. Básicamente se dividen en:
+  \begin{itemize}
+	\item Clustering jerarquíco: aglomerativo, divisorio.
+	\item Clustering no jerarquíco: k-means, PCA: \emph{principal component analysis}, etc.
+  \end{itemize}
+  \end{itemize}
+\end{frame}  
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Clustering jerarquíco}
+  \begin{itemize}
+  \item La idea básica del clustering aglomerativo es la siguiente:
+  \begin{itemize}
+	\item Identificar los clusters con la menor distancia
+	\item Unirlos a los nuevos clusters
+	\item Calcular la distancia entre clusters
+	\item Regresar al primer paso hasta que tengas un solo cluster con todos tus datos
+  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{Jerárquico y aglomerativo}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{cluster.JPG}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Funciones en \pl{R}}
+  \begin{itemize}
+  \item En fin, en \pl{R} podemos usar las funciones \BIOCfunction{hclust} y \BIOCfunction{agnes} si queremos ir de abajo hacia arriba.
+  \item Para ir en el sentido contrario, está la función \BIOCfunction{diana}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{No jerárquico}
+  \begin{itemize}
+  \item De los métodos de clustering no jerárquico, el más usado es el k-means. Este funciona así:
+  \begin{itemize}
+	\item Escoger un número k de clusters
+	\item Asigna al azar los datos a los k clusters
+	\item Calcula un nuevo centroide para cada uno de los k clusters
+	\item Calcula la distancia entre todos los datos hacia los k centroides
+	\item Asigna cada dato al centroide más cercano
+	\item Repite el proceso hasta que las asignaciones sean estables
+  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Funciones en \pl{R}}
+  \begin{itemize}
+  \item En \pl{R} podemos hacer el k-means con la función \BIOCfunction{kmeans} del paquete \pl{Stats}.
+  \item Otras opción algo similar es con la función \BIOCfunction{pam}.
+  \item El PCA se hace con la función \BIOCfunction{prcomp}.
+  \item En fin, hay muchos paquetes disponibles para hacer tipos de clusters.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Un ejercicio simple}
+  \begin{itemize}
+  \item Vamos a hacer un ejercicio simple con datos de GEO.
+  \item Pueden bajar el archivo \pl{GSE1110clean.txt} o simplemente usar el siguiente comando\footnote{Acuérdense de que los códigos están en la página del curso}:
+<<eval=TRUE, echo=TRUE>>=
+mydata <- read.delim("http://www.lcg.unam.mx/~lcollado/R/data/GSE1110/GSE1110clean.txt", header=T, sep="\t")
+@
+  \item Hay que volver nuestro objeto una matriz y añadir bien los nombres de las líneas.
+<<eval=TRUE, echo=TRUE>>=
+rownames(mydata) <- mydata[,1]
+mydata <- as.matrix(mydata[,-1])
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Filtrando nuestros datos}
+  \begin{itemize}
+  \item Si se fijan, \pl{mydata} tiene 22 810 líneas y 22 columnas; no podemos hacer un clustering de este tamaño, pues \pl{R} nos va a protestar por limitacions de memoria. Vamos a filtrar nuestra información para quedarnos solo con las líneas de intensidad alta o de alta variabilidad.
+<<eval=TRUE, echo=TRUE>>=
+mydata <- mydata[apply(mydata>100, 1, sum)/length(mydata[1,])>0.5 & apply(log2(mydata), 1, IQR)>1.5,]
+@  
+  \item Tgirke, quien creó este ejercicio, hizo una función especial para escoger colores, así que leemos su código con la función \BIOCfunction{source}.
+<<eval=TRUE, echo=TRUE>>=
+source("http://faculty.ucr.edu/~tgirke/Documents/R_BioCond/My_R_Scripts/my.colorFct.R")
+@    
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{El clustering como tal}
+  \begin{itemize}
+  \item Ahora tenemos que centrar y escalar nuestros datos. 
+<<eval=TRUE, echo=TRUE>>=
+mydatascale <- t(scale(t(mydata)))
+@  
+  \item Vamos a hacer clusters por correlación de Pearson para nuestras líneas y por Spearman para nuestras columnas.
+<<eval=TRUE, echo=TRUE>>=
+hr <- hclust(as.dist(1-cor(t(mydatascale), method="pearson")), method="complete") # Cluster rows by Pearson correlation.
+hc <- hclust(as.dist(1-cor(mydatascale, method="spearman")), method="complete") # Clusters columns by Spearman correlation.
+@  
+  \item Si se fijan, usamos \BIOCfunction{as.dist} para interpretar los resultados de nuestras correlaciones como distancias. Pues ese el tipo de objeto que necesita \BIOCfunction{hclust} como entrada.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Visualizando clusters!}
+  \begin{itemize}
+  \item Hay varias formas de visualizar los resultados de un clustering. La más común es por dendogramas usando \BIOCfunction{plot}, o si tienes 2, con un \pl{heatmap}.
+<<eval=FALSE, echo=TRUE>>=
+plot(as.dendrogram(hr))
+plot(as.dendrogram(hc))
+heatmap(mydata, Rowv=as.dendrogram(hr), Colv=as.dendrogram(hc), col=my.colorFct(), scale="row")
+@  
+  \item Acuérdense de que los resultados de funciones como \BIOCfunction{hclust} son objetos con muchos attributos. Chequenlos con la función \BIOCfunction{attributes}
+<<eval=FALSE, echo=TRUE>>=
+attributes(hr)
+@    
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Dendograma: hr}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+plot(as.dendrogram(hr))
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Dendograma: hc}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+plot(as.dendrogram(hc))
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{heatmap}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+heatmap(mydata, Rowv=as.dendrogram(hr), Colv=as.dendrogram(hc), col=my.colorFct(), scale="row")
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Creando nuestro heatmap final!}
+  \begin{itemize}
+  \item Ahora vamos a cortar el árbol a una altura específica y le pondremos una barrita con colores del lado izquierdo para ver los diferentes clusters.
+<<eval=TRUE, echo=TRUE>>=
+mycl <- cutree(hr, h=max(hr$height)/1.5)
+mycolhc <- sample(rainbow(256))
+mycolhc <- mycolhc[as.vector(mycl)]
+@
+  \item Ya con nuestra barrita preparada, hacemos el \pl{heatmap} final:
+<<eval=FALSE, echo=TRUE>>=  
+heatmap(mydata, Rowv=as.dendrogram(hr), Colv=as.dendrogram(hc), col=my.colorFct(), scale="row", RowSideColors=mycolhc)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Heatmap final}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+heatmap(mydata, Rowv=as.dendrogram(hr), Colv=as.dendrogram(hc), col=my.colorFct(), scale="row", RowSideColors=mycolhc)
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Fin Clustering}
+  \begin{itemize}
+  \item Listo! Ya saben lo más básico del clustering. Claro, una cosa es encontrar los grupos y la otra es encontrar una explicación biológica a dichos grupos.
+  \item Sé que algunos tendrán curiosidad de aprender más al respecto, así que los invito a seguir esta \myurlshort{faculty.ucr.edu/~tgirke/Documents/R_BioCond/R_BioCondManual.html\#R_clustering}{página}. 
+  \item Por ejemplo, acabamos de hacer solo el principio de la sección de ejercicios.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Fin del Curso}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Ligando \pl{R} con otros lenguajes}
+  \begin{itemize}
+  \item Ya vimos en la clase pasada como conectarnos a \pl{MySQL} desde \pl{R}. También puedes juntar a \pl{R} con:
+  \begin{itemize}
+	\item Excel, al hacer archivos separados por tab o comas.
+	\item Perl, usando llamadas al sistema o con un paquete como el \myurlshort{www.omegahat.org/RSPerl/}{RSPerl}.
+	\item Python, usando \myurlshort{rpy.sourceforge.net/}{RPy}. En sí Python no lo hemos visto en la LCG, pero sé que existe un repositorio similar a BioPerl y Bioconductor llamado BioPython.
+	\item Con páginas HTML usando \myurlshort{www.rpad.org/Rpad/}{Rpad}. 
+	\item En fin, en \myurlshort{zoonek2.free.fr/UNIX/48_R/02.html}{este} link que es parte de los links del material de apoyo pueden encontrar más información al respecto.
+  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Fin del Curso!}
+  \begin{itemize}
+  \item Tareas de \pl{R} como tal ya no tendrán este semestre, aunque nos vemos la próxima semana para checar sus avances de proyecto en la parte de \pl{R} y dentro de 2 semanas para evaluar su proyecto completo.
+  \item Espero que les haya gustado el curso y que si usen \pl{R}\footnote{Por favor! Ya no hagan gráficas de pie!!! :P}. El próximo semestre verán \pl{R} avanzado con Alejandra Medina :) Me enseñan pls!
+  \item Les recuerdo que luego ustedes tendrán que participar en la impartición de cursos similares a las siguientes generaciones. Además, puede que en su laboratorio no muchos o nadie sepa de \pl{R}, así que les deseo suerte en esta siguiente etapa de compartir sus conocimientos.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

@@ -1,0 +1,1189 @@
+\input{../header.tex}
+\begin{document}
+
+\SweaveOpts{prefix.string=plots/clase, height=5.7}
+
+%%% set up some options for Sweave and R %%%
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Datos Univariados y Gráficas}
+  \tableofcontents
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{List}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Que son}
+  \begin{itemize}
+  \item \pl{R} ofrece diferentes objetos como son los vectores atómicos\footnote{Donde todos los elementos son del mismo tipo}, matrices y data frames. Otro de estos son los \Rcode{list}.
+  \item Las \Rcode{list} en realidad consisten de una colección de objetos conocidos como sus componentes. Estos pueden ser de cualquier tipo como ven aquí:
+<<eval=TRUE, echo=TRUE>>=
+lista <- list(nombre="Leo", hermano="Alex", edad=21, calif.alumnos=c(6,9,10,8,7))
+lista$nombre == lista[[1]]
+lista$calif.alumnos[1] == lista[[4]][1]
+var <- "hermano"
+lista[["hermano"]] == lista[[var]]
+@
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Accesando una lista}
+  \begin{itemize}
+  \item Como se habrán dado cuenta, hay diferentes formas de accesar a una lista. En general, puedes accesar a cada elemento usando \Rcode{lst[[i]]} donde i va desde 1 hasta \Rcode{length(lst)}.
+  \begin{itemize}
+    \item \$ es útil por si no se acuerdan de que posición corresponde al elemento que quieren recuperar.
+	\item \Rcode{lista[[var]]} es bastante útil si el nombre del elemento que quieren accesar está en una variable.
+	\item Si el elemento de la lista es un vector, pueden accesar a las diferentes posiciones como en el ejemplo de \Rcode{lista[[4]][1]}.
+  \end{itemize}
+  \item Es muy importante que noten la diferencia entre \Rcode{lista[1]} y \Rcode{lista[[1]]}. El primero te regresa una \emph{sublista} mientras que el segundo te regresa el primer elemento de la lista.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Crear una lista}
+  \begin{itemize}
+  \item Crear una lista es bastante sencillo como ya vieron. Es recomendable que especifiques los nombres de cada elemento aunque no es obligatorio.\footnote{Una lista puede tener funciones como elementos!}
+<<eval=FALSE, echo=TRUE>>=
+lista <- list(nom.1=ele.1, ..., nom.n=ele.n)
+@
+  \item Una vez creada una lista, pueden añadirle elementos así:
+<<eval=FALSE, echo=TRUE>>=
+lista[n+1] <- list(nom.m=ele.m)
+@
+  \item Pueden contatenar listas usando \Rcode{c()}:
+<<eval=FALSE, echo=TRUE>>=
+lista.ABC <- c(lista.A, lista.B, lista.C)
+@  
+  \item Finalmente, pueden borrar elementos de la lista usando \Rcode{<- NULL}
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Factor}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Que son}
+  \begin{itemize}
+  \item Otro tipo de objeto en \pl{R} son los \Rcode{factor}. Estos los pueden ver como vectores que tienen alguna información con respecto a la clasificación de los datos.
+  \item En sí son como enumeraciones en otros lenguajes y son útiles para generar datos tabulares.
+  \item Cuando usan la función \Rcode{read.table}, todo lo que parece un caracter es leido como un \Rcode{factor}
+  \item Luego lean más sobre la función \Rfunction{cut} para aprender a generar datos tabulares.
+  \item \alert{Un factor no es de tipo numérico!} Por ejemplo, no pueden usar la función \Rcode{mean}. 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Un ejemplo}
+  \begin{itemize}
+  \item Aquí les muestro un ejemplo donde uso un \Rcode{factor} \pl{\^}\pl{\^}:
+<<eval=TRUE, echo=TRUE>>=
+fiesta <- factor(sample(c("muerto", "happy", "pedo", "sobrio"), 100, replace=TRUE, prob=c(0.1, 0.4, 0.3, 0.2)))
+fiesta[1:4]
+table(fiesta)
+@  
+  \end{itemize}
+  \begin{block}{Substituciones}
+  \pl{Perl} es excelente para manejar strings, pero \pl{R} también puede hacer sustituciones con la función \BIOCfunction{sub}. Por ejemplo:
+<<eval=TRUE, echo=TRUE>>=
+fiesta2 <- sub('o$', 'os', as.character(fiesta), perl=TRUE) 
+fiesta2[1:10]  
+@
+  \end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Apply}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{La familia apply}
+  \begin{itemize}
+  \item \pl{R} ofrece  una familia de funciones que les será muy útil ya que les ahorra líneas de código. Además, tengo entendido que son más eficientes.
+  \item La función básica de esta familia es \Rfunction{apply} y la completan \Rfunction{sapply}, \Rfunction{tapply} y \Rfunction{lapply}.
+  \item La sintaxis de cada una varia, pero la del \Rcode{apply} es: \Rcode{apply(X, MARGIN, FUN, ARGs)}.
+  \begin{itemize}
+    \item X es un arreglo, matriz o data.frame
+	\item MARGIN delimita si trabajamos sobre las filas (1), columnas (2) o ambas c(1,2)
+	\item FUN es una o más funciones, por ejemplo \Rcode{mean}
+	\item ARGs es para los argumentos de la función, si es que son necesarios.
+  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{For vs apply}
+  \begin{itemize}
+  \item Vamos a ver como la familia \Rcode{apply} nos facilita las cosas. Retomen el último ejercicio de la anterior sesión. Este lo pudieron resolver así usando el ciclo \Rcode{for}:
+<<eval=TRUE, echo=TRUE>>=
+arch <- "http://kabah.lcg.unam.mx/~lcollado/R/data/fagos_grandes_codon.txt"
+topfagos <- read.table(file=arch, header = T)
+res <- NULL
+for (i in 1:length(topfagos[1,])) {
+  temp <- sum(topfagos[,i])
+  res <- c(res, temp)
+}
+res <- res/sum(topfagos)
+names(res) <- colnames(topfagos)
+res[res>0.03]  
+@  
+  \item Ahora vamos a hacerlo con \Rcode{sapply}:
+<<eval=TRUE, echo=TRUE>>=
+sapply(topfagos, sum) / sum(topfagos) -> res2; res2[res2>0.03]
+@  
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Datos Univariados}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Tipos de Datos}
+  \begin{itemize}
+  \item Como un super repaso de la estadística descriptiva, acuérdense que hay varios tipos de datos. Estos se analizan y visualizan de diferentes formas.
+  \begin{itemize}
+    \item Datos categorícos: simplemente son datos divididos por categorías. Pueden ser nominales u ordinales.
+	\item Númericos discretos: generalmente usan los números enteros y se pueden hacer cierto tipo de operaciones con ellos. Por ejemplo, la edad.
+	\item Númericos contínuos: su rango generalmente está en los reales. Estos los puedes volver discretos al truncarlos o categorícos al usar intervalos.
+  \end{itemize}
+  \item Si quieren revisar más sobre la estadística descriptiva chequen este \myurlshort{www.lcg.unam.mx/~lcollado/R/resources/EstadisticaDescriptiva.pdf}{pdf}. A algunos se les hará familiar :P.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{EDA}
+  \begin{itemize}
+  \item Que haces cuando tienes un set de datos? Pues quieres analizarlos y explorarlos :P. \pl{R} es muy fuerte en el \emph{exploratory data analysis}.
+  \item Las gráficas son una parte esencial del EDA. En las siguientes diapositivas veremos que tipo de gráficas son sirve para cierto tipo de datos. Más adelante, ya haremos unas nosotros.
+  \item Por ahora vamos a trabajar con datos univariados. Esto significa que son de una sola variable.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Categóricos}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Datos Categóricos}
+  \begin{itemize}
+  \item La forma más simple de resumir este tipo de datos es hacer una tabla. Por ejemplo:
+<<echo=FALSE, results=tex>>=
+xx <- require(xtable)
+xtable(t(table(fiesta)), caption="Estado de la fiesta")
+@  
+  \item Aquí usé la función \BIOCfunction{xtable} del paquete con el mismo nombre. En \pl{R} básico pueden usar la función \Rcode{table}\footnote{Lo que le pases tiene que poder ser intrepretado como un \Rcode{factor}}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Categóricos: \BIOCfunction{barplot}}
+  \begin{itemize}
+  \item Otra forma de resumir este tipo de datos es con gráficas de barras.
+  \item A esta función le pueden pasar como argumento el resultado de la función \Rcode{table}. Esto les puede ayudar a resumir sus datos.    
+  \item Tengan cuidado al usar este tipo de gráficas, ya que siempre te pueden intentar engañar si cambian el rango del eje Y. Es por eso que deberían empezar en 0.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Barplot Incorrecto}  
+  \begin{figure}[htbp] 
+  \begin{centering} 
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+pub <- c(15, 14, 16)
+names(pub) <- c("Juan", "Pedro", "María")
+barplot(pub, main="Publicaciones", ylab="Número", ylim=c(12,16), xpd=FALSE)
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Barplot Correcto}  
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+barplot(pub, main="Publicaciones", ylab="Número")
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{\BIOCfunction{Pie}}
+  \begin{itemize}
+  \item Las gráficas de barra también las pueden usar para gráficar líneas de tiempo. Aquí deben tener cuidado de que sea entendible la gráfica; aka, intenten minimizar el uso de "tinta".
+  \item Otro tipo de gráfica para datos categóricos es la de pie. Sin embargo, este tipo de gráfica es altamente NO recomendable. Prueba de esto, lean lo que dice \Rcode{?pie}:
+  \begin{itemize}
+    \item \pl{Pie charts are a very bad way of displaying information. The eye is good at judging linear measures and bad at judging relative areas. A bar chart or dot chart is a preferable way of displaying this type of data.} 
+  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Cual es mas grande?}
+  \begin{figure}[htbp] 
+  \begin{centering}
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+pie(pub, main="Publicaciones", col=heat.colors(3))
+@ 
+  \end{centering} 
+  \end{figure}
+\end{frame}  
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Dotchart}
+  \begin{itemize}
+  \item El tercer tipo de gráfica que nos ayuda con este tipo de datos se llama \BIOCfunction{dotchart}.
+  \item Este función básicamente nos regresa los valores dentro del rango de la variable\footnote{Osea, del min al max}. Aquí deben tener cuidado con el eje X para ver realmente los valores.
+  \item Usen este tipo de gráficas para resaltar las diferencias.
+  \item Pueden leer más al respecto \myurlshort{hosho.ees.hokudai.ac.jp/~kubo/Rdoc/library/graphics/html/dotchart.html}{aquí}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Una dotchart}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+dotchart(pub, main="Publicaciones", col=rainbow(3), pch=16)
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Discretos}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Números Discretos}
+  \begin{itemize}
+  \item Cuando su variable tome valores númericos, van a querer entender como se distribuyen. Querrán conocer el rango de sus datos, por donde están centrados, que tan esparcidos están, etc.
+  \item Hay funciones, como la de \BIOCfunction{summary()} que les pueden ayudar. La otra opción es checar los datos gráficamente \pl{\^}\pl{\^}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Tallo y hojas}
+  \begin{itemize}
+  \item La más básica de estas gráficas es la de tallo y hojas\footnote{stem-and-leaf} si es que su conjuto de datos no es muy grande. Esta se hace con la función \BIOCfunction{stem}.
+  \item Supongo que ya han visto este tipo de gráfica antes, pero les recuerdo que pone los decimales como tallos y los dígitos como hojas\footnote{si sus números van de 0 a 99}. En sí, es como un histograma acostado.
+  \item Rápidamente pueden ver la forma de la distribución y el rango. Aquí vemos un ejemplo con los datos de \Rcode{islands}:
+  \end{itemize}
+<<eval=TRUE, echo=TRUE>>=
+stem(islands)
+@ 
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Alternativas al \Rcode{stem}}
+  \begin{itemize}
+  \item Como ya se dieron cuenta, \Rcode{code} ocupa bastante espacio vertical, por lo que que existen alternativas.
+  \item Estas muestran prácticamente la misma información, aunque hacia arriba.
+  \item La primera es la función \BIOCfunction{stripchart}. Para salgan bien las gráficas hay que meterse en más detalle a sus argumentos.
+  \item La segunda es la función \BIOCfunction{DOTplot}. Su uso es más simple y aquí les muestro un par de ejmplos con los datos de \Rcode{kid.weights} del paquete \RClass{UsingR}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Stripchart}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+library(UsingR)
+kid.weights -> strip
+strip <- strip$height[48 <= strip$age & strip$age <60]
+stripchart(strip, method="stack", xlab="x", pch=1, offset=1, cex=2)
+@
+  \end{centering}
+  \end{figure}
+\end{frame}  
+
+\begin{frame}[fragile]
+  \frametitle{Ahora con DOTplot}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+DOTplot(strip)
+@
+  \end{centering}
+  \end{figure}
+\end{frame}  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Contínuos}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Datos contínuos}
+  \begin{itemize}
+  \item En sí, las gráficas que veremos a continuación también sirven para datos discretos. Pero su utilidad es resaltada con datos contínuos :D.
+  \end{itemize}
+\end{frame}  
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Medidas de tendencia central}
+  \begin{block}{Un repaso}
+  Cuando tenga muchos datos van a querer encontrar información sobre un punto medio de sus datos. Con \pl{R} pueden encontrar unos con funciones:
+  \begin{itemize}
+  \item La media muestral con \BIOCfunction{mean} y una media sin cierto porcentaje de valores extremos usando el argumento \Rcode{trim}
+  \item La mediana muestral con \BIOCfunction{median}
+  \item La moda\footnote{No es muy buena para resumir un set de datos} aunque no hay una función que te lo haga. Puedes usar \Rcode{which.max(table(x))}
+  \item El punto medio del rango\footnote{Es más sensible que la media a valores extremos} con \Rcode{mean(range(x))}
+  \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Medidas de dispersión}
+  \begin{block}{}
+  Una vez que conozcan un punto medio, van a querer encontrar que tan dispersos están sus datos. Pueden encontrar:
+  \begin{itemize}
+  \item El rango (mín, máx) de sus datos con \BIOCfunction{range} y la diferencia entre ellos con \Rcode{diff(range(x))}.
+  \item La varianza muestral con \BIOCfunction{var} y la desviación estándar muestral con \BIOCfunction{sd}.
+  \item El rango intercuartílico (IQR en inglés) que es la distancia entre los percentiles 25 y 75 con \BIOCfunction{IQR}.
+  \item Pueden encontrar cualquier cuantil con la función \BIOCfunction{quantile}. Acuérdense de que la media es el cuantil 0.25.
+  \item Recuerden que una función muy importante es \BIOCfunction{summary}.
+  \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Forma de la distribución}
+  \begin{itemize}
+  \item Las gráficas tipo tallas y hojas sirven siempre y cuando no tengan tantos datos. Así que la opción es hacer histogramas con la función \BIOCfunction{hist}.
+  \item Un argumento muy importante de esta función es el \Rcode{breaks} que decide cuantos grupos van a tener. Pueden usar el \emph{default}, especificar un número o usar alguno de los algoritmos que ofrece la función.
+  \item Con \Rcode{hist} pueden generar histogramas idénticos para un set de datos. Uno puede tener frecuencias absolutos en el eje Y, mientras que otro puede ser de probabilidades. Para generar el segundo usen el parámetro \Rcode{prob=T}.
+  \item Aquí les muestro un par de ejemplos\footnote{Noten que en el primero los datos tienen dist. bimodal}:
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Hist del \Rcode{faithful\$waiting}}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+hist(faithful$waiting, col="light blue", main="Histograma de faithful$waiting", xlab="Tiempo de espera entre erupciones", ylab="Frecuencia")
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Densidad \Rcode{OBP}}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+hist(OBP, breaks="Scott", prob=TRUE, col="light blue", main="Histograma de OBP", ylab="Densidad", xlab="OBP: on base percentage")
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Simetría, modas, sesgo}
+  \begin{itemize}
+  \item Muchas veces querrán ver si sus datos:
+  \begin{itemize}
+    \item son simétricos
+	\item tienen una distribución unimodal, bimodal o multimodal
+	\item están sesgados y hacia que lado
+  \end{itemize}
+  \item Una forma\footnote{No se las recomiendo, pero a unos les gusta} es hacer un polígono de las frecuencias. Para este no hay una función que te lo haga.
+  \item En fin, nos podemos dar una idea bastante clara de esto usando las funciones \BIOCfunction{lines} junto con \BIOCfunction{density}. Incluso los podemos juntar con un histograma.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Polígono}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+bins <- seq(42, 109, by=10)
+freqs <- table(cut(faithful$waiting, bins))
+y.pts <- c(0, freqs, 0)
+x.pts <- seq(37, 107, by=10)
+plot(x.pts, y.pts, type="l", main="Polígono de faithful$waiting", col="blue")
+rug(faithful$waiting, col="red") 
+@
+  \end{centering}
+  \end{figure}
+\end{frame}  
+
+\begin{frame}[fragile]
+  \frametitle{Bimodal}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+hist(faithful$waiting, breaks="scott", prob=TRUE, main="", ylab="", col="light blue")
+lines(density(faithful$waiting), col="red")
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Casi unimodal}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+hist(OBP, breaks="scott", prob=TRUE, main="", ylab="", col="light blue")
+lines(density(OBP), col="red")
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Multimodal}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+library(MASS)
+hist(galaxies,prob=TRUE, main="", ylab="", col="light blue", ylim=c(0,0.00015))
+lines(density(galaxies), col="red")
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Simétrico}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+hist(last.tie, prob=TRUE, main="", ylab="", col="light blue")
+lines(density(last.tie), col="red")
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Sesgado}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+hist(cfb$VEHIC, prob=TRUE, breaks="Scott", main="", ylab="", col="light blue")
+lines(density(cfb$VEHIC), col="red")
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{\BIOCfunction{boxplot}}
+  \begin{itemize}
+  \item Anoten que si sus datos son simétricos, la media, la mediana y  la media truncada se van a parecer.  
+  \item La otra opción fuerte es usar el \BIOCfunction{boxplot}. Este en sí utiliza la información del \Rcode{summary}. Con este tipo de gráfica es fácil visualizar:
+  \begin{itemize}
+    \item Los cuartiles 1, 2 y 3. Recuerden que el segundo corresponde a la mediana.
+    \item Te pone un límites máximo y mínimo usando el cuartil 1 - 1.5 veces el IQR, el cuartil 3 + 1.5 veces IQR
+	\item Los valores extremos. Estos aparecen como bolitas hasta arriba y/o abajo de los límites.
+  \end{itemize}
+  \item A continuación les muestro dos ejemplos:
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Un boxplot}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+boxplot(alltime.movies$Gross, ylab="Ventas de por vida", main="Usando alltime.movies$Gross", col=gray(0.9))
+f = fivenum(alltime.movies$Gross)
+text(rep(1.3, 5), f, labels=c("mín", "1er cuartil", "mediana", "3er cuartil", "máx"))
+@
+  \end{centering}
+  \end{figure}
+\end{frame}  
+
+\begin{frame}[fragile]
+  \frametitle{Otro boxplot}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+boxplot(brightness, ylab="Brillantez de las estrellas", main="Usando brightness", col=gray(0.9))
+f = fivenum(brightness)
+text(rep(1.3, 5), f, labels=c("mín", "1er cuartil", "mediana", "3er cuartil", "máx"))
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Gráficas}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Aprendiendo a hacerlas}
+  \begin{itemize}
+  \item En las siguientes diapositivas vamos a ver como hacer las gráficas simples en \pl{R}.
+  \item Vamos a aprender a usar varios parámetros de estas al ir mejorando ciertas gráficas.
+  \item Necesitamos el objeto \Rcode{topfagos} que ya habíamos definido previamente.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Gráficas de líneas}
+  \begin{itemize}
+  \item Primero hagan una gráfica básica con las sumas de las columnas de las primeras 5 líneas de \Rcode{topfagos}:
+<<eval=FALSE, echo=TRUE>>=
+top5 <- apply(topfagos[1:5,], 2, sum)
+plot(top5)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 1: paso 1}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+top5 <- apply(topfagos[1:5,], 2, sum)
+plot(top5)
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{\Rcode{type}, \Rcode{col}, \Rcode{main}, \BIOCfunction{title}}
+  \begin{itemize}
+  \item Ahora vamos a mejorar esa gráfica.
+  \item Vamos a usar el argumento:
+  \begin{itemize}
+    \item \Rcode{type} para cambiar el tipo de símbolo.
+	\item \Rcode{col} para cambiar los colores.
+    \item \BIOCfunction{title} para ponerle título a la imagen.
+	\item \Rcode{main} para especificar el título.
+	\item \Rcode{col.main} para cambiar el color del título.
+	\item \Rcode{font.main} para poner el título en ítalicos.
+  \end{itemize}
+<<eval=FALSE, echo=TRUE>>=
+plot(top5, type="o", col="blue")
+title(main="Top5 fagos y sus codones", col.main="red", font.main=4)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 1: paso 2}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+plot(top5, type="o", col="blue")
+title(main="Top5 fagos y sus codones", col.main="red", font.main=4)
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{\BIOCfunction{lines}, \Rcode{ylim}, \Rcode{pch}}
+  \begin{itemize}
+  \item Ahora vamos a manejar 2 vectores de datos y vamos a usar los siguientes argumentos:
+  \begin{itemize}
+    \item \Rcode{ylim} para delimitar los límites del eje Y.
+	\item \BIOCfunction{lines} para añadir otra línea
+	\item \Rcode{pch} para escoger un símbolo para la segunda línea.
+	\item \Rcode{lty} para especificar el tipo de línea (punteada por ejemplo).
+  \end{itemize}
+<<eval=FALSE, echo=TRUE>>=
+top10 <- apply(topfagos[6:10,], 2, sum)
+plot(top5, type="o", col="blue", ylim=c(1000,10000))
+lines(top10, typ="o", pch=22, lty=2, col="red")
+title(main="Top5 y 10 fagos", col.main="red", font.main=4)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 1: paso 3}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+top10 <- apply(topfagos[6:10,], 2, sum)
+plot(top5, type="o", col="blue", ylim=c(1000,10000))
+lines(top10, typ="o", pch=22, lty=2, col="red")
+title(main="Top5 y 10 fagos", col.main="red", font.main=4)
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{\Rcode{axes}, \Rcode{ann}, \BIOCfunction{box}}
+  \begin{itemize}
+  \item Con los mismos 2 vectores, vamos a añadirle información al eje X y una leyenda a la gráfica. Usaremos:
+  \begin{itemize}
+	\item \Rcode{ann} y \Rcode{axes} para apagar la información de los ejes que se crea automáticamente.
+    \item \Rcode{axis} para especificar manualmente la información del eje X (1) y del eje Y (2).
+	\item \BIOCfunction{box} para hacer una caja y delimitar el espacio de la gráfica.
+	\item \BIOCfunction{title} para especificar los títulos de los ejes.
+	\item \BIOCfunction{legend} para crear la leyenda de la grafica.	
+	\item \Rcode{cex} y \Rcode{cex.axis} para cambiar el tamaño de la letra relativo al tamaño default
+	\item \Rcode{las} nos sirve para marcar donde queremos los valores del eje Y con respecto a este eje: horizontales, perpendiculares, etc. 
+  \end{itemize}
+<<eval=FALSE, echo=TRUE>>=
+rango <- range(0, top5, top10)
+plot(top5, type="o", col="blue", ylim=rango, axes=FALSE, ann=FALSE)
+axis(1, at=c(1, 5, 11, 13, 15, 17, 19, 21, 25, 27, 30, 36, 38, 39, 41, 45, 51, 55, 56, 58), lab=c("A", "R", "N", "D", "C", "Q", "E", "G", "H", "I", "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V"), font = 1, cex.axis=0.5)
+axis(2, las=1, at=3000*0:rango[2])
+box()
+lines(top10, type="o", pch=22, lty=2, col="red")
+title(main="Top5 y 10 fagos", col.main="red", font.main=4)
+title(xlab="Codones", col.lab=rgb(0, 0.5, 0))
+title(ylab="Frecuencia Absoluta", col.lab=rgb(0, 0.5, 0))
+legend(40, rango[2], c("top5", "top10"), cex=0.8, col=c("blue", "red"), pch=21:22, lty=1:2)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 1: paso 4}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+rango <- range(0, top5, top10)
+plot(top5, type="o", col="blue", ylim=rango, axes=FALSE, ann=FALSE)
+axis(1, at=c(1, 5, 11, 13, 15, 17, 19, 21, 25, 27, 30, 36, 38, 39, 41, 45, 51, 55, 56, 58), lab=c("A", "R", "N", "D", "C", "Q", "E", "G", "H", "I", "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V"), font = 1, cex.axis=0.5)
+axis(2, las=1, at=3000*0:rango[2])
+box()
+lines(top10, type="o", pch=22, lty=2, col="red")
+title(main="Top5 y 10 fagos", col.main="red", font.main=4)
+title(xlab="Codones", col.lab=rgb(0, 0.5, 0))
+title(ylab="Frecuencia Absoluta", col.lab=rgb(0, 0.5, 0))
+legend(40, rango[2], c("top5", "top10"), cex=0.8, col=c("blue", "red"), pch=21:22, lty=1:2)
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{PNG, PDF}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Creando archivos png}
+  \begin{itemize}
+  \item Ahora vamos a aprender a guardar la imagen en un archivo \pl{.png}. Trabajaremos con 3 columnas específicas. Usaremos:
+  \begin{itemize}
+	\item \BIOCfunction{png} para especificar el nombre del archivo y que queremos que la gráfica se guarde en un png.
+	\item \Rcode{plot\_colors} que es un objeto definido por nosotros para los colores que vamos a usar.
+	\item \BIOCfunction{dev.off()} para especificar que terminas de hacer la gráfica. Al usar está línea se crea el archivo.
+  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]  
+<<eval=FALSE, echo=TRUE>>=
+max_y <- max(topfagos)
+plot_colors <- c("blue", "red", "forestgreen")
+png(filename="figure.png", height=500, width=600, bg="white")
+plot(topfagos$"I_ATA", type="o", col=plot_colors[1], ylim=c(0, max_y), axes=FALSE, ann=FALSE)
+axis(1, at=1:10, lab=c("F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10"))
+axis(2, las=1, at=1000*0:max_y)
+box()
+lines(topfagos$"I_ATT", type="o", pch=22, lty=2, col=plot_colors[2])
+lines(topfagos$"I_ATC", type="o", pch=23, lty=3, col=plot_colors[3])
+title(main="Codones de I en top10 fagos", col.main="red", font.main=4)
+title(xlab="Fagos", col.lab=rgb(0,0.5,0))
+title(ylab="Frecuencia", col.lab=rgb(0,0.5,0))
+legend(4, max_y, names(topfagos)[grep("^I", names(topfagos))], cex=0.8, col=plot_colors, pch=21:23, lty=1:3)
+dev.off()
+@  
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 2: paso 1}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+max_y <- max(topfagos)
+plot_colors <- c("blue", "red", "forestgreen")
+#png(filename="figure.png", height=500, width=600, bg="white")
+plot(topfagos$"I_ATA", type="o", col=plot_colors[1], ylim=c(0, max_y), axes=FALSE, ann=FALSE)
+axis(1, at=1:10, lab=c("F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10"))
+axis(2, las=1, at=1000*0:max_y)
+box()
+lines(topfagos$"I_ATT", type="o", pch=22, lty=2, col=plot_colors[2])
+lines(topfagos$"I_ATC", type="o", pch=23, lty=3, col=plot_colors[3])
+title(main="Codones de I en top10 fagos", col.main="red", font.main=4)
+title(xlab="Fagos", col.lab=rgb(0,0.5,0))
+title(ylab="Frecuencia", col.lab=rgb(0,0.5,0))
+legend(4, max_y, names(topfagos)[grep("^I", names(topfagos))], cex=0.8, col=plot_colors, pch=21:23, lty=1:3)
+#dev.off()
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Creando pdfs}
+  \begin{itemize}
+  \item Ahora vamos a guardar la imagen en formato \pl{pdf}. Además vamos a usar:
+  \begin{itemize}
+	\item \BIOCfunction{pdf} de igual forma que usamos \Rcode{png}.
+	\item \Rcode{xlab} y \Rcode{ylab} para especificar los títulos de los ejes.
+	\item \BIOCfunction{text} para poner los nombres del eje X inclinados a 45 grados.
+	\item \Rcode{lwd} para cambiar el grosor de la línea.
+	\item \Rcode{mar} para cambiar los márgenes de la imagen.
+  \end{itemize}
+<<eval=FALSE, echo=TRUE>>=
+plot_colors <- c(rgb(r=0.0,g=0.0,b=0.9), "red", "forestgreen")
+pdf(filename="figure.pdf", height=3.5, width=5)
+par(mar=c(4.2,3.8,0.2,0.2))
+plot(topfagos$"I_ATA", type="l", col=plot_colors[1], ylim=c(0, max_y), axes=F, ann=F, xlab="Fagos", ylab="Frecuencia", cex.lab=0.8, lwd=2)
+axis(1, lab=F)
+text(x=c(1:10),par("usr")[3] -200, srt=45, adj=1, labels=c("F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10"), xpd=T, cex=0.8)
+axis(2, las=1, cex.axis=0.8)
+box()
+lines(topfagos$"I_ATT", type="l", lty=2, col=plot_colors[2])
+lines(topfagos$"I_ATC", type="l", lty=3, col=plot_colors[3])
+legend("topleft", names(topfagos)[grep("^I", names(topfagos))], cex=0.8, col=plot_colors, lty=1:3, lwd=2, bty="n")
+dev.off()
+par(mar=c(5,4,4,2) + 0.1) #regresa los margenes al valor default
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 2: paso 2}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+plot_colors <- c(rgb(r=0.0,g=0.0,b=0.9), "red", "forestgreen")
+#pdf(filename="figure.pdf", height=3.5, width=5)
+par(mar=c(4.2,3.8,0.2,0.2))
+plot(topfagos$"I_ATA", type="l", col=plot_colors[1], ylim=c(0, max_y), axes=F, ann=F, xlab="Fagos", ylab="Frecuencia", cex.lab=0.8, lwd=2)
+axis(1, lab=F)
+text(x=c(1:10),par("usr")[3] -200, srt=45, adj=1, labels=c("F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10"), xpd=T, cex=0.8)
+axis(2, las=1, cex.axis=0.8)
+box()
+lines(topfagos$"I_ATT", type="l", lty=2, col=plot_colors[2])
+lines(topfagos$"I_ATC", type="l", lty=3, col=plot_colors[3])
+legend("topleft", names(topfagos)[grep("^I", names(topfagos))], cex=0.8, col=plot_colors, lty=1:3, lwd=2, bty="n")
+#dev.off()
+par(mar=c(5,4,4,2) + 0.1)
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Gráficas de Barras}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Gráficas de barras}
+  \begin{itemize}
+  \item Simplemente vamos a aprender a usar \BIOCfunction{barplot}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+<<eval=FALSE, echo=TRUE>>=
+barplot(topfagos$"I_ATA")
+@  
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 3: paso 1}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+barplot(topfagos$"I_ATA")
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Gráficas de barras}
+  \begin{itemize}
+  \item Ahora la modificamos con argumentos que en su mayoría ya les son conocidos.
+  \begin{itemize}
+	\item \Rcode{border} lo vamos a usar para especificar el color del borde de las barras.
+	\item \Rcode{density} lo vamos a usar para marcar que tan denso es el color adentro de cada barra.
+	\item \Rcode{names.arg} es para especificar los nombres de cada barra.
+  \end{itemize}
+<<eval=FALSE, echo=TRUE>>=
+barplot(topfagos$"I_ATA", main="Codon I_ATA", xlab="Fagos", ylab="Frecuencia", names.arg=c("F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10"), border="blue", density=seq(10, 100, by=10))
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 3: paso 2}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+barplot(topfagos$"I_ATA", main="Codon I_ATA", xlab="Fagos", ylab="Frecuencia", names.arg=c("F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10"), border="blue", density=seq(10, 100, by=10))
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Algo de colores}
+  \begin{itemize}
+  \item Ahora le vamos a agregar otros datos, una leyenda y unos colores.
+  \begin{itemize}
+	\item Usamos \Rcode{rainbow} para obtener colores tipo arcoiris para nuestra gráfica.
+	\item \Rcode{beside} nos sirve para juntar las barras.
+  \end{itemize}
+<<eval=FALSE, echo=TRUE>>=
+codonesI <- matrix(c(topfagos$"I_ATA", topfagos$"I_ATT", topfagos$"I_ATC"), 3, 10)
+rownames(codonesI) <- c("I_ATA", "I_ATT", "I_ATC")
+barplot(t(codonesI), main="Codones de I", xlab="Fagos", ylab="Frecuencia", beside=TRUE, col=rainbow(10))
+legend(x=9, y=3500, c("F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10"), cex=0.8, bty="n", fill=rainbow(10))
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 3: paso 3}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+codonesI <- matrix(c(topfagos$"I_ATA", topfagos$"I_ATT", topfagos$"I_ATC"), 3, 10)
+rownames(codonesI) <- c("I_ATA", "I_ATT", "I_ATC")
+barplot(t(codonesI), main="Codones de I", xlab="Fagos", ylab="Frecuencia", beside=TRUE, col=rainbow(10))
+legend(x=9, y=3500, c("F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10"), cex=0.8, bty="n", fill=rainbow(10))
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Otro tipo de barras}
+  \begin{itemize}
+  \item Ahora vamos a cambiar nuestra gráfica de barras. Vamos a hacerlas acumulativas. Además, usaremos nuevos colores.
+  \begin{itemize}
+	\item Usamos \Rcode{heat.colores} para obtener colores tipo \pl{heatmap} para nuestra gráfica.
+	\item \Rcode{space} para marcar el espacio entre cada barra
+  \end{itemize}
+<<eval=FALSE, echo=TRUE>>=
+par(xpd=T, mar=par()$mar+c(0,0,0,4))
+barplot(codonesI, main="Codones de I", ylab="Frecuencia", col=heat.colors(3), space=0.1, cex.axis=0.8, las=1, names.arg=c("F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10"), cex=0.8) 
+legend(0.5, 5500, rownames(codonesI), cex=0.8, fill=heat.colors(3))
+par(mar=c(5, 4, 4, 2) + 0.1) # para regresar a los parametros normales
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 3: paso 4}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+par(xpd=T, mar=par()$mar+c(0,0,0,4))
+barplot(codonesI, main="Codones de I", ylab="Frecuencia", col=heat.colors(3), space=0.1, cex.axis=0.8, las=1, names.arg=c("F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10"), cex=0.8) 
+legend(0.5, 5500, rownames(codonesI), cex=0.8, fill=heat.colors(3))
+par(mar=c(5, 4, 4, 2) + 0.1) # para regresar a los parametros normales
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Histogramas}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Histogramas}
+  \begin{itemize}
+  \item Para empezar, hacemos un histograma simple.
+  \item En este caso vamos a usar los datos de \Rcode{babyboom}\footnote{Tienen que haber usado \Rcode{library(UsingR)}}. La variable \Rcode{running.time} almacena la hora después de medianoche a la cual nacieron los bebés.
+  \begin{itemize}
+	\item Simplemente usamos la función \BIOCfunction{hist}.
+  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+<<eval=FALSE, echo=TRUE>>=
+hist(diff(babyboom$running.time))
+@  
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 4: paso 1}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+hist(diff(babyboom$running.time))
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Ahora con color}
+  \begin{itemize}
+  \item En este caso vamos a usar los datos de \Rcode{nym.2002}. La variable \Rcode{time} almacena los tiempos que hicieron los concursantes del maratón de ese año.
+  \begin{itemize}
+	\item Simplemente usamos el tan conocido argumento \Rcode{col}.
+	\item Además, delimito el eje Y con \Rcode{ylim}
+  \end{itemize}
+<<eval=FALSE, echo=TRUE>>=
+hist(nym.2002$time, col="light blue",ylim=c(0,500))
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 4: paso 2}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+hist(nym.2002$time, col="light blue",ylim=c(0,500))
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Usando \Rcode{heat.colors}}
+  \begin{itemize}
+  \item En este caso vamos a usar los datos de \Rcode{faithful}. La variable \Rcode{waiting} almacena los tiempos una y otra erupción de "Faithful".
+  \begin{itemize}
+	\item Usamos el argumento \Rcode{breaks} para especificar cuantas intervalos queremos en el histograma.
+	\item Con \Rcode{right} estamos deshabilitando el que cierren por el lado derecho los intervalos del histograma.
+    \item \Rcode{heat.colors} nos sirve para obtener colores tipo heatmap.
+  \end{itemize}
+<<eval=FALSE, echo=TRUE>>=
+max_num <- max(faithful$waiting)
+hist(faithful$waiting, col=heat.colors(max_num), breaks=max_num/2, xlim=c(0,max_num), right=F, main="Tiempos entre erupciones de Faithful", las=1)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 4: paso 3}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+max_num <- max(faithful$waiting)
+hist(faithful$waiting, col=heat.colors(max_num), breaks=max_num/2, xlim=c(0,max_num), right=F, main="Tiempos entre erupciones de Faithful", las=1)
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Densidad de probabilidad}
+  \begin{itemize}
+  \item Aquí seguimos con los mismo datos y vamos a decidir los intervalos manualmente.
+  \begin{itemize}
+	\item Noten que a \Rcode{breaks} le paso un vector manualmente.
+	\item Como queremos la densidad de probabilidad, cambié el valor de \Rcode{freq}
+	\end{itemize}
+<<eval=FALSE, echo=TRUE>>=
+brk <- c(0, 46, 55, 64, 69, 82, 90, 100)
+hist(faithful$waiting, col=heat.colors(length(brk)), breaks=brk, xlim=c(0,max_num), right=F, main="Densidad de Probabilidad de las erupciones de Faithful", cex.axis=0.8, freq=F)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 4: paso 4}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+brk <- c(0, 46, 55, 64, 69, 82, 90, 100)
+hist(faithful$waiting, col=heat.colors(length(brk)), breaks=brk, xlim=c(0,max_num), right=F, main="Densidad de Probabilidad de las erupciones de Faithful", cex.axis=0.8, freq=F)
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Aleatorios}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Unos números aleatorios}
+  \begin{itemize}
+  \item Usando el paquete \BIOCfunction{mcmc} generamos unos número al azar. Estos los vamos a comparar visualmente con los que generamos en base a una distribución "log-normal".
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+<<eval=FALSE, echo=TRUE>>=
+r <- rlnorm(1000)
+hist(r)
+# versus
+library(mcmc)
+h <- function(x) if (all(x >= 0) && sum(x) <= 1) return(1) else return(-Inf)
+out <- metrop(h, rep(0, 5), 1000)
+out <- metrop(out, scale = 0.1)
+out <- metrop(out, nbatch = 1e4)
+hist(out$batch[ , 1])
+@  
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 5: paso 1a}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+r <- rlnorm(1000)
+hist(r)
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 5: paso 1b}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+library(mcmc)
+h <- function(x) if (all(x >= 0) && sum(x) <= 1) return(1) else return(-Inf)
+out <- metrop(h, rep(0, 5), 1000)
+out <- metrop(out, scale = 0.1)
+out <- metrop(out, nbatch = 1e4)
+hist(out$batch[ , 1])
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Viendo la dif}
+<<eval=FALSE, echo=TRUE>>=
+h1 <- hist(r, plot=F, breaks=c(seq(0,max(r)+1, .1)))
+plot(h1$counts, log="xy", pch=20, col="blue",main="Distribución Log-normal",xlab="Valor", ylab="Frecuencia")
+# Versus
+h2 <- hist(out$batch[,1])
+plot(h2$counts, log="xy", pch=20, col="blue",main="Distribución con MCMC",xlab="Valor", ylab="Frecuencia")
+@  
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 5: paso 2a}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+h1 <- hist(r, plot=F, breaks=c(seq(0,max(r)+1, .1)))
+plot(h1$counts, log="xy", pch=20, col="blue", main="Distribución Log-normal", xlab="Valor", ylab="Frecuencia")
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 5: paso 2b}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+h2 <- hist(out$batch[,1], plot=F)
+plot(h2$counts, log="xy", pch=20, col="blue", main="Distribución con MCMC", xlab="Valor", ylab="Frecuencia")
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Dotchart}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Dotchart}
+  \begin{itemize}
+  \item El último tipo de gráfica que vamos a ver hoy es el \BIOCfunction{dotchart}. Primero hacemos una normal y luego le ponemos colores! :)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+<<eval=FALSE, echo=TRUE>>=
+dotchart(t(codonesI))
+# y luego
+dotchart(t(codonesI), col=rainbow(10), pch=16, cex=0.8)
+@  
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 6: paso 1}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+dotchart(t(codonesI))
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf 6: paso 2}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+dotchart(t(codonesI), col=rainbow(10), pch=16, cex=0.8)
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Resumiendo}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Ya casi!}
+  \begin{itemize}
+  \item Para empezar les muestro una gráfica con los diferentes símbolos que pueden usar. Acuérdense de que son parámetros del argumento \Rcode{pch}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{pch}
+  \begin{figure}[htbp]
+  \begin{centering}
+<<eval=TRUE, echo=FALSE, fig=TRUE>>=
+# Make an empty chart
+plot(1, 1, xlim=c(1,5.5), ylim=c(0,7), type="n", ann=FALSE)
+
+# Plot digits 0-4 with increasing size and color
+text(1:5, rep(6,5), labels=c(0:4), cex=1:5, col=1:5)
+
+# Plot symbols 0-4 with increasing size and color
+points(1:5, rep(5,5), cex=1:5, col=1:5, pch=0:4)
+text((1:5)+0.4, rep(5,5), cex=0.6, (0:4))
+
+# Plot symbols 5-9 with labels
+points(1:5, rep(4,5), cex=2, pch=(5:9))
+text((1:5)+0.4, rep(4,5), cex=0.6, (5:9))
+
+# Plot symbols 10-14 with labels
+points(1:5, rep(3,5), cex=2, pch=(10:14))
+text((1:5)+0.4, rep(3,5), cex=0.6, (10:14))
+
+# Plot symbols 15-19 with labels
+points(1:5, rep(2,5), cex=2, pch=(15:19))
+text((1:5)+0.4, rep(2,5), cex=0.6, (15:19))
+
+# Plot symbols 20-25 with labels
+points((1:6)*0.8+0.2, rep(1,6), cex=2, pch=(20:25))
+text((1:6)*0.8+0.5, rep(1,6), cex=0.6, (20:25))
+@
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{FIN}
+  \begin{itemize}
+  \item Como se habrán dado cuenta hay una infinidad de parámetros para las gráficas... muchos de los cuales se nos olvidan que son. Su manual de gráficas es simplemente escribir \alert{\Rcode{?par}}.
+  \item Por ejemplo, puedes tener 2 o 4 gráficas en lugar de una usando el argumento \Rcode{mfrow}.
+  \item Ahora, por favor chequen el \myurlshort{www.lcg.unam.mx/~lcollado/R/}{ejercicio 2}. Suerte!
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

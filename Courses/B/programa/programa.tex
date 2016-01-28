@@ -1,0 +1,220 @@
+%\VignetteIndexEntry{Programa de Seminario III: R/Bioconductor}
+%\VignetteDepends{}
+%\VignetteKeywords{R, Bioconductor}
+%\VignettePackage{SIII: R/Bioc}
+\documentclass[letterpaper,12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Standard Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{epsfig}
+%\usepackage{graphicx}
+%\usepackage{graphics}
+%\usepackage{amssymb}
+%\usepackage{amsmath}
+%\usepackage{mathrsfs}
+%\usepackage{caption}
+%\usepackage{comment}
+\usepackage{fancyvrb}
+\usepackage{fancyhdr}
+
+\usepackage[a4paper]{geometry}
+\usepackage{hyperref,graphicx}
+
+\usepackage[spanish]{babel}
+\selectlanguage{spanish}
+\usepackage[utf8]{inputenc}
+
+%%%%%%%%%%%%%%%%%%%%%% headers and footers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy} 
+\renewcommand{\footrulewidth}{\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plainnat}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% sweave options  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%% opening %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\textbf{Seminario III: \texttt{R}/\texttt{Bioconductor}\\Agosto-Diciembre 2009}}
+\author{Leonardo Collado Torres\\[1em]Licenciado en Ciencias Genómicas,\\ UNAM, Cuernavaca, México\\[1em]\texttt{lcollado@lcg.unam.mx}}
+
+\usepackage{Sweave}
+\begin{document}
+\maketitle
+
+\medskip
+\noindent{\small\textbf{Ayudantes:} Alejandro Reyes \texttt{areyes@lcg.unam.mx}, José Reyes \texttt{jreyes@lcg.unam.mx} y Víctor Moreno \texttt{jmoreno@lcg.unam.mx}}
+
+\medskip
+\begin{abstract}
+El curso Seminario III: R/Bioconductor será impartido en la Licenciatura de Ciencias Genómicas de la UNAM los viernes de 12:00 a 14:00. Dicho curso profundizará en Bioconductor que es el conjunto de herramientas públicas, montadas en \texttt{R} y desarrolladas para el estudio de la genómica. Para tomar esta clase es necesario tener un manejo básico de estadística por un lado y de R por el otro. En el segundo caso se impartió un curso de \texttt{R} introductorio a la sexta generación de la LCG disponible en \url{http://www.lcg.unam.mx/~lcollado/E/}. El orden en el que se cubrirá el material y el proyecto asociado a esta materia estarán intregrados y directamente relacionados al curso de Bioinformática y Estadística I. 
+\end{abstract}
+
+\section{Objetivos}
+
+\section{Proyecto}
+
+\section{Evaluación}
+% Mover despues de programa de clases?
+
+\section{Programa inicial de clases}
+
+\begin{itemize} 
+
+\item[14 Ago] Clase I
+  \begin{description}
+  \item[Introducción y R básico] conociendo el lenguaje
+  \begin{enumerate}
+  \item Orígenes de R
+  \end{enumerate}
+  \end{description}
+  
+  \item[21 Ago] Clase II
+  \begin{description}
+  \item[Intro a R] parte II
+  \begin{enumerate}
+  \item Estructuras de Control
+  \end{enumerate}
+  \end{description}
+  
+  \item[28 Ago] Clase III
+  \begin{description}
+  \item[Fin de la intro a R] parte III
+  \begin{enumerate}
+  \item Dudas
+  \end{enumerate}
+  \end{description}
+  
+  \item[4 Sept] Clase IV
+  \begin{description}
+  \item[Estadística Descriptiva] Empieza tema de variables aleatorias discretas
+  \begin{enumerate}
+  \item Tabla de Contingencia (table)
+  \end{enumerate}
+  \end{description}
+  
+  \item[11 Sept] Clase V
+  \begin{description}
+  \item[Estadística Descriptiva] Visualización general de datos
+  \begin{enumerate}
+  \item Histogramas de frecuencias y distribución de frecuencias acumuladas (hist)
+  \end{enumerate}
+  \end{description}
+  
+  \item[23 Feb] Clase VI
+  \begin{description}
+  \item[Más de gráficas] Mosaicos
+  \begin{enumerate}
+  \item Detalles gráficos o distribuciones (rbinom, rpois, rgeom)
+  \end{enumerate}
+  \end{description}
+  
+  \item[18 Sept] Clase VII
+  \begin{description}
+  \item[Primer trabajo aplicado] Por definir
+  \begin{enumerate}
+  \item Describir trabajo aplicado?
+  \end{enumerate}
+  \end{description}
+  
+  \item[25 Sept] Clase VIII
+  \begin{description}
+  \item[Título Clase] Variables aleatorias continuas
+  \begin{enumerate}
+  \item por ver
+  \end{enumerate}
+  \end{description}
+  
+  \item[2 Oct] Clase IX
+  \begin{description}
+  \item[Título Clase] VAC II
+  \begin{enumerate}
+  \item por ver
+  \end{enumerate}
+  \end{description}
+  
+  \item[9 Oct] Clase X
+  \begin{description}
+  \item[Título Clase] VAC III
+    \begin{enumerate}
+      \item por ver
+    \end{enumerate}
+  \end{description}
+  
+  \item[16 Oct] Clase XI
+  \begin{description}
+  \item[Título Clase] VAC IV
+  \begin{enumerate}
+  \item por ver
+  \end{enumerate}
+  \end{description}
+  
+  \item[23 Oct] Clase XII
+  \begin{description}
+  \item[Título Clase] VAC V
+  \begin{enumerate}
+  \item por ver
+  \end{enumerate}
+  \end{description}  
+  
+  \item[30 Oct] Clase XIII
+  \begin{description}
+  \item[Título Clase] VAC VI
+  \begin{enumerate}
+  \item por ver
+  \end{enumerate}
+  \end{description}
+  
+  \item[6 Nov] Clase XIV
+  \begin{description}
+  \item[Título Clase] VAC VII
+  \begin{enumerate}
+  \item por ver
+  \end{enumerate}
+  \end{description}  
+    
+  \item[13 Nov] Clase XV
+  \begin{description}
+  \item[Título Clase] Distribución de probabilidad multivariable
+  \begin{enumerate}
+  \item por ver
+  \end{enumerate}
+  \end{description}
+  
+  \item[20 Nov] Clase XVI
+  \begin{description}
+  \item[Título Clase] DPM II
+  \begin{enumerate}
+  \item por ver
+  \end{enumerate}
+  \end{description}
+    
+  \item[27 Nov] Clase XVII
+  \begin{description}
+  \item[Título Clase] DPM III
+  \begin{enumerate}
+  \item por ver
+  \end{enumerate}
+  \end{description}
+  
+  \item[4 Dic] Primera Semana de Exámenes
+  \begin{description}
+  \item[Título Clase] DPM IV
+  \begin{enumerate}
+  \item por ver
+  \end{enumerate}
+  \end{description}
+  
+  \item[11 Dic] Segunda Semana de Exámenes
+  \begin{description}
+  \item[Título Clase] Intervalos de Convianza
+  \begin{enumerate}
+  \item por ver
+  \end{enumerate}
+  \end{description}
+
+  
+\end{itemize}
+
+\end{document}

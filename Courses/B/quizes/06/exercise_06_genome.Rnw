@@ -1,0 +1,69 @@
+%\VignetteIndexEntry{Exercise 06 from Seminar III: R/Bioconductor}
+%\VignetteDepends{}
+%\VignetteKeywords{R, Bioconductor}
+%\VignettePackage{SIII: R/Bioc}
+\documentclass[letterpaper,12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Standard Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{epsfig}
+%\usepackage{graphicx}
+%\usepackage{graphics}
+%\usepackage{amssymb}
+%\usepackage{amsmath}
+%\usepackage{mathrsfs}
+%\usepackage{caption}
+%\usepackage{comment}
+\usepackage{fancyvrb}
+\usepackage{fancyhdr}
+
+\usepackage[a4paper]{geometry}
+\usepackage{hyperref,graphicx}
+
+%\usepackage[spanish]{babel}
+%\selectlanguage{spanish}
+%\usepackage[utf8]{inputenc}
+
+%%%%%%%%%%%%%%%%%%%%%% some personal commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\pl}[1]{\texttt{#1}}
+\newcommand{\myurlshort}[2]{\href{http://#1}{{\textsf{#2}}}}
+
+%%%%%%%%%%%%%%%%%%%%%% headers and footers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy} 
+\renewcommand{\footrulewidth}{\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plainnat}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% sweave options  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\SweaveOpts{prefix.string=plots/fig,eps=FALSE,echo=FALSE}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%% opening %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\textbf{Seminar III: \texttt{R}/\texttt{Bioconductor}\\ \small August-December 2009}}
+\author{Leonardo Collado Torres\\[1em]Bachelor in Genomic Sciences (LCG),\\ UNAM, Cuernavaca, Mexico\\[1em]\texttt{lcollado@lcg.unam.mx}\\[1em]\url{http://www.lcg.unam.mx/~lcollado/}}
+
+\begin{document}
+\maketitle
+
+\medskip
+\noindent{\small\textbf{Assistants:} Alejandro Reyes \pl{areyes@lcg.unam.mx}, Jos\'e Reyes \pl{jreyes@lcg.unam.mx} and V\'ictor Moreno \pl{jmoreno@lcg.unam.mx}}
+
+\medskip
+\noindent{\small\textbf{Note:} Questions through the \myurlshort{foros.nnb.unam.mx/viewforum.php?f=111}{forum} please. Those who are not from the sixth LCG generation send us an email so we can register you on the forum.}
+
+\medskip
+\begin{abstract}
+The following exercise will make sure that you can use the \pl{GenomeGraphs} package.
+\end{abstract}
+
+\section{GenomeGraphs}
+  \begin{enumerate}
+  \item Download the following paper by Durinck, Bullard, Spellman and Dudoit: \url{http://www.ncbi.nlm.nih.gov/pubmed/19123956}
+  \item Reproduce figure 3 from the paper. Its just a matter of extracting the code from the text :)
+  \item Make a new plot with some re-ordering: invert the order of tracks. Meaning that you'll have conservation on top, followed by the Lee data, then David -, David +, Nagalakshmi, + gene region, genome axis, and finally - gene region. Change the colors of all the tracks to any ones you like (without repeating them). Finally, add a text overlay with your username on the conservation track around positions 1301700 to 1301900. You might prefer to build each \pl{gdObject} like in the class (a, b, c, \ldots) and then create the list when you use \pl{gdPlot}.
+  \item Explain every "make\ldots" command :)
+  \end{enumerate}
+
+
+\end{document}

@@ -1,0 +1,6 @@
+\frametitle {Gráfica final}
+  \begin{figure}[htbp]
+  \begin{centering}
+\includegraphics{plots2/sample-012}
+  \end{centering}
+  \end{figure}

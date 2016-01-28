@@ -1,0 +1,40 @@
+"1"
+library(MASS) 
+
+colores <-c("green", "blue")
+hist(DDT, col=colores, main="DDT en Brassica oleracea", xlab="Mediciones de DDT", col.lab="blue", ylab="Frecuencia", col.lab="blue")
+boxplot(DDT, col="cyan", main="DDT en Brassica oleracea", ylab="Mediciones", col.lab="blue")
+"La media esta por ahi del 3.3 y la desviacion estandar ha de ser como de 0.5"
+
+"Haciendo los comandos respectivos, veo que estuve cerca:"
+print("Media=3.3")
+print("Desviación estándar=0.5")
+mean(DDT)
+
+sd(DDT)
+
+
+hist(DDT, col=colores, main="DDT en Brassica oleracea", xlab="Mediciones de DDT\nLa media es 3.328 y la desviacion estandar 0.4371531", col.lab="blue", ylab="Frecuencia", col.lab="blue")
+boxplot(DDT, col="cyan", main="DDT en Brassica oleracea", ylab="Mediciones", col.lab="blue",xlab="\nLa media es 3.328 y la desviacion estandar 0.4371531",col.lab="blue")
+
+"2"
+library(UsingR)
+pdf("jbanda.pdf", height=3.5, width=10)
+par(mfrow=c(1,2))
+hist(lawsuits, col="blue", main="Histograma de Lawsuits", xlab="Rangos", ylab="Frecuencia")
+hist(log(lawsuits), col=colores, main="Histograma de logaritmos de Lawsuits", xlab="Rangos", ylab="Frecuencia")
+dev.off()
+# Se ven raros tus histogramas, pero es solo por la forma en que definiste el PDF
+
+"3"
+dev.off()
+"Lo siguiente lo hice para la gráfica c de la figura 4 del artículo 'Transcription of mammalian messenger RNAs by a
+nuclear RNA polymerase of mitochondrial origin' cuyo url es http://www.nature.com/nature/journal/v436/n7051/pdf/nature03848.pdf"
+plot_colors <- c("grey", "black")
+x <- c(1.5, 2, 3, 16.5, 26.5, 3.6)
+names(x) <- c("                        pGL3   ", "  pGL3   ", "                   pGL3-SV40", "pGL-SV40", "            pGL3-ALDH12", "pGL3-ALDH12")
+barplot(x, col=plot_colors, ylim = c(0, 35), main="Inmunoprecipitacion de cromatina con anticuerpos contra RNAPII o POLRMT", ylab="Colonias resistentes a ampicilina x100")
+legend(1, 30, c("mtRNAP", "RNAP II"), cex=1, pch=19, col= plot_colors)
+
+# Tu título es muy grande, pero puedes cambiar el tamaño de la letra con cex.main
+# Se ve bien tu gráfica :D

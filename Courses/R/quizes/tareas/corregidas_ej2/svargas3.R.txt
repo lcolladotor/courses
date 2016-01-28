@@ -1,0 +1,34 @@
+##svargas
+
+
+library(MASS)
+hist(DDT,main="Histograma ",xlab="Mediciones de DDT ",ylab="Frecuencia",col="pink")
+boxplot(DDT,col="pink",main="BoxPlot")
+f=fivenum(DDT)
+text(rep(1.3,5),f,labels=c("min","1er cuartil","mediana","3er cuartil","max"))
+Media<-mean(DDT)
+Varianza<-var(DDT)
+print(c(Media,Varianza))
+
+
+##svargas
+
+library(UsingR)
+pdf(file="Grafico_ejercicio2_lawsuits.pdf")
+par(mfrow=c(1,2))
+hist(lawsuits, main="svargas: Histograma", col="pink", xlab="lawsuits", ylab="Frecuencia")
+hist(log(lawsuits, base=exp(1)), main="svargas: Histograma de valores logaritmicos", col="pink", xlab="lawsuits", ylab="Frecuencia")
+# Bien, aunque no se ve el título. Con cex.main puedes cambiar el tamaño de la letra para que quepa.
+dev.off()
+
+
+##svargas
+
+##www.neuroscience.com/bargraph.gif
+ 
+
+table
+colnames(table)<-c("1","2","3","4")
+barplot(table,col=pink,main="Relacion entre la region cerebral y la union de receptores")
+
+# Tu gráfica no debio causarte muchos problemas, pero se te olvidó llenar tu objeto table.

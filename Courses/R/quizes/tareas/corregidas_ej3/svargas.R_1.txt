@@ -1,0 +1,92 @@
+##############################
+# Practica 3		     #
+# R			     #
+# Lattice		     #
+##############################
+
+
+
+require(UsingR)
+require(lattice)
+#################################################################################################
+#1. Usen el set de datos diamond del paquete UsingR.						#
+#(a) Hagan un scatterplot de las variables carat y price.					#
+#(b) A˜nadenle la línea de regresión lineal simple.						#
+#(c) Haz una predicción del valor de un diamante de un tercio de carat con esta regresión.	#
+#################################################################################################
+
+# a) scatter plot:
+
+plot(diamond$carat ~ diamond$price)
+
+# b) Regresion lineal:
+
+reg <- lm(diamond$carat ~ diamond$price)
+
+abline(reg, col="red", lwd=2)
+
+# c) Predicción:
+
+lines(c(100, 1200), c(0.333, 0.333), col="blue") # Tu código tiene mucha similitudes al de Jason.
+(1/3 - reg$coefficients[1])/reg$coefficients[2]
+
+# El resultado es 991.2697
+
+# Está mal tu predicción. Así se hacía:
+library(UsingR)
+attach(diamond)
+predict(lm(price ~ carat), data.frame(carat = 1/3))
+
+#################################################################################################
+#2. Usen el set de datos cancer del paquete UsingR.						#
+#(a) Haz una gráfica con los boxplots de las variables stomach, bronchus, colon, ovary y	#
+#breast.											#
+#(b) Cual tiene la cola más larga?								#
+#(c) Cual es la más compacta?									#
+#(d) Todos los centros son similares?								#
+#################################################################################################
+
+# a) boxplots
+
+boxplot(cancer$stomach, cancer$bronchus, cancer$colon, cancer$ovary, cancer$breast, names=c("Stomach", "Bronchus", "Colon", "Ovary", "Breast"))
+
+# Cáncer de seno muestra la cola más larga
+# Cáncer de bronqueos muestra la cola más compacta
+# La media del estómago y bronqueos son muy similares, al igual que la de colón y ovarios, finalmente el de cáncer.
+
+# Te faltó terminar tu  oración :P Pero está bien.
+
+####################################################################################################
+#3. Usa el set de datos kid.weights del paquete UsingR.						   #
+#(a) Explora la relaci´on entre el peso y la edad usando lattice.				   #
+#(b) Particiona a las edades en intervalos de 0-3, 3-6, 6-9 y 9-12. Se mantiene la misma relación  #
+#en los grupos?											   #
+####################################################################################################
+
+# a)
+
+xyplot(age ~ weight, data=kid.weights, pch=21)
+
+# b)
+
+xyplot(age ~ weight, data=kid.weights, col=c("red", "blue", "green", "yellow")[unclass(cut(kid.weights$age, breaks=12*seq(0, 12, 3)))])
+
+#La relación se mantiene hasta los 9-12 años aproximadamente que es el momento en el que parece que se pierde un poco.
+# Bien :D
+
+#########################################################################################################
+#4. Usa el set de datos female.inc del paquete UsingR. Son datos de mujeres en el 2001 en USA.		#
+#(a) Hay alguna diferencia del ingreso entre las razas? Usa boxplots con lattice para ayudarte		#
+#a responder la pregunta.										#
+#(b) Encuentra el resumen de estadísticas para cada grupo racial.					#
+#########################################################################################################
+
+
+bwplot(female.inc$race ~ female.inc$income)
+
+#Las diferencias entre los ingresos comparando grupos raciales es muy pequeña, aunque la media es muy cercana y el 95% de las mujeres están dentro
+#del mismo intervalo, las mujeres blancas presentan ingresos mayores a las negras y a las hispanas, estas últimas presentan los ingresos mas bajos
+#de todos. 
+
+# Esta bien, aunque te faltó mencionar que hay más outliers en las blancas, y que ganan un buen.
+# Faltaron las estadísticas por cada grupo.

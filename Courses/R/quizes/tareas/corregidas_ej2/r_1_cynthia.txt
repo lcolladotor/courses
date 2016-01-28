@@ -1,0 +1,47 @@
+#1. Usen el set de datos DDT del paquete MASS. Este contiene mediciones independientes del pesticida
+#DDT en Brassica oleracea.
+#(a) Hagan un histograma y un boxplot de los datos con colores (a su gusto) y t´?tulos apropiados.
+#(b) De esta gr´aficas estimen la media y desviaci´on est´andar.
+#(c) Agreguen la informaci´on del punto anterior al c´odigo e impr´?manla usando print.
+#(d) Tienen que subir el c´odigo para responder a esta pregunta. El c´odigo debe ser portable!!!!
+
+library(MASS)
+DDT
+hist(DDT, main="Mediciones del pesticida DDT en Brassica oleracea", xlab="mg/cm2", ylab="Frecuencia", col=rainbow(16), col.lab="blue", col.main="blue",  breaks=10)
+boxplot(DDT, main="Mediciones del pesticida DDT en Brassica oleracea",  ylab="mg/cm2", col="lightblue", col.lab="blue", col.main="blue")
+print (c("La media estimada es 3.25, y la desviacion estandar 0.25")) 
+
+#2. Revisen el par´ametro mfrow de la funci´on par. Usen los datos de lawsuits del paquete UsingR.
+#(a) Tienen que guardar las gr´aficas en un archivo PDF para este ejercicio.
+#(b) En el lugar de 1 sola gr´afica, quiero que me pongan lado a lado el histograma de lawsuits
+#y el histograma de los valores logar´?tmicos de los mismos datos.
+#(c) El t´?tulo de las gr´aficas debe incluir su nombre en formato de su username del email: por
+#ejemplo, lcollado.
+#(d) Evidentemente, sus histogramas deben estar personalizados (colores, etc).
+#(e) Solo suban el c´odigo (portable!!) que crea el archivo PDF con las 2 gr´aficas.
+
+library(UsingR)
+lawsuits
+pdf("calexandgrafica2.pdf")
+loglaw <- log(lawsuits)
+par(mfrow=c(1,2))
+hist(lawsuits, main="Lawsuits", xlab="lawsuits", ylab="Frecuencia", col=rainbow(16), col.lab="blue", col.main="blue")
+hist(loglaw, main="Valores logaritmicos", xlab="log (lawsuits)", ylab="Frecuencia", col=rainbow(16), col.lab="blue", col.main="blue")
+dev.off()
+
+
+#3. Simplemente busquen una gr´afica12 en alg´un periodico o revista cient´ifica y hagan una r´eplica
+#(a su estilo) usando R.
+#? Incluyan el URL de donde encontraron la gr´afica en su c´odigo como comentario.
+#? Envien solo el c´odigo para hacer la gr´afica y no la gr´afica en s´i. Este debe ser portable!!!!3
+#? Si usan alg´un archivo para crear su data set este debe estar en su folder de public_html
+#y su codigo debe accesarlo via Internet. Otra vez... su c´odigo debe ser portable!!!
+#? Suban su c´odigo a la p´agina de cursos (incluyendo el de las anteriores preguntas).
+
+print (c("http://www.sin-italy.org/vecchiosito/jnonline/vol14n4/270.html"))
+norm <- rnorm(100, mean=40, sd=20)
+norm2 <- rnorm(100, mean=80, sd=20)
+boxplot(norm,norm2, main="Values of peritoneal effluent VEGF levels after different peritoneal dwell times", xlab="dwell times", ylab="VEGF level", col=rainbow(5), col.lab="blue", col.main="blue")
+
+
+# Bien bien :D Tal vez lo único que te falló un poco fue tu estimado de la desviación estándar. Pero hasta donde voy, eres la única que lo hizo a ojo (que era lo que quería) :D

@@ -1,0 +1,8 @@
+peces.capturados	frec.obs	frec.esp
+0	9	6
+1	22	17
+2	25	32
+3	30	35
+4	21	18
+5	12	13
+6	6	4

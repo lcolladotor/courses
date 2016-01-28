@@ -1,0 +1,6 @@
+\beamer@endinputifotherversion {3.07pt}
+\beamer@sectionintoc {1}{Estructuras de Control}{3}{0}{1}
+\beamer@sectionintoc {2}{Matrices}{8}{0}{2}
+\beamer@sectionintoc {3}{Archivos y directorios}{11}{0}{3}
+\beamer@sectionintoc {4}{List}{17}{0}{4}
+\beamer@sectionintoc {5}{Factor}{21}{0}{5}

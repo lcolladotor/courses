@@ -1,0 +1,370 @@
+\input{../header.tex}
+
+\SweaveOpts{prefix.string=plots/rnas, height=5.6}
+
+\begin{document}
+
+%%% set up some options for Sweave and R %%%
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Sesión práctica con small RNAs}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Datos}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Intro}
+  \begin{itemize}
+    \item Lo que hoy vamos a ver viene del siguiente artículo:
+    \begin{itemize}
+      \item	\emph{Sorting of Small RNAs into Arabidopsis Argonaute Complexes Is Directed by the 5' Terminal Nucleotide}
+	\end{itemize}
+    \item En dicho artículo encuentran que AGO reconoce información de la secuencia en el extremo 5', y vamos a usar datos de ellos.
+	\item En sí, la información suplementaria está disponible \myurlshort{www.cell.com/supplemental/S0092-8674(08)00285-7}{aquí} o pueden encontrar el artículo desde \myurlshort{www.ncbi.nlm.nih.gov/pubmed/18342361}{NCBI}.
+    \item Por ahora, pueden ver el PDF en la página de cursos.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Datos para R}
+  \begin{itemize}
+    \item Ya les arreglé las tablas suplementarias 1 y 2 para poder usarlas en \pl{R}. 
+	\begin{itemize}
+	  \item La 1 ahora es \pl{rnas.csv} que está disponible en datos. 
+	  \item La 2 ahora es \pl{mirnas.csv} está en el mismo folder.
+	\end{itemize}
+	\item En sí, si alguien gusta, le recomiendo que compare los archivos Excel originales con los .csv que les proporciono. Sobre todo por las notas.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{A trabajar!}
+  \begin{itemize}
+    \item Bueno, a trabajar. Por favor apóyense en el código disponible sobre esta clase. Pronto entregarán el código, tal que lo podamos correr sin ningún problema.
+	\item Les recuerdo, usen:
+	\begin{itemize}
+	  \item Emacs; en un buffer tengan su script y en el otro buffer abran \pl{R}.
+	  \item \pl{R} en Windows usando un editor de textos. Por ejemplo, el que ya viene con \pl{R}. Tendrán que usar copy paste seguido.
+	  \item El comando \BIOCfunction{savehistory}. Sin embargo, el output de este lo tendrán que depurar.
+	\end{itemize}
+	\item Intenten comentar todas las líneas de código nuevas que usen. Pues luego será parte de la tarea.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Gráficas de Pie}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Creando \pl{rnas}}
+  \begin{itemize}
+  \item Primero vamos a imitar la figura 2.b de la parte "Total". Pero para eso necesitamos datos. Lean el archivo \pl{rnas.csv}
+  \item \textquestiondown Alguien sabe que es un csv y como se lee?
+<<eval=TRUE, echo=FALSE>>=
+rnas <- read.csv("http://www.lcg.unam.mx/~lcollado/E/data/rnas.csv", header=T, row.names=1)
+@  
+  \item Una vez que tengan el objeto \BIOCfunction{rnas}, chequenlo. Usen \pl{head} o \pl{tail} por ejemplo.
+  \end{itemize}
+\end{frame}
+ 
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Filtrando \pl{rnas}}
+  \begin{itemize}
+  \item Bueno, este \pl{data.frame} tiene información que por ahora no nos interesa. Pues despliega información por miRNAs, tasiRNAs, etc. 
+  \item Vamos a filtrar los datos y crear el objeto \BIOCfunction{rnas2}. Hay que quedarnos con solo las categorías generales y no las subcategorías.
+<<eval=TRUE, echo=TRUE>>=
+rnas2 <- rnas[c(1, 5, 14, 17, 18, 21, 26, 27, 28, 29),]
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Las.... bueno, \pl{pie}}
+  \begin{itemize}
+  \item Son tal vez las gráficas más sencillas de hacer y probablemente las más odiadas.
+<<eval=FALSE, echo=TRUE>>=
+?pie
+@  
+  \item Solo chequen la ayuda de \BIOCfunction{pie}. Verán que dice: \emph{Pie charts are a very bad way of displaying information. The eye is good at judging linear measures and bad at judging relative areas. A bar chart or dot chart is a preferable way of displaying this type of data.}
+  \item Bueno, hagamos nuestra gráfica de pie de la sección de "Total".
+<<eval=FALSE, echo=TRUE>>=
+pie(rnas2[,1], labels= rownames(rnas2), col=rainbow(10), cex=0.6, main="Total")
+@    
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Pie de "Total"}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+pie(rnas2[,1], labels= rownames(rnas2), col=rainbow(10), cex=0.6, main="Total")
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Logramos imitar una :)}
+  \begin{itemize}
+  \item La gráfica es MUY parecida a la del artículo. En él, juntan a los cloroplastos y mitocondrias en una categoría. Además, usan otros colores.
+  \item En la nuestra tenemos problemas para leer los nombres, así que mejor usamos la función \BIOCfunction{legend}.
+<<eval=FALSE, echo=TRUE>>=
+pie(rnas2[,1], labels= NA, col=rainbow(10), main="Total")
+legend("bottom", rownames(rnas2), col=rainbow(10), xpd=T, inset=-0.15, pch=20, cex=0.7, ncol=3)
+@  
+  \item Si se sienten perdidos con los argumentos de la función \pl{legend}, entenderán rápido si checan la ayuda de dicha función.
+  \item Ahora ya saben hacer el resto de las gráficas de la figura 2.b de artículo :)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Pie 2 de "Total"}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+pie(rnas2[,1], labels= NA, col=rainbow(10), main="Total")
+legend("bottom", rownames(rnas2), col=rainbow(10), xpd=T, inset=-0.15, pch=20, cex=0.7, ncol=3)
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Gráficas de barras}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Creando \pl{mirnas}}
+  \begin{itemize}
+  \item Ahora imitaremos a una gráfica de barras que usan en la figura 3.c Al igual que antes, necesitamos DATA!!!
+  \item Lean el archivo \pl{mirnas.csv} como lo hicimos antes con \pl{rnas.csv}.
+<<eval=TRUE, echo=TRUE>>=
+mirnas <- read.csv("http://www.lcg.unam.mx/~lcollado/E/data/mirnas.csv", header=T, row.names=1)
+@  
+  \item Acuerdense de explorar el objeto \pl{mirnas}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{\alert{EL} truco de los factor}
+  \begin{itemize}
+  \item Ahora, quiero que me encuentren para Total, AGO1, 2, 4 y 5 que porcentaje de las secuencias que encuentran empiezan con U, A, C y G.
+  \item \alert{No es taaaaaaaaaaan complicado wuahahaha :P}. Primero les voy a enseñar un truco con datos de clase \pl{factor}.
+<<eval=TRUE, echo=TRUE>>=
+head(unclass(mirnas[,1]))
+@  
+  \item Corran el anterior sin el \pl{head}. Ahora vean que pasa si lo acoplo a un \pl{which}. Igual, vuelvan a hacerlo sin \pl{head}.
+<<eval=TRUE, echo=TRUE>>=
+head(which(unclass(mirnas[,1]) == 1))
+@    
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Obtiendo nuestra matriz resultado}
+  \begin{itemize}
+  \item Ahora deberían entender esto:
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+res <- NULL
+for (j in 2:6) {
+temp <- NULL
+for (i in 1:4) { temp <- c(temp, sum(mirnas[which(unclass(mirnas[,1]) ==i),j])) }
+res <- cbind(res, temp/sum(temp))
+}
+@  
+  \normalsize
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Agregandole nombres}
+  \begin{itemize}
+  \item Bueno, ahora simplemente le agrego nombres a nuestra matriz \pl{res} usando listas.
+<<eval=TRUE, echo=TRUE>>=
+dimnames(res)[[1]] <- c("A", "C", "G", "U")
+dimnames(res)[[2]] <- colnames(mirnas)[2:6]
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{\pl{Barplot}}
+  \begin{itemize}
+  \item Bien, ahora simplemente usaremos \BIOCfunction{barplot} para hacer nuestra gráfica de barras. 
+<<eval=FALSE, echo=TRUE>>=
+barplot(res, ylim=c(0,1), col=rainbow(4), main="miRNAs")
+legend("bottom", dimnames(res)[[1]], pch=20, col=rainbow(4), inset = -0.2, ncol=4, xpd=T)
+@  
+  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Barras para miRNAs}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+barplot(res, ylim=c(0,1), col=rainbow(4), main="miRNAs")
+legend("bottom", dimnames(res)[[1]], pch=20, col=rainbow(4), inset = -0.2, ncol=4, xpd=T)
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{w00t}
+  \begin{itemize}
+  \item \textquestiondown Qué tal eh? Se parece bastante a la gráfica 3.c parte de miRNAs, aunque los datos difieren un poco por lo cual no son idénticas.
+  \item No es la mejor gráfica... pero es mejor que la siguiente.
+<<eval=FALSE, echo=TRUE>>=
+barplot(res, beside=T, ylim=c(0,1), col=rainbow(4), main="miRNAs")
+legend("topright", dimnames(res)[[1]], pch=20, col=rainbow(4))
+@  
+  \item \textquestiondown Cúal es la diferencia primordial entre las dos gráficas a nivel de código?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Barras 2 para miRNAs}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+barplot(res, beside=T, ylim=c(0,1), col=rainbow(4), main="miRNAs")
+legend("topright", dimnames(res)[[1]], pch=20, col=rainbow(4))
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Gráficas de mosaicos}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Level up!}
+  \begin{itemize}
+  \item En nuestro taller de RNAs, María y yo estuvimos de acuerdo en que ese no es el mejor tipo de gráfica.
+  \item Es tiempo de que puedan usar el poderío de \pl{R} tal como se los mostramos en la primera clase :)
+<<eval=FALSE, echo=TRUE>>=
+?mosaicplot
+@  
+  \item \alert{\textquestiondown Complicado, verdad?} Bueno, les enseñaré un ejemplo que pueden repetir felizmente.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Empezando..}
+  \begin{itemize}
+  \item Usemos nuestra matriz \pl{res} que creamos antes para la gráfica de barra. Para que funcione como queremos, tenemos que usar la transversa de nuestra matriz, por eso el \BIOCfunction{t()}.
+<<eval=FALSE, echo=TRUE>>=
+mosaicplot(t(res), main="Mosaic plot de miRNAs", col=rainbow(4))
+legend("bottom", dimnames(res)[[1]], pch=20, col=rainbow(4), inset = -0.2, ncol=4, xpd=T)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Mosaico de miRNAs}
+  \begin{figure}[tbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+mosaicplot(t(res), main="Mosaic plot de miRNAs", col=rainbow(4))
+legend("bottom", dimnames(res)[[1]], pch=20, col=rainbow(4), inset = -0.2, ncol=4, xpd=T)
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Creando \pl{res2}}
+  \begin{itemize}
+  \item En realidad, es nuestra misma gráfica de barras pero con espacios extras. Lo que pasa es que nuestros datos en \pl{res} están ya en porcentajes (valores de 0 a 1) así que no nos sirven.
+<<eval=TRUE, echo=TRUE>>=
+colSums(res)
+@  
+  \item Repitamos la creación de la matriz \pl{res} pero manteniendo valores absolutos.
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+res2 <- NULL
+for (j in 3:6) {
+temp <- NULL
+for (i in 1:4) { temp <- c(temp, sum(mirnas[which(unclass(mirnas[,1]) ==i),j])) }
+res2 <- cbind(res2, temp) #  
+}
+dimnames(res2)[[1]] <- c("A", "C", "G", "U")
+dimnames(res2)[[2]] <- colnames(mirnas)[3:6]
+colSums(res2)
+@    
+  \normalsize
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Y Waldo?}
+  \begin{itemize}
+  \item \textquestiondown Alguien nota lo que cambie?
+<<eval=TRUE, echo=TRUE>>=
+ncol(res) == ncol(res2)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Nuestro nuevo mosaicplot}
+  \begin{itemize}
+  \item \emph{Indeed}, ya no me interesan los datos de "Total".
+  \item Ahora si repitamos nuestra gráfica de mosaico. Solo le voy a cambiar un poco como se imprime el texto usando el argumento \pl{las}.
+<<eval=FALSE, echo=TRUE>>=
+mosaicplot(t(res2), main="Mosaic plot de miRNAs", col=rainbow(4), las=2)
+legend("bottom", dimnames(res)[[1]], pch=20, col=rainbow(4), inset = -0.2, ncol=4, xpd=T)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Mosaico 2 de miRNAs}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+mosaicplot(t(res2), main="Mosaic plot de miRNAs", col=rainbow(4), las=2)
+legend("bottom", dimnames(res)[[1]], pch=20, col=rainbow(4), inset = -0.2, ncol=4, xpd=T)
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Concluyendo}
+  \begin{itemize}
+  \item Esa gráfica dice mucho más que la que usaron en el artículo. Como ven, la mayoría de los miRNAs están asociados con AGO1, y de estos, la mayoría tienen una U en el extremo 5'.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Tarea :P}
+  \begin{itemize}
+  \item Ahora la parte fuera de clase....
+  \item Averiguen como usar la función \BIOCfunction{pdf} y sobre todo con el argumento \pl{onefile}. 
+  \item Tienen hasta la mañana del miércoles para subir a Cursos su script de \pl{R} que genere solo un archivo PDF como output. Este archivo PDF debe contener 7 gráficas.
+  \begin{itemize}
+    \item Las 5 gráficas de pie de la figura 2.b
+	\item Las 2 importantes que hicimos en clase para la figura 3.c (la de barras y la de mosaico).
+  \end{itemize}
+  \item Como ven, su tarea está prácticamente hecha por nosotros :) Claro, faltan los comentarios y que le cambien el nombre del archivo al homólogo de \pl{lcollado.R} ;)
+  \end{itemize}
+\end{frame}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

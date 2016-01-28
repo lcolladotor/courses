@@ -1,0 +1,6 @@
+prueba_1	prueba_2	prueba_3	prueba_4	prueba_5	prueba_6
+experimentador_1	95	83	72	65	45	32
+experimentador_2	100	92	88	83	72	65
+experimentador_3	90	85	70	68	40	35
+experimentador_4	88	31	22	15	9	7
+experimentador_5	96	81	71	70	37	34

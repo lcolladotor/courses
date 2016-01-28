@@ -1,0 +1,246 @@
+\documentclass{beamer}
+\usepackage{Sweave}
+\usepackage{fancyvrb}
+\usepackage{fancyhdr}
+\usepackage{beamerthemesplit}
+
+\title{\textbf{Seminar III: \texttt{R}/\texttt{Bioconductor}\\ \textbf{GeneR} }}
+\author{Amhed Missael Vargas Velazquez\\ \texttt{avargas@lcg.unam.mx}}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\section{Introduction}
+\subsection{Overview of the GeneR package}
+\begin{frame}
+  \frametitle{What is GeneR?}
+GeneR is a package that allows direct use of nucleotide sequences within R software. Functions can be used to read and write sequences from main file formats (Embl, Genbank and Fasta) in order to perform a lot of manipulations and analyses.
+  \begin{itemize}
+  \item<2-> Authors
+ \\L. Cottret, A. Lucas, E. Marrakchi, O. Rogier, V. Lefort, P. Durosay, A. Viari, C. Thermes; Y. d'Aubenton-Carafa.
+\item<3-> Maintainer
+\\Y. d'Aubenton-Carafa
+
+\item<4->{ \small I think that Y. d'Aubenton-Carafa, entered the proyect at the end :) }
+    
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+GeneR is a very useful package which contains some functions for the manipulation of genetic data. It`s similar to Biostrings\footnote {Biostrings was showed in the previous class by Isaac}, However, GeneR contains more functions and it used for different things. In addition, it is related to GeneRfold\footnote {A package created by Y. d'Aubenton-Carafa, A. Lucas; C. Thermes, the same creator as the GeneR package XD} package that allows the use of Vienna RNA library within R, meaning, tools for the prediction and comparison of RNA secondary structures.\footnote {It`s an excellent package to talk about, and it´s also interesting and easy to use.}
+\\You can install the GeneR package in R using:
+<<eval=FALSE, echo=TRUE>>=
+    source("http://bioconductor.org/biocLite.R")
+    biocLite("GeneR")
+@
+
+\end{frame}
+
+\begin{frame}
+ \frametitle{What is it used for?}
+  
+\begin{itemize}
+  \item<1-> Reading and writing sequences
+\\Fast sequence retrieving even from very large sequence databanks, in Fasta, Embl or Genbank formats.
+  \item<2-> Handling sequences
+\\The usual copy-paste of parts of sequences or other manipulations can be performed by functions using vectors of strands and positions.
+  \item<3-> Analyzing sequences   
+\\To count oligo-nucleotides by mono, di or tri, to look for exact word positions or to shuffle sequences.   
+  \item<4-> Manipulation of regions on a chromosome
+\\Tools to easily compute any subregions (intergenic regions, exons or more sophisticated regions), without an exhaustive texture on a whole chromosome.
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+ \frametitle{What is it used for?}
+  
+\begin{itemize}
+
+ \item<1-> Performing bioinformatic jobs  
+\\ Functions related to genetic and structural aspects of the sequences : ORF localization, translation, or RNA secondary structure determination\footnote{with extention of GeneR: GeneRfold package}.
+ 
+ \end{itemize}
+\end{frame}
+
+\section{Using GeneR}
+
+\subsection{Examples}
+
+\begin{frame}[allowframebreaks, fragile]
+ \frametitle{Working with sequences}
+
+\footnote{So sorry my friends, but this is a brief drescription of the GeneR, so im not going to explain each function. ; p} I create a random sequence for the samples
+
+<<eval=TRUE, echo=TRUE>>=
+library(GeneR)
+seq <- randomSeq(prob = c(0.2, 0.3, 0.2, 0.3), letters = c("T", "C","A", "G"), n = 30)
+@
+
+Insert a poly A into the end of the sequence
+
+<<eval=TRUE, echo=TRUE>>=
+seq <- insertSeq(seq, "AAAAAAAAAA", 30)
+seq
+@
+
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+Compute the reverse complementary
+
+<<eval=TRUE, echo=TRUE>>=
+strComp(seq)
+@
+
+Count di-nucleotides\footnote{It can be in groups from 1 to 15}
+
+<<eval=TRUE, echo=TRUE>>=
+strCompoSeq(seq, wsize = 2)
+@
+
+Translate the sequence string to a protein
+<<eval=TRUE, echo=TRUE>>=
+strTranslate(seq)
+@
+\end{frame}
+
+\subsection{Manipulation of sequences with buffers}
+\begin{frame}
+\frametitle{Doing big jobs}
+Most of the functions in the GeneR package use buffers.
+
+\begin{itemize}
+
+ \item<1->Why use buffers 
+
+ \item<2-> To work on large sequences (i.e. a whole chromosome).
+
+ \item<3-> In addition, you can buffer fasta sequences from Ncbi
+
+ \end{itemize}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+Buffering the complete genome of Nanoarchaeum equitans\footnote{One of the most little genomes, i don`t wanna break my computer} from Ncbi.
+
+<<eval=TRUE, echo=TRUE>>=
+seqNcbi ("NC_005213",file="toto.seq",submotif=TRUE,type="fasta")
+readFasta("toto.seq")
+@
+
+Size of the genome.
+<<eval=TRUE, echo=TRUE>>=
+sizeSeq()
+@
+
+Looking for motifs\footnote{Also, there is a function named getOrfs, that is supposed used to know where find Open Reading Frames, however, is not working :(}.
+<<eval=TRUE, echo=TRUE>>=
+exactWord("ACTGA", seqno = 0,case.sensitive=TRUE)
+@
+
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+DNA TO RNA
+<<eval=TRUE, echo=TRUE>>=
+dnaToRna()
+@
+
+Or writing our new RNA file
+<<eval=TRUE, echo=TRUE>>=
+writeFasta(seqno = 0, file = "Nan_rna.fa", name = "MyRNA",comment = "RNA generated by DNA of Nanoarchaeum equitans", append = TRUE)
+@
+
+You must remember, any function that uses the buffer, changes the content of the buffer.
+\\We changed our DNA, so that if we use a getSeq you will see RNA
+<<eval=TRUE, echo=TRUE>>=
+getSeq(seqno=0, from=1, to= 30)
+@
+You might prefer to change the number of the buffer for anything that you might do.
+\end{frame}
+
+\begin{frame}
+\frametitle{Bioinformatic Job}
+We already see in one of our class, how is constitute a bacterial genome...
+\\So, why not use the functions to do a brief review the genome of the Rhizobium etli.
+We want to know:
+ \begin{itemize}
+
+  \item<2-> The size
+
+  \item<3-> The GC content
+
+  \item<4-> A GC Skew of the genome
+
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+Buffering the sequence
+<<eval=TRUE, echo=TRUE>>=
+seqNcbi ("NC_007761",file="Retli.seq",submotif=TRUE,type="fasta")
+readFasta("Retli.seq")
+@
+
+The size
+<<eval=TRUE, echo=TRUE>>=
+sizeSeq()
+@
+
+The GC content
+<<eval=TRUE, echo=TRUE>>=
+GCcontent()
+@
+
+For the GC skew, i create a object with the size for sectionate the genome
+<<eval=TRUE, echo=TRUE>>=
+size <- sizeSeq()
+@
+
+And now we use the function densityProfile
+<<eval=TRUE, echo=TRUE>>=
+dens <- densityProfile(ori=398328*(1:11),from=1,to=size,
+              seqno=0, fun=seqSkew,nbinL=24,nbinR=24,sizeBin=16597)
+@
+At last, we plot :)
+<<eval=TRUE, echo=TRUE, fig=TRUE>>=
+plot(dens$skgc,main="GC skew")
+@
+\end{frame}
+
+\section{Conclutions}
+
+\subsection{Gene R}
+
+\begin{frame}
+ \frametitle{U - U}
+
+ \begin{itemize}
+
+  \item<1-> GeneR has great tools:
+
+  \item<2-> To find a region in the genome
+
+  \item<3-> To manipulate sequences
+
+  \item<4-> To do large jobs
+
+\\
+\\As we see Gene R has the potential to be an excellent tool for conducting bioinformatics.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+ \frametitle{That's All Folks}
+
+I encourage you to explore the Help Options of this package and to use them, they`re user - friendly and fun XD .
+
+\end{frame}
+
+
+\end{document}

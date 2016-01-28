@@ -1,0 +1,223 @@
+\input{../header.tex}
+
+\SweaveOpts{prefix.string=plots2/sample, height=5.7}
+
+\begin{document}
+
+%%% set up some options for Sweave and R %%%
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Muestreo de poblaciones}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Intro}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Descripción de la actividad}
+  \begin{itemize}
+    \item Hoy regresaremos al problema que les describí en "letras.pdf" y aprenderemos a usar la función sample.
+	\item La sesión de hoy será mas bien práctica y de nuevo, tendrán que entregar un script comentado en la página de Cursos\footnote{Si termina la gran mayoría en clase, mejor!}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{\pl{sample}}
+  \begin{itemize}
+    \item Primero que nada, veamos los argumentos de la función \BIOCfunction{sample}.
+  \end{itemize}
+<<echo=TRUE, eval=TRUE>>=
+args(sample)
+@ 
+  \begin{itemize}
+    \item $x$ es la población de la cual queremos obtener una muestra. Generalmente es un vector.
+	\item \emph{size} es el tamaño de nuestra muestra.
+	\item \emph{replace} lo usamos para hacer un muestro con o sin reemplazo.
+	  \begin{itemize}
+	    \item \textquestiondown Qué creen que sea eso?
+	  \end{itemize}
+	\item \emph{prob} es un vector con las probabilidades para cada elemento de nuestra población.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Ejemplo}
+  \begin{example}[Califs]
+  Imaginemos que sus calificaciones son al azar y queremos obtener una muestra de como les va a ir en el próximo examen. La población es de 0 hasta 10 y el tamaño de nuestra muestra es de 20. Encontremos la calificación promedio.
+  \begin{enumerate}
+    \item \textquestiondown Qué pasa si las probabilidades son iguales?
+	\item \textquestiondown Y si nuestro vector \pl{prob} es igual a (.005, .008, .012, .015, .05, .1, .126, .129, .25, .18, .125) ?
+  \end{enumerate}
+  \end{example}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Solución}
+  \begin{itemize}
+  \item Por sencillez, guardaremos los resultados en los objetos $x$ y $y$.
+<<eval=TRUE, echo=TRUE>>=
+x <- sample(x=0:10, size=20, replace=T)
+y <- sample(x=0:10, size=20, replace=T, prob=c(.005, .008, .012, .015, .05, .1, .126, .129, .25, .18, .125))
+@  
+<<eval=FALSE, echo=TRUE>>=
+table(x)
+table(y)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Nuestros resultados}
+  \begin{itemize}
+    \item Veamos los datos en formato de tabla.
+<<echo=FALSE, results=tex>>=
+xx <- require(xtable)
+xtable(t(table(x)), caption="Califs 1er caso")
+xtable(t(table(y)), caption="Califs 2ndo caso")
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{:O}
+  \begin{itemize}
+  \item \textquestiondown Salió lo que esperabamos dado nuestras probabilidades?
+<<eval=TRUE, echo=TRUE>>=
+mean(x)
+mean(y)
+@  
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Problema}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{La simulación inicial}
+  \begin{itemize}
+  \item Primero que nada, lo siguiente es una simulación sencilla para una población de tamaño 50. Veamos que pasa si asumimos la misma probabilidad para todos los elementos y con tamaños de muestra diferentes: desde 1 hasta 1000.
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+pob <- 1:50
+res <- NULL
+for (i in 1:1000) {
+	muestra <- sample(pob, size=i, replace=T)
+	prueba <- length(unique(muestra)) / length(pob)
+	if (prueba >= 1) {
+		res <- c(res, 1)
+	} else {
+		res <- c(res, 0)
+	}
+}
+@  
+  \end{itemize}
+  \normalsize
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Explorando res}
+  \begin{itemize}
+  \item Si gráficamos nuestros resultados, veremos algo con dos estados. 
+  \item Como extra, podemos usar \BIOCfunction{lines} para marcar en el eje $Y$ el 0.95
+  \scriptsize
+<<eval=FALSE, echo=TRUE>>=
+plot(1:1000, res, col="blue", main="Una simulación", xlab="Tamaño de la muestra")
+lines(x=1:1000, y=rep(0.95,1000), col="red")
+@  
+  \end{itemize}
+  \normalsize
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{1era simulación}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+plot(1:1000, res, col="blue", main="Una simulación", xlab="Tamaño de la muestra")
+lines(x=1:1000, y=rep(0.95,1000), col="red")
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Problema}
+  \begin{itemize}
+    \item Basándose en la simulación anterior, quiero que hagan 100 simulaciones para una población de tamaño 10 y con probabilidades iguales.
+    \item Cada simulación debe explorar tamaños de muestra desde 1 hasta 100.
+    \item Hagan una sola gráfica donde resuman sus resultados con la línea en el 0.95 en el eje $Y$.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Tips}
+  \begin{itemize}
+    \item Almacenen sus resultados en una matriz \footnote{Pueden llenarla con 0s o \pl{NA}} en vez de en un vector nulo.
+    \item Utilicen dos ciclos para llenar su matriz. Ya les di una \alert{super} ayuda con los 0s y 1s.
+    \item Como tienen que resumir sus 100 simulaciones en una gráfica, saquen la \_ \_ \_ \_ \_ .
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Solución}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Código}
+  \begin{itemize}
+  \item Usando los elementos que les dije en los "Tips", obtenemos esto:
+  \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+pob <- 1:10
+res <- matrix(0, 100, 100)
+for (i in 1:100) {
+for (j in 1:100) {
+	muestra <- sample(pob, size=j, replace=T)
+	prueba <- length(unique(muestra)) / length(pob)
+	if (prueba >= 1) {
+		res[i,j] <- 1
+	} 
+}
+}
+@  
+  \normalsize
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{La gráfica}
+  \begin{itemize}
+  \item El código para la gráfica es casi el mismo ^^. Noten el uso de \BIOCfunction{colMeans}.
+  \scriptsize
+<<eval=FALSE, echo=TRUE>>=
+plot(1:100, colMeans(res), col="blue", main="100 simulaciones", xlab="Tamaño de la muestra", ylab="Media de las 100 simulaciones")
+lines(x=1:100, y=rep(0.95,100), col="red")
+@  
+  \normalsize
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Gráfica final}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+plot(1:100, colMeans(res), col="blue", main="100 simulaciones", xlab="Tamaño de la muestra", ylab="Media de las 100 simulaciones")
+lines(x=1:100, y=rep(0.95,100), col="red")
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}

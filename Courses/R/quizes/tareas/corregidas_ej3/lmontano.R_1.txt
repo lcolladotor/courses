@@ -1,0 +1,15 @@
+library(UsingR)
+library(lattice)
+  xyplot(price ~ carat, data = diamond, xlab= "Carat? wtfstht??", ylab="price") 
+ plot(diamond$carat, diamond$price, abline(what), xlab="Carat", ylab="price", col= "red")
+ 
+ # esta bien tu primera grafica, la segunda no
+ 
+###no confio en los resultados que despliega esto, no los entiendo. un codigo mas complejo me hacia lo mismo :(
+predict(what, .3)####2
+attach(cancer)
+####inciso b.-cancer de mama tiene mas incidencia
+###inciso c. cancer de bronquios
+####inciso d. todos los centros son similares menos el de seno.
+
+# Y el boxplot¿?

@@ -1,0 +1,17 @@
+# Propuesta proyecto Uriel
+# 5 de Agosto de 2009
+
+Matriz estequiométrica con diferentes organismos
+  Más de 1 organismo, se podría hacer una matriz de un ambiente. Venter? Bombas? hidrofibicidad + peso --> set de reglas para predecir la hidrofibicidad
+Brenda, reactome?
+De aquí puedes sacar
+Clustering, distancia, propriedades estadísticas, motivos
+Ecuaciones diferenciales
+Simulaciones estocásticas para ver como son esas cosas... predecir comportamiento?
+
+Anotación, receta para asignar EC numbers
+
+Objetivo es hasta la 2nda dimensión de un subconjunto de un genoma
+
+mutaciones in sílico --- ya en la materia de systems
+es una infraestructura para modelaje

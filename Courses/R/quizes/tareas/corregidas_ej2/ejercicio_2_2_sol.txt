@@ -1,0 +1,45 @@
+#ej 1
+library(MASS)
+DDT
+hist(DDT,main="Histograma de DDT en Brassica oleracea", col=rainbow(5))
+boxplot(DDT, main="DDT en Brassica oleracea", col= "blue", col.main="green")
+mean(DDT)		#calculadas
+sd(DDT)
+print("la media calculada es=")
+print (mean(DDT))
+print("la ds calculada es=")
+print(sd(DDT))
+#a ojimetro
+meanhist <- 3.3
+print("la media vista del histograma es=")
+print(meanhist)
+sdhist <- 0.3
+print("la ds vista del histograma es=")
+print(sdhist)
+meanbox <- 3.25
+print("la media vista del boxplot es=")
+print (meanbox)
+sdbox <- 0.2
+print("la ds vista del boxplot es=")
+print(sdbox)
+
+#ej2
+library(UsingR)
+loglawsuit <- log(lawsuits)
+pdf(file="graficadDDT.pdf", height =10, width=20)
+par(mfrow =c(1,2), cex.main=1)
+hist(lawsuits,main="mdiazdel: Histogram of lawsuits", col=rainbow(12))
+hist(loglawsuit,main="mdiazdel: Hist. of lawsuits (log)", col=rainbow(9))
+dev.off()
+
+#ej3
+#http://xibalba.lcg.unam.mx/~mdiazdel/grafica_ejemplo.png
+genesesenciales <- c(200, 620, 115, 167, 385, 402, 639, 640, 640, 390, 240, 715, 276, 260)
+organismos <- c("S. aureus WCUH29", "S. aureus RN42240", "S. pneumoniae Rx-1", "S. pneumoniae D39", "H. pylori G27", "M. genitalium", "M. tuberculosis H37Rv", "H. influenzae Rd", "P. aeruginosa PAO1", "P. aeruginosa PA14", "S. thyphimurium", "E. coli K-12 MG1655", "E. coli K-12 BW25113", "B. subtilis 168")
+genes <- c(2800, 3920, 2030, 2030, 1603, 480, 3982, 1617, 5780, 5860, 4410, 4370, 4498, 4173)
+genesnoesenciales <- (genes-genesesenciales)
+todosgenes <-matrix(c(genesesenciales, genesnoesenciales), 2, 14, byrow=1)
+barplot(todosgenes, main="genes esenciales", ylab="numero de ORFs", col=c("red","gray"), space=0.5, cex.axis=0.8, names.arg=organismos, cex=1, cex.names=0.5, las=2)
+#si no se ven todos los nombres de los organimos se puede hacer a cex.names mas pequeño
+
+# Excelente gráfica! :D

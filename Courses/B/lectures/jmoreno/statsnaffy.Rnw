@@ -1,0 +1,483 @@
+\documentclass{beamer}
+
+\mode<presentation>
+{
+ \usetheme{Berkeley}
+\usecolortheme{sidebartab}
+\usecolortheme{seahorse}
+\setbeamercovered{transparent}
+\useinnertheme{circles}
+}
+
+\usepackage{color}
+\usepackage{amsfonts}
+\usepackage{comment}
+
+%%% Al parecer necesito esto en ubuntu para los acentos
+\usepackage[spanish]{babel}
+\selectlanguage{spanish}
+\usepackage[utf8]{inputenc}
+
+\definecolor{myblue}{rgb}{0.25, 0, 0.75}
+\definecolor{mygold}{rgb}{1,0.8,0.2}
+\definecolor{gray}{rgb}{0.5, 0.5, 0.5}
+\definecolor{lucia}{rgb}{0.8,0.4,0.7} 
+
+\newcommand{\myurl}[1]{\href{http://#1}{\textcolor{gray}{\texttt{#1}}}}
+\newcommand{\myem}[1]{\structure{#1}}
+\newcommand{\myurlshort}[2]{\href{http://#1}{\textcolor{gray}{\textsf{#2}}}}
+
+\newcommand{\RPackage}[1]{\textcolor{gray}{\textsf{#1}}}
+\newcommand{\pl}[1]{\texttt{#1}}
+\newcommand{\RCode}[1]{\texttt{#1}}
+\newcommand{\RFunction}[1]{\textsf{#1}}
+\newcommand{\RClass}[1]{\textcolor{mygold}{\textsf{#1}}}
+\newcommand{\BIOCfunction}[1]{\textcolor{orange}{#1}}
+
+\setbeamercolor{example text}{fg=lucia}
+\setbeamertemplate{sections/subsections in toc}[ball unumbered]
+\setbeamertemplate{frametitle continuation}[from second][]
+\setbeamertemplate{itemize subitem}[triangle]
+\setbeamertemplate{footline}[page number]
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{navigation symbols}{}
+
+\renewcommand{\footnotesize}{\fontsize{6.10}{12}\selectfont}
+
+\def\argmax{\operatornamewithlimits{arg\,max}}
+\def\argmin{\operatornamewithlimits{arg\,min}}
+
+\title{Seminar III: R/Bioconductor}
+\subtitle{Misc. Stats and affy Quality Control.}
+\author[V\'ictor Moreno]{Jos\'e V\'ictor Moreno Mayar \\ jmoreno@lcg.unam.mx}
+\institute{LCG - UNAM}
+\date{August - December, 2009}
+
+
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@ 
+
+\begin{document}
+
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\section*{Class Overview.}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Misc. Stats and affy Control Quality.}
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+\section{Packages for this class.}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Packages for this class.}
+For this class we will use two functions already included in R, and the affy package.
+<<eval=FALSE, echo=TRUE>>=
+source("http://bioconductor.org/biocLite.R")
+biocLite("affy")
+@
+\end{frame}
+
+\section{lowess.}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Some theory.}
+\begin{itemize}
+	\item{It is a method for making smooth regressions of scatter plots.}
+	\item{It uses the \alert{least squares} method.}
+	\item{Let us recall the method.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Least Squares.}
+\begin{itemize}
+	\item{It consists, mainly, on fitting a curve to a given set of points.}
+	\item{The total sum of the residuals has to be minimized. \footnote{The square of the error is used, so it is called \alert{least squares}}}
+	\item{The function depends on the degree of the polynomial that should be fitted.}
+	\item{A system of linear equations is gotten so the coefficients of the regression curve are calculated.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Locally Weighted Regression.}
+\begin{itemize}
+	\item{The difference here is the weighting function W($x$) used for each \emph{$x_i$}.}
+	\item{So each pair ($x_i$, $y_i$) has a different effect on the regression.}
+	\item{Even more, W($x$) is calculated based on the neighborhood of $x_i$.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{The Weighting Function.}
+\begin{itemize}
+	\item{An initial set of weights $w_k$($x_i$) is calculated for each $x_i$.}
+	\item{An initial fitted value \^y$_i$ is calculated for each $x_i$.}
+	\item{This is made by means of \alert{weigthed least squares}.}
+	\item{The point is fitted to a $dth$ degree polynomial function (usually, $d=1$).}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{$f$ and The Smoothness Assumption.}
+\begin{itemize}
+	\item{The fact that the nieghbors of an $x_i$ may be used in calculating its set of weights, makes an assumption of smoothness.}
+	\item{So, you can select how wide will the neighborhood be.}
+	\item{This is made through the paremeter $f$.}
+	\item{Different values of $f$ may be taken from the interval (0,1]. }
+	\item{The larger the $f$, the wider the neighborhood and the smoother the points will be.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{\alert{Robust} Lowess.}
+\begin{itemize}
+	\item{The way to make this regression robust is by calculating a better  \^y$_i$.}
+	\item{The regression is guarded against deviant points, which might distort the smoothed point by reiterating the procedure.}
+	\item{This time, the computing of the  \^y$_i$ will be made with a different set of weights $\delta_i$.}
+	\item{$\delta_i$ is calculated based on the size of the residual $y_i-$ \^y$_i$.}
+	\begin{itemize}
+		\item{Large residuals result in small weights and small residuals result in large weights.}
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Lowess in R.}
+\begin{itemize}
+	\item{The function in R to generate this curves is \alert{lowess()}.}
+	\item{The arguments to be passed to the function are the two related (or not) variables, f, which is the span of the smoothing process and the number of times the process should be iterated.}
+	\item{Time for some practice.}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{An example.}
+Let us create a data frame with two variables $x$ and $y$ where:
+\begin{itemize}
+	\item{$x$ are the first 151 consecutive natural numbers.}
+	\item{$y_i$ = .2$x_i$+$\epsilon_i$ .}
+	\item{$\epsilon_i$ is a random sample taken from a normal distribution with $\mu$=0 and $\sigma$=1.}
+	\item{Make an xyplot of it.}
+	\item{Adjust 5 curves with different values for $f$ $f$=.01, $f$=.2, $f$=.5, $f$=.8, $f$=.99, and plot them.}
+	\item{Compare it to a curve made with \alert{lm()}.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{An example.}
+Creating the data frame.
+<<eval=TRUE, echo=TRUE>>=
+x<-seq(from=0, to=150, by=1)
+error<-rnorm(1000,0,1)
+error151<-sample(error,151,replace=T)
+y<-.02*x+error151
+xy<-data.frame(x,y)
+@
+<<eval=TRUE, echo=F>>=
+leg<-c("f=.01", "f=.2", "f=.5", "f=.8", "f=.99", "lm")
+cols<-c("lightblue", "purple", "orange", "red", "green", "black")
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{An example.}
+Making the regressions.
+<<eval=TRUE, echo=TRUE>>=
+lo.xy.01<-lowess(xy$x, xy$y, f=.01)
+lo.xy.2<-lowess(xy$x, xy$y, f=.2)
+lo.xy.5<-lowess(xy$x, xy$y, f=.5)
+lo.xy.8<-lowess(xy$x, xy$y, f=.8)
+lo.xy.99<-lowess(xy$x, xy$y, f=.99)
+lr<-lm(y~x, data=xy)
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{An example. (xyplot and regressions.)}
+\begin{center}
+<<eval=TRUE, echo=F,fig=TRUE,height=5>>=
+plot(y~x, data=xy, col="grey", main="xy")
+lines(lo.xy.01, col="lightblue")
+lines(lo.xy.2, col="purple")
+lines(lo.xy.5, col="orange")
+lines(lo.xy.8, col="red")
+lines(lo.xy.99, col="green")
+abline(lr, col="black")
+legend("bottomright", leg, col=cols, lty=1)
+@
+\end{center}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Pros and Cons.}
+\begin{itemize}
+	\item{What does the function \alert{lowess()} return?\footnote{Use class().}}
+	\item{What are its cons when compared to \alert{lm()}?\footnote{Which functions could be used on an object of class lm?}}
+	\item{Which one do you consider to be the best fit?}
+	\item{Do you notice any convergence?}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Choosing $f$.}
+\begin{itemize}
+	\item{$f$ should be chosen in order for it to maximize the smoothing.}
+	\item{It should not make the pattern in the data diffuse or distorted.}
+	\item{Most of the times, $f$ should be chosen in the interval (.2,.8).}
+	\item{When you do not know which is the best value for $f$, .5 should make the job, for an initial exploratory analysis.}
+\end{itemize}
+\end{frame}
+
+\section{loess.}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{loess.}
+\begin{itemize}
+	\item{loess is a \alert{newer} version of lowess.}
+	\item{It implements the same local fitting method as lowess.}
+	\item{The iterative method is optional.}
+	\item{loess uses the formula notation.}
+	\item{Here, you can decide the degree of the polynomial to which the data should be fitted.}
+	\item{If you do not rely on the least squares approximation method, you can select some other one.}
+	\item{An important argument of the function is \alert{loess.control}.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{loess.control.}
+\begin{itemize}
+	\item{loess.control helps you tune different parameters of the lowess computation.}
+	\item{surface -> this regression may be used to extrapolate values based on the data.}
+	\item{statistics, trace.hat -> to set these parameters to approximate would be useful if there are several points.}
+	\item{Here, you can select the number of iterations to be made, as well.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Extrapolating with loess.}
+\begin{itemize}
+	\item{Let us do an exptrapolation with the surface argument of the loess.control set to "direct".}
+\end{itemize}
+<<eval=TRUE, echo=T>>=
+xy.lo2 <- loess(y ~ x, xy, control = loess.control(surface = "direct"))
+pred2<-predict(xy.lo2, data.frame(xs = seq(50, 200, 1)), se = TRUE)
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Plotting the Extrapolation.}
+<<eval=TRUE, echo=F,fig=TRUE,height=5>>=
+plot(y~x, data=xy, main="xy", xlim=c(0, 200), col="purple")
+lines(seq(50,200,1), xy.lo2$fit, col="red", type="l")
+@
+\end{frame}
+
+\section{Affymetrix Chips.}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{About the chips.}
+\begin{itemize}
+	\item{Let us study some important aspects of the Affimetrix oligonucleotide arrays tech.}
+	\item{The goal is to probe an RNA sample (target) with different oligonucleotide probes.\footnote{25 bp long}}
+	\item{Each feature is called a \alert{probe pair}.}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{About the chips.}
+\begin{itemize}
+	\item{Each probe pair contains a \alert{perfect match (PM)} and a \alert{mismatch (MM)} probe.}
+	\begin{itemize}
+		\item{MM is used to measure the amount of \alert{non-specific binding}.\footnote{It is created by changing the $13th$ base of the PM.}}
+	\end{itemize}
+	\item{A \alert{probe pair set} is made up of all the PMs and MMs related to a common \alert{affyID}.\footnote{An affyID is related to a gene or a gene fraction represented on the array.}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{About the chips.}
+\begin{itemize}
+	\item{You can access to the PM, MM and probe names data with the \alert{pm(), mm(), probeNames()} methods, for an \alert{AffyBatch} object. \footnote{We will learn more about it, later.}}
+	\item{Another important function is \alert{geneNames()}, which extracts unique affyIDs from an AffyBatch object.}
+\end{itemize}
+\end{frame}
+
+\section{AffyBatch}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Reading .CEL files.}
+\begin{itemize}
+	\item {Affy chips are read into .CEL files which are read into R with the \alert{ReadAffy()} function.}
+	\item {First of all, you should have all your .CEL files in your working directory. You can check or set it with the getwd() and setwd() functions.}
+	\item {All you have to do, is to keep your data into an R object.}
+\end{itemize}
+<<eval=TRUE, echo=T>>=
+library(affy)
+data<-ReadAffy()
+data
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{AffyBatch Objects.}
+\begin{itemize}
+	\item{What is the class of our object \emph{data}?}
+	\item{You can explore it by means of the \alert{slotNames()} function.\footnote{S3 and S4 objects can be accessed this way}}
+	\item{If you want to access a particular slot, you can do it with the following syntax.}
+\end{itemize}
+<<eval=T, echo=T>>=
+slotNames(data)
+slot(data, "nrow")
+@
+\end{frame}
+
+\section{phenoData}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{phenoData.}
+\begin{itemize}
+	\item{Microarray expression data is useless without metadata\footnote{Dr. Salt made a point on it last Monday.}, so there must be a description of what is being assessed in each chip.}
+	\item{You can find the description in the \alert{phenoData} slot of an AffyBatch object.}
+	\item{You can even assign a phenoData file to your data manually.}
+	\item{This will be useful when testing for differentially expressed genes.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Assigning a phenoData file}
+\begin{itemize}
+	\item{Download the file pdata1422.txt and move it to your working directory.}
+	\item{Then, read it with the \alert{read.AnnotatedDataFrame()}.}
+	\item{Finally, put it into your AffyBatch object.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Assigning a phenoData file.}
+<<eval=T, echo=T>>=
+pData(slot(data, "phenoData"))
+pd<-read.AnnotatedDataFrame(filename="pdata1422.txt", header=T)
+pData(pd)
+slot(data, "phenoData")<-pd
+pData(slot(data, "phenoData"))
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Getting Microarray Data.}
+\begin{itemize}
+	\item{As you know, you can use the \alert{ArrayExpress} package to get expression data.}
+	\item{I got my .CEL files as follows:}
+\end{itemize}
+<<eval=T, echo=T>>=
+library(ArrayExpress)
+Data = ArrayExpress("E-MEXP-1422", save=T)
+@
+\begin{itemize}	
+	\item{This AffyBatch object already has its phenoData complete, so, if you do not know much about the sample, ArrayExpress is a must.}
+\end{itemize}
+\end{frame}
+
+\section{Affy quality Control.}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{image.}
+\begin{itemize}
+	\item{Sometimes, the chip will be damaged or some dust will fall on it, so some expression values obtained from it, will not be reliable.}
+	\item{You can see the chips, as they were scanned, to check for this.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{image.}
+<<eval=F, echo=T,fig=TRUE,height=5>>=
+par(mfrow=c(2,3))
+image(Data)
+par(mfrow=c(1,1))
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{hist.}
+\begin{itemize}
+	\item{The \alert{hist} function is well suited to deal with AffyBatch objects, as well.}
+	\item{Make a histogram in order check if the intensities are distributed similarly among the arrays.}
+	\item{You can infer the need for \alert{normalization} between arrays with this plot.\footnote{We will discuss this in the next class.}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{hist.}
+<<eval=T, echo=F,fig=TRUE,height=5>>=
+hist(Data)
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{M vs A plot.}
+\begin{itemize}
+	\item{The log ratio of the intensities is plotted on the vertical axis.}
+	\item{The average of the log intensities is plotted on the horizontal axis.}
+	\item{This plots offer a way of making pairwise graphical comparison of intensity data.}
+	\item{Problems in replicate sets of arrays may be assessed with these graphs.}
+	\item{We will use our Data object as it is ordered according to the replicates.\footnote{See the phenoData.}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{M vs A plot.}
+<<eval=T, echo=F,fig=TRUE,height=5>>=
+MAplot(Data, pairs = TRUE, plot.method = "smoothScatter")
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{M vs A plot.}
+\begin{itemize}
+	\item{The argument pairs sets the function to make pairwise comparisons.}
+	\item{What would happen with pairs=F?\footnote{The chip is compared to a reference chip.}}
+	\item{What can you notice about the red regression and the deviant points?\footnote{We need to normalize, wait for the next class.}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{RNA Degradation.}
+\begin{itemize}
+	\item{As you already know, different fragments of the same RNA are represented in different features of the array.}
+	\item{An artefact of the microarray techinque is that features representing sites closer to the 5' end of the RNA are less intense.}
+	\item{This is because RNA degradation in the assay \alert{starts at the 5' end} of the molecule.}
+	\item{There is a way to check for the RNA degradation rate in the assay.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{RNA Degradation.}
+<<eval=T, echo=T>>=
+degradation<-AffyRNAdeg(Data)
+names(degradation)
+@
+\begin{itemize}
+	\item{There is a way to make a summary of this object.\footnote{Use the \alert{summarizeAffyRNAdeg()} function.}}
+	\item{Now, we will plot \alert{degradation curves} for this data.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{RNA Degradation Plots.}
+<<eval=T, echo=F,fig=TRUE,height=5>>=
+plotAffyRNAdeg(degradation)
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Pending Points.}
+Next class, we will learn about microarray normalization, finding DEGs and the SpeCond package.
+\end{frame}
+
+
+\end{document}

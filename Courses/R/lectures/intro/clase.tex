@@ -1,0 +1,806 @@
+\input{../header.tex}
+
+
+
+\usepackage{Sweave}
+\begin{document}
+
+%%% set up some options for Sweave and R %%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Introducción y R básico}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Orígenes}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{De donde viene R}
+  \begin{itemize}
+  \item Para muchos \pl{R} es un dialecto porque es un derivado del lenguaje \pl{S} creado por John Chambers y co en los Bell Labs. En si, \pl{R} fue escrito a mitad de los 90s por Ross Ihaka y Robert Gentleman.
+  \item Desde 1997, \pl{R} ha sido manejado por el \emph{R Development Core Team} y se ha mantenido como open-source.
+  \item Una ventaja de R es que se puede usar en varias plataformas: UNIX, Windows, Mac. 
+  \item \pl{R} en si es un lenguaje de computación creado para facilitar la manipulación de datos, hacer cálculos y gráficas de alto nivel. Es por esto que \pl{R} es fuerte en estadística.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Propiedades de R}
+  \pl{R} es un ambiente para trabajar en estadística computacional y al mismo tiempo es un lenguaje de programación. Hay usuarios que solo van a usar las funciones básicas de \pl{R} (como una calculadora) mientras otros incluso harán paquetes que ligen \pl{R} con \pl{C}. En fin, \pl{R}:
+  \begin{itemize}
+  \item es efectivo en el manejo de datos y su almacenamiento.
+  \item tiene muchos operadores para hacer cálculos en arreglos (vectores) y matrices.
+  \item tiene una gama de herramientas para el análisis de datos. Hay muchos paquetes disponibles, como la familia de Bioconductor.
+  \item tiene un sistema de gráficas muy útil para el análisis de datos. Excel es cosa del pasado ;)
+  \item ya viene con modelos estadísticos.
+  \item hay muchos manuales y un sistema de ayuda bastante bueno. Además hay una comunidad internacional que te puede ayudar :).
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Uso básico de R}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Abrir y cerrar R}
+  \begin{itemize}
+  \item Para abrir \pl{R} simplemente tienen que escribir el comando \Rcode{R} en UNIX. Lo primero que veran es una pequeña descripción de \pl{R} incluyendo la versión que tienen instalada.
+  \item Al abrir \pl{R}, este busca en el directorio donde están información de alguna sesión previa. Esto luego sera útil con los \emph{workspace}.
+  \item Para cerrar \pl{R} simplemente escriban \BIOCfunction{q()}. Les va a pedir si quieren guardar una imagen del workspace -- por ahora digan que no. 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Workspace}
+  \begin{itemize}
+  \item Muchas veces tienes que interrumpir tu trabajo. \pl{R} tiene toda una funcionalidad llamada workspace que te ayuda a retomar tu trabajo de sesiones previas.
+  \item Cuando guardas el workspace se crean dos archivos: \pl{.RData} y \pl{.Rhistory} en el directorio donde estes trabajando. Estos almacenan todos los objetos que haya definido el usuario (vectores, matrices, listas, funciones). La próxima vez que abras R en ese directorio, carga todo lo que creaste antes automáticamente.
+  \item Hay una serie de funciones que les pueden ayudar para organizar su trabajo en R. \Rfunction{getwd} te da tu directorio de trabajo actual, \Rfunction{setwd} lo cambia, \Rfunction{history} te muestra los últimos 25 comandos que usaste y \Rcode{history(max.show=Inf)} te muestra todos.
+  \item Otras funciones útiles son \Rfunction{savehistory} y \Rfunction{loadhistory}. Además si quieres ver que objetos tienes en tu sesión puedes usar \Rfunction{objects} o \Rfunction{ls}; puedes quitar objectos con \Rfunction{rm}.
+  \item Si quieren guardar el workspace manualmente o con un nombre diferente a \pl{.Rdata} usen \BIOCfunction{\Rcode{save.image()}}. De igual forma, pueden cargar un workspace manualmente con \Rfunction{load}.
+  \item Para checar las opciones del ambiente de \pl{R} usen \Rfunction{options}. Por ejemplo, pueden cambiar cuantos dígitos se imprimen en el output.
+  \end{itemize}
+\end{frame}  
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{R como Calculadora}
+  \begin{itemize}
+  \item R es un \emph{expression language}. Aka\footnote{also known as}, una R no es igual a una r. Los nombres de variables tienen que empezar por un punto\footnote{Una letra le tiene que seguir al punto para que sea un nombre válido} o caracteres alfanuméricos.
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> 2 + 2
+> 2^2
+> r <- c(1:3, 4.5, 109)
+> pi * r^2
+> sqrt(36)
+> sin(2 * pi)
+> exp(1)
+> log(10)
+> log(10, base = 10)
+\end{Sinput}
+\end{Schunk}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{Asignación de valores}
+  \begin{itemize}
+  \item En R, hay 3 formas de asignar valores, aunque en general se usan solo dos: \Rcode{=} y \Rcode{<-}
+  \item Preferencialmente usen \BIOCfunction{\Rcode{<-}} simplemente para evitar confusiones. Es que el signo \Rcode{=} se usa para el paso de valores en las funciones.
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> A <- c(a = 1, b = 2)["b"]
+> A = c(a = 1, b = 2)["b"]
+> A
+\end{Sinput}
+\begin{Soutput}
+b 
+2 
+\end{Soutput}
+\end{Schunk}
+  \begin{itemize}
+  \item Aquí queda más clara la asignación en la primera línea, aunque las dos hacen lo mismo.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{Vectores}
+  \begin{itemize}
+  \item \pl{R} es un lenguaje vectorizado, así que puedes ver todas tus variables como vectores. Hay varios \emph{modos}: \pl{numeric, character, logical}.
+  \item Tal vez la función más usada en \pl{R} es \BIOCfunction{\Rcode{c()}}. Con esta función puedes generar vectores de datos.
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> v1 <- c(1:10)
+> v2 <- runif(10)
+> v3 <- sample(c("A", "C", "G", "T"), 
++     size = 10, replace = TRUE)
+> v4 <- v3 %in% c("A", "G")
+> v5 <- c("foo", 2, TRUE)
+> v6 <- c(2, "3")
+\end{Sinput}
+\end{Schunk}
+  \begin{itemize}
+  \item Puedes usar la función \Rfunction{mode} para encontrar que tipo de vector tienes. Además, con \Rfunction{as} puedes cambiar el modo de un vector. Intenten cambiar al modo \emph{numeric} los vectores \pl{v5 y v6}:
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> as.numeric(v5)
+> as.numeric(v6)
+\end{Sinput}
+\end{Schunk}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Un ejemplo sencillo}
+  \begin{example}[Tam. Fagos]
+  Conocemos el tamaño del genoma de 10 bacteriofagos. Queremos explorar esta información. Sus tamaños en mbs son: \pl{233.2 180.5 280.3 244.8 252.4 178.2 211.2 196.2 176.8 185.7} Almacenen esta info en el vector \pl{fagos} y encuentren:
+    \begin{enumerate}
+    \item La suma de los tam. de los genomas
+	\item La longitud del vector fagos
+	\item El tam. promedio de los genomas
+	\end{enumerate}
+  \end{example}
+  Así se resuelve:
+\begin{Schunk}
+\begin{Sinput}
+> fagos <- c(233.2, 180.5, 280.3, 
++     244.8, 252.4, 178.2, 211.2, 
++     196.2, 176.8, 185.7)
+> sum(fagos)
+\end{Sinput}
+\begin{Soutput}
+[1] 2139.3
+\end{Soutput}
+\begin{Sinput}
+> length(fagos)
+\end{Sinput}
+\begin{Soutput}
+[1] 10
+\end{Soutput}
+\begin{Sinput}
+> sum(fagos)/length(fagos)
+\end{Sinput}
+\begin{Soutput}
+[1] 213.93
+\end{Soutput}
+\begin{Sinput}
+> mean(fagos)
+\end{Sinput}
+\begin{Soutput}
+[1] 213.93
+\end{Soutput}
+\end{Schunk}
+  Además, pueden usar \pl{sort(), min(), max(), range(), diff(), cumsum()} y \alert{summary()}.
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Reciclaje de vectores}
+  \begin{itemize}
+  \item En \pl{R} la mayoría de las funciones están vectorizadas\footnote{En las que no, es porque no tendría sentido vectorizarlas}. Por ejemplo cuando hacemos \Rcode{x = 2; y = 3; x + y} en realidad estamos haciendo $x[i] + y[i], i \in 1, ... \max\{|x|,|y|\}$
+  \item Si la longitud de los dos vectores no es la misma, \pl{R} recicla el más chico con tal de llegar a la longitud del grande.
+  \item Prueben con \Rcode{c(2,3) + c(3,4,5)} y compárenlo con \Rcode{c(2,3) + c(3,4,5,8)}
+  \item Siempre tengan cuidado con los warnings que salen. En el caso del reciclaje, estos solo salen si \Rcode{(length(x) \%\% length(y)) != 0 }
+  \item Con esto en mente ahora podemos encontrar la varianza de un vector de forma \emph{manual}:
+  \end{itemize}
+  \begin{example}[Varianza]
+\begin{Schunk}
+\begin{Sinput}
+> x <- c(2, 3, 5, 7, 11)
+> xbar <- mean(x)
+> n <- length(x)
+> sum((x - xbar)^2)/(n - 1)
+\end{Sinput}
+\begin{Soutput}
+[1] 12.8
+\end{Soutput}
+\begin{Sinput}
+> var(x)
+\end{Sinput}
+\begin{Soutput}
+[1] 12.8
+\end{Soutput}
+\end{Schunk}
+Supongo que ahora solo usarán \Rcode{var()} ;)
+  \end{example}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Obtener ayuda}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Buscando ayuda}
+  \begin{itemize}
+  \item Tal vez lo más importante en cualquier lenguaje de programación es saber donde buscar ayuda. \pl{R} tiene un sistema de ayuda bastante completo, aunque a veces si hay que meterse a google.
+  \item \alert{La función madre para buscar ayuda es \Rcode{help()}} Digamos que no saben que hace la función \Rfunction{names}, así que pueden buscar ayuda al respecto con \BIOCfunction{\Rcode{help("names")}} o alguno de los atajos: \BIOCfunction{\Rcode{?names}} o \BIOCfunction{\Rcode{?"names"}}.
+  \item Si no saben que es lo que buscan pueden usar \BIOCfunction{\Rcode{help.start()}} que abre una página html. Aquí siempre encontrarán ejemplos que los pueden ayudar a entender. Estos los pueden copiar y pegar en R para correlos :)
+  \item Para hacer una búsqueda más profunda usen \BIOCfunction{\Rcode{help.search()}} ya que esta función busca en más secciones de los manuales de ayuda. Por ejemplo, \Rcode{help.search("names")}
+  \item Si están buscando nombres de funciones, usen \BIOCfunction{\Rcode{apropos()}} Por ejemplo, \Rcode{apropos("names")}. Otras funciones útiles son \BIOCfunction{\Rcode{RSiteSearch()}}, \BIOCfunction{\Rcode{args()}} y \BIOCfunction{\Rcode{example()}}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Usando las herramientas de ayuda}
+  \begin{example}[data.entry y names]
+  En este ejemplo apliquen lo que acabamos de ver para buscar ayuda sobre \pl{names} y \pl{data.entry}. Luego:
+    \begin{enumerate}
+    \item Creen el vector \pl{simpsons} con los nombres de los 5 protagonistas de los Simpons usando la función \Rcode{c()}. 
+    \item Usando \Rcode{names} cambien el vector \pl{simpsons} para que refleje quien es el padre, madre, etc.
+    \item Usen \Rcode{data.entry} y agreguen a dos amigos de la familia al vector \pl{simpsons}.
+    \item Completen-actualizen los nombres del vector \pl{simpsons}
+    \end{enumerate}
+  \end{example}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Un ejercicio simple de tarea}
+  \begin{block}{Aprendiendo a hacer secuencias y repeticiones}
+  Como un ejercicio simple de tarea quiero que aprendan a usar las funciones \BIOCfunction{\Rcode{seq}}, \BIOCfunction{\Rcode{rev}}, \BIOCfunction{\Rcode{paste}} y el operador \pl{colon \BIOCfunction{:}}. Almacenen en diferentes vectores los siguientes datos sin usar \Rcode{c()} a menos de que no haya otra opcion.
+    \begin{itemize}
+	\item Los números de Fibonnacci del 1 al 34
+	\item Las fracciones 1/1 hasta 1/10 usando enteros en el denominador.
+	\item Los años desde 1964 hasta el 2008.
+	\item Los múltiplos de 25 desde 1000 hasta 0 \emph{en ese orden}.
+	\item La serie "A" "A" "T" "T" "T" "T" "C" "G" y luego conviertanla a "AATTTTCG".
+	\end{itemize}
+  \end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Índices de vectores}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Usar los índices}
+  \begin{itemize}
+  \item En \pl{R} al igual que en otros lenguajes es importante aprender como accesar a la información que tienes en tu variable; vectores en este caso.
+  \item Muchas veces van tener su información almacenada en un vector de datos; hay cuatro índices principales que puedes usar para seleccionar subconjuntos de tu vector: vectores lógicos, un vector de enteros positivos, otro de negativos y un string de caracteres.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Vectores Lógicos}
+  \begin{itemize}
+  \item Cuando accesas a un vector por medio de un vector lógico, estas filtrando a los que te dan como \pl{TRUE}\footnote{Muchas veces puedes usar \pl{T} en vez de \pl{TRUE}; eviten llamar una variable como T} en alguna comparación.
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> x <- c(-2:2)
+> y <- x/x
+> z <- y[!is.na(y)]
+> z2 <- y[!is.na(y) & x > 0]
+\end{Sinput}
+\end{Schunk}
+  \begin{itemize}
+  \item En la primera \pl{z}, estamos eliminando a los valores \Rcode{NaN}\footnote{NaN significa Not a Number} como sería 0/0. En \pl{z2} además queremos solo los de \Rcode{x>0}.
+  \item Tengan en mente que la longitud de los vectores \pl{z} y \pl{z2} son diferentes a la longitud de \pl{x}.
+  \end{itemize}
+  
+  \begin{block}{Operadores Lógicos}
+  En \pl{R} hay diversos operadores lógicos que funcionan como en otros lenguajes con alguna pequeña diferencia. Corran los siguientes comandos para aprender como funcionan :). Para un aprendizaje más detallado lean la ayuda de \Rcode{?">"} y \Rcode{?all.equal}
+  \end{block}
+\begin{Schunk}
+\begin{Sinput}
+> x <- c(1:5)
+> x < 5
+> x > 1
+> x > 1 & x < 5
+> x > 1 && x < 5
+> x > 1 | x < 5
+> x > 1 || x < 5
+> x == 3
+> x != 3
+> !x == 3
+> x == c(2, 4)
+> x %in% c(2, 4)
+\end{Sinput}
+\end{Schunk}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Vector de enteros positivos}
+  \begin{itemize}
+  \item Tal vez la forma más comun de accesar a un vector de datos es por posición. Aquí simplemente las posiciones van desde 1\footnote{Es diferente de Perl!} hasta n donde n es la longitud del vector de datos.
+  \item Si \Rcode{x} tiene 100 elementos, puedes entrar a los primeros 10 usando \Rcode{x[1:10]} o a los elementos 1, 5 y 8 usando \Rcode{x[c(1,5,8)]}.
+  \item Otra forma de usar esta tipo de índice sería:
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> c("A", "T", "C", "G")[rep(c(1, 
++     2, 2, 4, 3), times = 2)]
+\end{Sinput}
+\end{Schunk}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Vector de enteros negativos}
+  \begin{itemize}
+  \item En realidad esto es muy sencillo. Simplemente son las posiciones que queremos excluir.
+  \item En el siguiente ejemplo simplemente nos quedamos con las posiciones 1, 7, 8 y 10.
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> x <- c("inicio", rep(c("A", "T", 
++     "C", "G"), times = 2), "fin")
+> y <- x[-c(2:6, 9)]
+> y
+\end{Sinput}
+\begin{Soutput}
+[1] "inicio" "T"      "C"      "fin"   
+\end{Soutput}
+\end{Schunk}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Por vector de caracteres}
+  \begin{itemize}
+  \item En realidad esta forma es muy parecida a las anteriores. Simplemente tienen que poner entre comillas dobles las palabras que identifican a las posiciones.
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> fagos <- c(233.2, 180.5, 280.3)
+> names(fagos) <- c("Aeromonas phage Aeh1", 
++     "Enterobacteria phage RB43", 
++     "Pseudomonas phage phiKZ")
+> fagos["Aeromonas phage Aeh1"]
+> fagos[grep("Aeh1", names(fagos))]
+\end{Sinput}
+\end{Schunk}
+  \alert{Chequen la función grep!} \Rcode{which} también es bastante útil.
+  \begin{itemize}
+  \item Para ahora ya se deben haber dado cuenta... las funciones siempre usan (...) y los vectores de datos usan [...]
+  \end{itemize}
+\end{frame}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Estructuras de Control}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{El famoso "if"}
+  \pl{R} ofrece las estructuras de control más clásicas con lo cual luego podremos hacer funciones.
+  \begin{itemize}
+  \item El \Rcode{if} es la estructura más simple y su sintaxis es bastante sencilla: \Rcode{if (cond1=vdd) \string{cmd1\string} else \string{cmd2\string}}
+  \item El \Rcode{ifelse} no se diferencia tanto, aunque es una función. Mas bien es como en Excel; su sintaxis es: \Rcode{ifelse(prueba, valor-vdd, valor-falso)}
+  \item Aquí les muestro un par de ejemplos:
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> if (1 == 0) {
++     print(1)
++ } else {
++     print(2)
++ }
+\end{Sinput}
+\begin{Soutput}
+[1] 2
+\end{Soutput}
+\begin{Sinput}
+> x <- 1:10
+> ifelse(x < 5 | x > 8, x, 0)
+\end{Sinput}
+\begin{Soutput}
+ [1]  1  2  3  4  0  0  0  0  9 10
+\end{Soutput}
+\end{Schunk}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Ciclos}
+  \begin{itemize}
+  \item El \Rcode{for} ya no es tan similar a lo que conocemos. Su sintaxis base es: \Rcode{for(variable in secuencia) \string{comandos\string} }
+  \item El segundo tipo de ciclo más usado es \Rcode{while}. Su sintaxis base es: \Rcode{while(condición) \string{comandos\string} }
+  \item El último y que casi nunca se usa es el \Rcode{repeat}. Realmente no se los recomiendo... en fin, aquí tienen un ejemplo de un for:
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> x <- 1:10
+> z <- NULL
+> for (i in 1:length(x)) {
++     if (x[i] < 5) {
++         z <- c(z, x[i] - 1)
++     }
++     else {
++         z <- c(z, x[i]/x[i])
++     }
++ }
+> z
+\end{Sinput}
+\begin{Soutput}
+ [1] 0 1 2 3 1 1 1 1 1 1
+\end{Soutput}
+\end{Schunk}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Matrices}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Matrices}
+  \begin{itemize}
+  \item \pl{R} te permite tener variables de tipo matriz. Estas simplemente son vectores con un vector dimensional que es diferente de \pl{NULL}.
+  \item Si le cambias el vector de dimensiones a un vector, lo puedes volver una matriz\footnote{No a fuerzas es de 2 dimensiones}. Esto afecta como se imprime como ven a continuación:
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> V <- runif(100)
+> print(V[1:9])
+\end{Sinput}
+\begin{Soutput}
+[1] 0.4479711 0.7877175 0.7089860
+[4] 0.8446513 0.3021317 0.5532824
+[7] 0.6777822 0.2457244 0.8265174
+\end{Soutput}
+\begin{Sinput}
+> dim(V)
+\end{Sinput}
+\begin{Soutput}
+NULL
+\end{Soutput}
+\begin{Sinput}
+> dim(V) <- c(2, 5, 10)
+> print(V[, , 1])
+\end{Sinput}
+\begin{Soutput}
+          [,1]      [,2]      [,3]
+[1,] 0.4479711 0.7089860 0.3021317
+[2,] 0.7877175 0.8446513 0.5532824
+          [,4]      [,5]
+[1,] 0.6777822 0.8265174
+[2,] 0.2457244 0.9948602
+\end{Soutput}
+\end{Schunk}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Álgebra Matricial}
+  \begin{itemize}
+  \item \pl{R} te permite hacer operaciones entre matrices como:
+    \begin{itemize}
+	\item La multiplicación con \BIOCfunction{\Rcode{\%*\%}}
+	\item El inverso $X^{-1}$ con \BIOCfunction{\Rcode{solve}}
+	\item La transpuesta $X^t$ con \BIOCfunction{\Rcode{t}}
+	\item El producto \emph{exterior} de dos vectores ($xx^t$) con \BIOCfunction{\Rcode{\%o\%}}
+	\item El productor Kronecker de dos matrices con \BIOCfunction{\Rcode{\%x\%}}
+	\item $A^t X$ y $A X^t$ con \BIOCfunction{\Rcode{crossprod}} y \BIOCfunction{\Rcode{tcrossprod}}
+	\item La descomposición eigen de una matrix con \BIOCfunction{\Rcode{eigen}}
+	\end{itemize}
+  \item Si quieren aprender más sobre álgebra matricial vayan a \myurlshort{en.wikipedia.org/wiki/Matrix_(mathematics)}{wikipedia}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Multiplicación de Matrices}
+  \begin{itemize}
+  \item Para aprender un poco de la multiplicación de matrices corran los siguientes comandos y comparen los resultados:
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> X <- 1:16
+> dim(X) <- c(4, 4)
+> X
+> X * X
+> X %*% X
+> sum(X[, 1] * X[1, ])
+> sum(X[, 1] * X[2, ])
+\end{Sinput}
+\end{Schunk}
+  \begin{block}{Índices en matrices}
+  De paso ya aprendieron a usar índices en matrices :)! Ahora ya saben como recuperar alguna columna o línea de una matriz; por ejemplo, la línea 1 con \Rcode{X[1,]}. Recuerden que el primer índice son las líneas (m) y el segundo son las columnas (n) en el caso de una matriz \pl{m x n}.
+  \end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Archivos y directorios}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Leer un archivo}
+  \begin{itemize}
+  \item Algo esencial que todos sepan es como abrir un archivo o directorio en \pl{R}. Dudo mucho que quieran usar \BIOCfunction{\Rcode{scan()}} y llenar los datos manualmente :P.
+  \item \pl{R} puede manejar varios archivos con números para una sola variable, tablas de números, archivos tipo \pl{csv} y más. Por ejemplo, podríamos haber leido la info de los fagos así: \Rcode{fagos <- scan(file=\string"fagos.txt\string")}\footnote{El archivo tendría que estar en el mismo folder donde estamos trabajando}
+  \item Las funciones principales para leer archivos son \BIOCfunction{\Rcode{scan()}}\footnote{Especificando el archivo de entrada}, \BIOCfunction{\Rcode{read.table()}}, \BIOCfunction{\Rcode{read.csv()}} y \BIOCfunction{\Rcode{source()}}.
+  \item Si quieren especificar el archivo de entrada cuando ejecuten el comando, pueden usar \Rcode{read.table(file=file.choose())}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Data Frame}
+  \begin{block}{Data Frames}
+  Un formato muy usado en \pl{R} son los \emph{data frames}. Estos en realidad son como una hoja de cálculo donde cada columna es una variable. Pueden accesar a cada columna con \Rcode{dataframe\string$variable} o \Rcode{dataframe[[\string"variable\string"]]}. Además pueden usar las funciones \BIOCfunction{\Rcode{attach}} y \BIOCfunction{\Rcode{detach}} para agregar las variables de un \pl{data frame} al ambiente de \pl{R}.\footnote{No es recomendable si piensan modificar los valores del \pl{data frame} o si ya tienen variables con los mismos nombres}; la función \Rcode{with(data.frame, comando)} hace lo mismo. Finalmente, pueden ver el principio o el final de un \pl{data frame} usando \BIOCfunction{\Rcode{head()}} o \BIOCfunction{\Rcode{tail()}}.
+  \end{block}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{read.table}
+  \begin{example}[Leer una tabla]
+  Para leer una tabla con algo de info sobre unos fagos usen:
+\begin{Schunk}
+\begin{Sinput}
+> arch <- "../../data/10biggestPhages.txt"
+> fagos.gr <- read.table(file = arch, 
++     header = TRUE)
+\end{Sinput}
+\end{Schunk}
+  \pl{R} también te permite leer archivos que están en servidores web. Esta misma tabla también la pueden leer así\footnote{Mejor usen \Rcode{sitio <- "http://kabah.lcg.unam.mx/~lcollado/R/data/10biggestPhages.txt"} -- tuve que hacerlo de otra forma por el espacio}:
+  \end{example}
+\begin{Schunk}
+\begin{Sinput}
+> sitio <- "http://kabah.lcg.unam.mx/~lcollado/R/"
+> sitio <- paste(c(sitio, "data/10biggestPhages.txt"), 
++     collapse = "")
+> fagos.gr <- read.table(file = url(sitio), 
++     header = TRUE)
+> fagos.gr <- read.table(file = sitio, 
++     header = TRUE)
+> fagos.gr[c(2:4)]
+\end{Sinput}
+\begin{Soutput}
+   GenomeSize        EMBL  Taxid
+1      280334 AF399011_GR 169683
+2      252401 AY939844_GR 268746
+3      244834 AY283928_GR  75320
+4      233234 AY266303_GR 227470
+5      211215 AJ697969_GR 273133
+6      196280 AJ630128_GR 238854
+7      185683 AP008983_GR  12336
+8      180500 AY967407_GR 115991
+9      178249 AY940168_GR 268747
+10     176847 DQ149023_GR 382359
+\end{Soutput}
+\begin{Sinput}
+> fagos.gr$Taxid[2:3]
+\end{Sinput}
+\begin{Soutput}
+[1] 268746  75320
+\end{Soutput}
+\end{Schunk}
+  \begin{itemize}
+  \item Noten que las 2 formas de \Rcode{read.table} son iguales, solo que una es más clara en su sintaxis. Además, el output de \Rcode{read.table} es un \pl{data frame}.  
+  \item Chequen los argumentos de la función \Rcode{read.table}; en especial \BIOCfunction{\Rcode{sep}} y \BIOCfunction{\Rcode{header}}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Directorios}
+  \begin{itemize}
+  \item Muchas veces quieres abrir más de un archivo de un directorio o folder. Tal vez no quieres abrir todos, así que tienes que buscar un patrón en sus nombres.
+  \item La forma más automática de hacerlo es así:
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> setwd("../../data")
+> files <- list.files(pattern = "s.txt$")
+> for (i in files) {
++     x <- read.table(i, header = TRUE)
++     assign(i, x)
++     print(i)
++ }
+\end{Sinput}
+\begin{Soutput}
+[1] "10biggestPhages.txt"
+[1] "fagos.txt"
+\end{Soutput}
+\end{Schunk}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Definir funciones}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Funciones: lo básico}
+  \begin{itemize}
+  \item Algo muy importante es que puedan definir sus propias funciones. En si las funciones son objetos con el modo \emph{function} y muchas funciones base como \Rcode{mean} están definidas de la misma forma que las que ustedes harán.
+  \item La sintaxis basíca para definir una función y llamarla son:
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> mifun <- function(arg1, arg2, ...) {
++     lo_que_sea
++ }
+> mifun(arg1 = ..., arg2 = ...)
+\end{Sinput}
+\end{Schunk}
+  \begin{itemize}
+  \item Les recomiendo ampliamente que especifiquen valores \emph{default} a sus argumentos. Esto lo hacen con \Rcode{arg1 \string= val.def}.
+  \item Los nombres de las funciones siguen las mismas reglas que las de los objetos(variables). Tengan cuidado de no repetir nombres de funciones ya existentes en su ambiente de \pl{R}.
+  \item Cuando llaman a una función, pueden poner los argumentos en el mismo orden que los definieron o usar sus \emph{tag} (nombres).
+  \item Tomen nota de que un valor modificado adentro de una función es modificado temporalmente. Si en una función quieren modificar un valor externo, tienen que usar el operador \BIOCfunction{\pl{<}\Rcode{<-}} o la función \BIOCfunction{\Rcode{assign}}.
+  \item En cuanto al cuerpo de la función, pueden tener un solo comando o muchos.\footnote{Si tienen uno no necesitan usar las llaves.} El valor que regresa una función es el último en ser evaluado, o el que especifiquen con \BIOCfunction{\Rcode{return}}.
+  \end{itemize}
+  Aquí les ejemplifico un poco lo que acabamos de ver:
+\begin{Schunk}
+\begin{Sinput}
+> fact <- function(x = 1) {
++     ret <- 1
++     for (i in 1:x) {
++         ret = ret * i
++     }
++     return(c(x, ret))
++ }
+> fact()
+\end{Sinput}
+\begin{Soutput}
+[1] 1 1
+\end{Soutput}
+\begin{Sinput}
+> fact(x = 5)
+\end{Sinput}
+\begin{Soutput}
+[1]   5 120
+\end{Soutput}
+\begin{Sinput}
+> fact(6)
+\end{Sinput}
+\begin{Soutput}
+[1]   6 720
+\end{Soutput}
+\end{Schunk}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Funciones: ... y missing}
+  \begin{itemize}
+  \item Cuando no espeficicas los argumentos, lo que hace \pl{R} es buscar a cual corresponden.\footnote{Para entender mejor vean \Rcode{match.arg}}
+  \item Algo importante es poder pasar los argumentos de una función a otra (los que compartan). Para eso se utiliza el argumento especial \BIOCfunction{\Rcode{...}} 
+  \item Finalmente, usen la función \BIOCfunction{\Rcode{missing}} para checar si un argumento no fue proporcionado por el usuario.
+  \end{itemize}
+  Un ejemplo con \Rcode{missing}:
+\begin{Schunk}
+\begin{Sinput}
+> mifun2 <- function(x1 = 5, arg.op) {
++     if (missing(arg.op)) {
++         z1 <- 1:5
++     }
++     else {
++         z1 <- arg.op
++     }
++     return(z1/x1)
++ }
+> mifun2(x1 = 5)
+\end{Sinput}
+\begin{Soutput}
+[1] 0.2 0.4 0.6 0.8 1.0
+\end{Soutput}
+\begin{Sinput}
+> mifun2(x1 = 5, arg.op = 30:25)
+\end{Sinput}
+\begin{Soutput}
+[1] 6.0 5.8 5.6 5.4 5.2 5.0
+\end{Soutput}
+\end{Schunk}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Funciones: control}
+  \begin{itemize}
+  \item Algunas de las funciones que harán en el futuro requerirán de las utilidades de control. En \pl{R} hay 3 de estas: \BIOCfunction{\Rcode{return}}, \BIOCfunction{\Rcode{stop}} y \BIOCfunction{\Rcode{warning}}.
+  \item El \Rcode{return} ya lo usamos. Este especifica que valores regresa la función además de terminarla.
+  \item El \Rcode{stop} para la función e imprime un mensaje de error.
+  \item Finalmente, el \Rcode{warning} simplemente imprime un mensaje pero no para la función. Aquí les muestro un ejemplo para que lo corran:
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> mifun3 <- function(x1) {
++     if (x1 > 0) {
++         print(x1)
++     }
++     else if (x1 == 0) {
++         warning("El valor debe ser > 0")
++     }
++     else {
++         stop("Hay un error porque x1 < 0")
++     }
++ }
+> mifun3(x1 = 0)
+> mifun3(x1 = -2)
+\end{Sinput}
+\end{Schunk}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Funciones: nuevos operadores}
+  \begin{itemize}
+  \item En \pl{R} puedes definir un tipo de función especial, tal como \BIOCfunction{\Rcode{\%in\%}}. Estos operadores tienen que ser binarios. Se definen y usan con la sintaxis:
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> "%nombre%" <- function(x, y) {
++     lo_que_sea
++ }
+> datos1 %nombre% datos2
+\end{Sinput}
+\end{Schunk}
+  \begin{itemize}
+  \item Noten el uso de las comillas dobles en la definición del operador.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Paquetes}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Paquetes}
+  \begin{itemize}
+  \item No sé si han intentado instalar un paquete de \pl{BioPerl} o algo parecido... bueno, en \pl{R} es mucho más sencillo y no hay tantos problemas entre las diferentes plataformas.
+  \item En si, no pueden instalar paquetes en los servidores ya que no son admins, pero si es importante que aprendar como hacerlo. 
+  \item Hay dos fuentes principales de paquetes para \pl{R}. Una es \pl{CRAN} y la otra \pl{Bioconductor}\footnote{veremos más al respecto en otra clase}.
+    \begin{itemize}
+	\item \myurlshort{cran.r-project.org/}{CRAN}\footnote{De aquí incluso pueden bajar \pl{R} para su laptop}
+	\item \myurlshort{www.bioconductor.org}{Bioconductor}
+	\end{itemize}
+  \item Cada paquete tiene su ayuda, y pueden ver la descripcion basíca, sus dependencias y la lista de funciones del paquete con:
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> help(package = nombre.paquete)
+\end{Sinput}
+\end{Schunk}
+  \begin{itemize}
+  \item En general, hay una página para cada paquete donde te explican como usarlo y te muestran ejemplos.
+  \item Les recomiendo que escriban lo siguiente para explorar lo que te ofrece \pl{R} de base:
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> help(package = base)
+\end{Sinput}
+\end{Schunk}
+\end{frame}  
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Paquetes: instalación}
+  \begin{itemize}
+  \item Para ver que paquetes tienen instalados usen la función \BIOCfunction{\Rcode{installed.packages()}}
+  \item Para ver que paquetes hay disponibles en un \emph{mirror} usen \BIOCfunction{\Rcode{available.packages()}} y para instalar alguno usen \BIOCfunction{\Rcode{install.package()}}
+  \item Finalmente, para los de \pl{Bioconductor} tienen que usar un script de \pl{R} llamado \BIOCfunction{\pl{biocLite}}. Esto lo hacen con \BIOCfunction{\Rcode{source}}.
+  \end{itemize}
+  Aquí tienen un par de ejemplos:
+\begin{Schunk}
+\begin{Sinput}
+> install.package("mcmc")
+> source("http://bioconductor.org/biocLite.R")
+> biocLite("GeneR")
+\end{Sinput}
+\end{Schunk}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Paquetes: para usarlos}
+  \begin{itemize}
+  \item Los paquetes generalmente traen funciones. Pero también pueden ser librerías de datos. En el caso de \pl{Bioconductor} hay toda una sección para bajar datos experimentales.
+  \item Acuérdense que el ambiente de \pl{R} carga las funciones base. Para poder usar las funciones o la info de un paquete tienen que usar la función \BIOCfunction{\Rcode{library()}}.
+  \item Si luego se les olvida que paquetes tienen cargados en su sesión, usen \BIOCfunction{\Rcode{search()}}.
+  \end{itemize}
+  \begin{example}[GeneR]
+  Aquí les muestro un ejemplo donde usamos el paquete \pl{GeneR}.
+\begin{Schunk}
+\begin{Sinput}
+> library(GeneR)
+> s <- "atuuutututu"
+> placeString(s)
+> dnaToRna()
+> getSeq()
+> rnaToDna()
+> getSeq()
+\end{Sinput}
+\end{Schunk}
+  El resultado es \pl{[1] "ATTTTTTTTTT"}
+  \end{example}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Fin de la clase}
+  \begin{itemize}
+  \item Por último quiero que hagan el ejercicio 1 que pueden encontrar en la página del \myurlshort{www.lcg.unam.mx/~lcollado/R/}{curso}.
+  \item \alert{Suerte! :)}
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

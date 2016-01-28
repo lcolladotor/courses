@@ -1,0 +1,302 @@
+\input{../header.tex}
+
+
+
+\usepackage{Sweave}
+\begin{document}
+
+%%% set up some options for Sweave and R %%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Histogramas}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Histogramas}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Objetivos}
+  \begin{itemize}
+    \item Vamos a aprender aplastar los datos de las anteriores gráficas, osea, hacer histogramas.
+    \item Además, revisaremos unas gráficas útiles para comparar distribuciones visualmente.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Data!!}
+  \begin{itemize}
+  \item Primero que nada, obtengamos unos datos aleatorios.
+\begin{Schunk}
+\begin{Sinput}
+> set1 <- rnorm(1000)
+> set2 <- runif(1000)
+\end{Sinput}
+\end{Schunk}
+  \item Si se acuerdan, en la clase pasada usamos \pl{plot} para visualizar nuestros datos. El problema es que
+  queríamos aplastarlos hacia el eje $Y$, ya que el eje $X$ representaba la posición del número azaroso. Osea, iba
+  desde 1 hasta 1000 en este caso.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{plot clase pasada}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/hist-003}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{\pl{hist}}
+  \begin{itemize}
+  \item La forma de hacer este \emph{aplastamiento} es con una línea representando la densidad o con un histograma
+  usando la función \BIOCfunction{hist}. Si tienen curiosidad, hay funciones alternativas cuando su set de datos es
+  pequeño.
+  \begin{enumerate}
+    \item \BIOCfunction{stripchart}
+    \item \BIOCfunction{dotchart}
+  \end{enumerate}
+  \item Tengan cuidado, ya que un histograma es sensible al tamaño de cada barra que uses. En \pl{R} el tamaño lo escoge
+  automáticamente, aunque pueden utilizar el argumento \alert{breaks} para hacerlo de forma manual.
+  \item 
+\begin{Schunk}
+\begin{Sinput}
+> `?`(hist)
+> hist(set1)
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Ejemplo con set1}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/hist-005}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Frecuencia o prob}
+  \begin{itemize}
+  \item En el modo \emph{default} obtenemos un histograma de frecuencias. Podemos obtener un histograma de probabilidades usando el argumento \pl{prob=TRUE}
+  \item Al igual que con otras funciones de gráficas pueden cambiar el color, título, etc.
+  \item El siguiente ejemplo es con datos de \pl{R} y es una distribución bimodal. 
+\begin{Schunk}
+\begin{Sinput}
+> hist(faithful$waiting, col = "light blue", 
++     main = "Histograma de faithful$waiting", 
++     xlab = "Tiempo de espera entre erupciones", 
++     ylab = "Probabilidad", prob = T)
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Otro ejemplo}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/hist-007}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Comparar distribuciones}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Usando par y mfrow}
+  \begin{itemize}
+  \item Usando histogramas, una forma sencilla de comparar distribuciones es hacer 2 gráficas pegadas usando \BIOCfunction{par}. Claro, tengan cuidado porque diferentes distribuciones
+  se pueden parecer mucho bajo ciertos parámetros.
+\begin{Schunk}
+\begin{Sinput}
+> par(mfrow = c(1, 2))
+> hist(set1, prob = T)
+> hist(set2, prob = T)
+> par(mfrow = c(1, 1))
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Set1 vs Set2}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/hist-009}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Density con Hist}
+  \begin{itemize}
+  \item Lamentablemente no se pueden poner 2 histogramas en una sola gráfica, aunque en teoría podemos utilizar las funciones \BIOCfunction{lines} junto con
+  \BIOCfunction{density} para esquivar este problema.
+  \item Primero les muestro una donde la línea es de la misma distribución y luego otra donde no
+\begin{Schunk}
+\begin{Sinput}
+> hist(faithful$waiting, prob = TRUE, 
++     ylab = "Prob", col = "light blue")
+> lines(density(faithful$waiting), 
++     col = "red")
+> set3 <- runif(100, 40, 70)
+> hist(faithful$waiting, prob = TRUE, 
++     ylab = "Prob", col = "light blue")
+> lines(density(set3), col = "red")
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Iguales}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/hist-011}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{faithful vs set3}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/hist-012}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Con 2 líneas}
+  \begin{itemize}
+  \item Como se han de imaginar, otra forma es usar un espacio en blanco con dos líneas.
+\begin{Schunk}
+\begin{Sinput}
+> plot(0, 0, ylim = c(0, 1), xlim = c(min(set1), 
++     max(set1)))
+> lines(density(set1), col = "red")
+> lines(density(set2), col = "blue")
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+
+ \begin{frame}[fragile]
+  \frametitle{Set1 vs Set2}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/hist-014}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Comparar cuantiles}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Q-Q plot}
+  \begin{itemize}
+  \item La forma \emph{pro} usando gráficas para comparar dos distribuciones es con la llamada "Q-Q plot". Este tipo de gráficas usa como información los cuantiles de las dos
+  distribuciones que vas a comparar.Puede que estes comparando una muestra contra una distribución teórica, dos muestras o dos distribuciones teóricas. Además,
+  tiene la ventaja de que el tamaño de tus 2 poblaciones no importa.
+  \item En \pl{R} la función que hace este tipo de gráficas es \BIOCfunction{qqplot}.
+  \item Veamos como se ve set1 vs set1 y set1 vs set2.
+\begin{Schunk}
+\begin{Sinput}
+> qqplot(set1, set1)
+> qqplot(set1, set2)
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Set1 vs Set1}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/hist-016}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Set1 vs Set2}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/hist-017}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Q-Q Norm}
+  \begin{itemize}
+  \item Como ya vieron, si obtenemos una diagonal esta nos indica que las dos distribuciones son parecidas o iguales si nos da una diagonal
+  perfecta.
+  \item Ahora, digamos que tienen un set de datos y quieren saber si se distribuyen como normal.
+  \item Para este caso existe la función \BIOCfunction{qqnorm} la cual compara los cuantiles de tu muestra contra los cuantiles de la normal teórica.
+  \item Chequemos los siguientes ejemplos:
+\begin{Schunk}
+\begin{Sinput}
+> set4 <- rchisq(100, 3)
+> qqnorm(set4)
+> qqnorm(set1)
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{QQnorm set4}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/hist-019}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{QQnorm set1}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/hist-020}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Terminando}
+  \begin{itemize}
+  \item Recuerden que nuestro set1 son datos que obtuvimos con \alert{rnorm} mas no obtenemos una diagonal perfecta con \pl{qqnorm}.
+  \item Si se fijan, en el centro si existe nuestra diagonal pero en los bordes se curvea. Esto es por que tenemos valores extremos y es muy difícil que estos
+  correspondan a los valores extremos teóricos :P
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Tarea}
+  \begin{itemize}
+  \item Asistir al evento de mañana jueves :)
+  \item Hacer un reporte estadístico donde comparen la cantidad de "líquido" ingerido por la población de la LCG en este evento vs un evento promedio.
+  \item Suerte!!!
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

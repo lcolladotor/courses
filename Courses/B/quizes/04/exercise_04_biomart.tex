@@ -1,0 +1,69 @@
+%\VignetteIndexEntry{Exercise 04 from Seminar III: R/Bioconductor}
+%\VignetteDepends{}
+%\VignetteKeywords{R, Bioconductor}
+%\VignettePackage{SIII: R/Bioc}
+\documentclass[letterpaper,12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Standard Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{epsfig}
+%\usepackage{graphicx}
+%\usepackage{graphics}
+%\usepackage{amssymb}
+%\usepackage{amsmath}
+%\usepackage{mathrsfs}
+%\usepackage{caption}
+%\usepackage{comment}
+\usepackage{fancyvrb}
+\usepackage{fancyhdr}
+
+\usepackage[a4paper]{geometry}
+\usepackage{hyperref,graphicx}
+
+%\usepackage[spanish]{babel}
+%\selectlanguage{spanish}
+%\usepackage[utf8]{inputenc}
+
+%%%%%%%%%%%%%%%%%%%%%% some personal commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\pl}[1]{\texttt{#1}}
+\newcommand{\myurlshort}[2]{\href{http://#1}{{\textsf{#2}}}}
+
+%%%%%%%%%%%%%%%%%%%%%% headers and footers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy} 
+\renewcommand{\footrulewidth}{\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plainnat}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% sweave options  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%% opening %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\textbf{Seminar III: \texttt{R}/\texttt{Bioconductor}\\ \small August-December 2009}}
+\author{Leonardo Collado Torres\\[1em]Bachelor in Genomic Sciences (LCG),\\ UNAM, Cuernavaca, Mexico\\[1em]\texttt{lcollado@lcg.unam.mx}\\[1em]\url{http://www.lcg.unam.mx/~lcollado/}}
+
+\usepackage{Sweave}
+\begin{document}
+\maketitle
+
+\medskip
+\noindent{\small\textbf{Assistants:} Alejandro Reyes \pl{areyes@lcg.unam.mx}, Jos\'e Reyes \pl{jreyes@lcg.unam.mx} and V\'ictor Moreno \pl{jmoreno@lcg.unam.mx}}
+
+\medskip
+\noindent{\small\textbf{Note:} Questions through the \myurlshort{foros.nnb.unam.mx/viewforum.php?f=111}{forum} please. Those who are not from the sixth LCG generation send us an email so we can register you on the forum.}
+
+\medskip
+\begin{abstract}
+With the following exercises you'll tune your skills with packages such as biomaRt that enable you to download public data sets.
+\end{abstract}
+
+\section{biomaRt}
+  \begin{enumerate}
+  \item Use \pl{biomaRt} to access Uniprot. Get all the proteins from the virus domain. Find out which is the most frequent organism. Then find which is the most frequent EC number.
+  \item Follow \url{www.ensembl.org/info/website/tutorials/biomart_worked_ex.pdf} and reproduce it using \pl{biomaRt}. Every time they mention "click result" you need to create a different object with the corresponding information.
+  \item Make any plot you want with the previous data. Don't use the base plotting functions. Meaning, use \pl{lattice}, \pl{plotrix}, \ldots
+  \end{enumerate}
+
+
+\end{document}

@@ -1,0 +1,185 @@
+%PDF-1.1
+%Å‚Å„ÅœÅ”\r
+1 0 obj
+<<
+/CreationDate (D:20081030234651)
+/ModDate (D:20081030234651)
+/Title (R Graphics Output)
+/Producer (R 2.8.0)
+/Creator (R)
+>>
+endobj
+2 0 obj
+<<
+/Type /Catalog
+/Pages 3 0 R
+>>
+endobj
+5 0 obj
+<<
+/Type /Page
+/Parent 3 0 R
+/Contents 6 0 R
+/Resources 4 0 R
+>>
+endobj
+6 0 obj
+<<
+/Length 7 0 R
+>>
+stream
+q
+Q q
+BT
+0.000 0.000 0.000 rg
+/F3 1 Tf 14.00 0.00 -0.00 14.00 46.29 375.85 Tm (Densidad de Probabilidad de las erupciones de Faithful) Tj
+ET
+BT
+/F2 1 Tf 12.00 0.00 -0.00 12.00 190.99 18.72 Tm (faithful$waiting) Tj
+ET
+BT
+/F2 1 Tf 0.00 12.00 -12.00 0.00 12.96 192.40 Tm (Density) Tj
+ET
+Q q
+0.000 0.000 0.000 RG
+0.75 w
+[] 0 d
+1 J
+1 j
+10.00 M
+71.73 73.44 m 336.18 73.44 l S
+71.73 73.44 m 71.73 66.24 l S
+137.84 73.44 m 137.84 66.24 l S
+203.96 73.44 m 203.96 66.24 l S
+270.07 73.44 m 270.07 66.24 l S
+336.18 73.44 m 336.18 66.24 l S
+BT
+0.000 0.000 0.000 rg
+/F2 1 Tf 10.00 0.00 -0.00 10.00 68.95 47.52 Tm (0) Tj
+ET
+BT
+/F2 1 Tf 10.00 0.00 -0.00 10.00 132.28 47.52 Tm (20) Tj
+ET
+BT
+/F2 1 Tf 10.00 0.00 -0.00 10.00 198.40 47.52 Tm (40) Tj
+ET
+BT
+/F2 1 Tf 10.00 0.00 -0.00 10.00 264.51 47.52 Tm (60) Tj
+ET
+BT
+/F2 1 Tf 10.00 0.00 -0.00 10.00 330.62 47.52 Tm (80) Tj
+ET
+59.04 83.73 m 59.04 311.22 l S
+59.04 83.73 m 51.84 83.73 l S
+59.04 129.23 m 51.84 129.23 l S
+59.04 174.73 m 51.84 174.73 l S
+59.04 220.22 m 51.84 220.22 l S
+59.04 265.72 m 51.84 265.72 l S
+59.04 311.22 m 51.84 311.22 l S
+BT
+/F2 1 Tf 0.00 10.00 -10.00 0.00 41.76 71.22 Tm (0.000) Tj
+ET
+BT
+/F2 1 Tf 0.00 10.00 -10.00 0.00 41.76 116.72 Tm (0.005) Tj
+ET
+BT
+/F2 1 Tf 0.00 10.00 -10.00 0.00 41.76 162.22 Tm (0.010) Tj
+ET
+BT
+/F2 1 Tf 0.00 10.00 -10.00 0.00 41.76 207.71 Tm (0.015) Tj
+ET
+BT
+/F2 1 Tf 0.00 10.00 -10.00 0.00 41.76 253.21 Tm (0.020) Tj
+ET
+BT
+/F2 1 Tf 0.00 10.00 -10.00 0.00 41.76 298.71 Tm (0.025) Tj
+ET
+Q q 59.04 73.44 342.72 277.92 re W n
+1.000 0.000 0.000 rg
+0.000 0.000 0.000 RG
+0.75 w
+[] 0 d
+1 J
+1 j
+10.00 M
+71.73 83.73 152.06 2.91 re B
+1.000 0.200 0.000 rg
+223.79 83.73 29.75 182.13 re B
+1.000 0.400 0.000 rg
+253.54 83.73 29.75 137.53 re B
+1.000 0.600 0.000 rg
+283.29 83.73 16.53 73.60 re B
+1.000 0.800 0.000 rg
+299.82 83.73 42.97 257.33 re B
+1.000 1.000 0.000 rg
+342.79 83.73 26.44 246.72 re B
+1.000 1.000 0.251 rg
+369.23 83.73 33.06 40.14 re B
+Q
+endstream
+endobj
+7 0 obj
+1917
+endobj
+3 0 obj
+<<
+/Type /Pages
+/Kids [
+5 0 R
+]
+/Count 1
+/MediaBox [0 0 432 410]
+>>
+endobj
+4 0 obj
+<<
+/ProcSet [/PDF /Text]
+/Font <</F2 9 0 R /F3 10 0 R >>
+/ExtGState << >>
+>>
+endobj
+8 0 obj
+<<
+/Type /Encoding
+/BaseEncoding /WinAnsiEncoding
+/Differences [ 45/minus 96/quoteleft
+144/dotlessi /grave /acute /circumflex /tilde /macron /breve /dotaccent
+/dieresis /.notdef /ring /cedilla /.notdef /hungarumlaut /ogonek /caron /space]
+>>
+endobj
+9 0 obj <<
+/Type /Font
+/Subtype /Type1
+/Name /F2
+/BaseFont /Helvetica
+/Encoding 8 0 R
+>> endobj
+10 0 obj <<
+/Type /Font
+/Subtype /Type1
+/Name /F3
+/BaseFont /Helvetica-Bold
+/Encoding 8 0 R
+>> endobj
+xref
+0 11
+0000000000 65535 f 
+0000000021 00000 n 
+0000000163 00000 n 
+0000002282 00000 n 
+0000002365 00000 n 
+0000000212 00000 n 
+0000000292 00000 n 
+0000002262 00000 n 
+0000002457 00000 n 
+0000002714 00000 n 
+0000002810 00000 n 
+trailer
+<<
+/Size 11
+/Info 1 0 R
+/Root 2 0 R
+>>
+startxref
+2912
+%%EOF

@@ -1,0 +1,11 @@
+Name	GenomeSize	EMBL	Taxid
+"Pseudomonas phage phiKZ"	280334	AF399011_GR	169683
+"Cyanophage P-SSM2"	252401	AY939844_GR	268746
+"Bacteriophage KVP40"	244834	AY283928_GR	75320
+"Aeromonas phage Aeh1"	233234	AY266303_GR	227470
+"Pseudomonas phage EL"	211215	AJ697969_GR	273133	 
+"Cyanophage phage S-PM2"	196280	AJ630128_GR	238854 
+"Clostridium botulinum C bacteriophage"	185683	AP008983_GR	12336
+"Enterobacteria phage RB43"	180500	AY967407_GR	115991
+"Cyanophage P-SSM4"	178249	AY940168_GR	268747
+"Bacteriophage Syn9"	176847	DQ149023_GR	382359

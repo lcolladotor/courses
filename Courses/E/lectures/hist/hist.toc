@@ -1,0 +1,4 @@
+\beamer@endinputifotherversion {3.01pt}
+\beamer@sectionintoc {1}{Histogramas}{3}{0}{1}
+\beamer@sectionintoc {2}{Comparar distribuciones}{10}{0}{2}
+\beamer@sectionintoc {3}{Comparar cuantiles}{17}{0}{3}

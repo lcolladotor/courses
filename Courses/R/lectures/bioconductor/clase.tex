@@ -1,0 +1,394 @@
+\input{../header.tex}
+\usepackage{Sweave}
+\begin{document}
+
+
+
+%%% set up some options for Sweave and R %%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{\pl{Bioconductor}}
+  \tableofcontents
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Intro}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Motivación}
+  \begin{itemize}
+  \item \pl{Bioconductor} surgió por la gran cantidad de datos experimentales que estaban siendo generados. Son tal cantidad, que requerimos de la estadística y de la bioinformática para analizarlos.
+  \item Por otro lado, muchos laboratorios pierden tiempo re-escribiendo programas que ya otros habían hecho.
+  \item El otro problema es tener acceso a los programas que otros hacen. Por eso, \pl{Bioconductor} es de distribución libre. 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{De su funcionamiento}
+  \begin{itemize}
+  \item \pl{Bioconductor} empezó en el otoño del 2001.
+  \item Las personas principales que mantienen a \pl{Bioconductor} son del \pl{Fred Hutchinson Cancer Research Center} en Seattle, USA.
+  \item Salen dos versiones nuevas por año.
+  \item En sí, muchos de los paquetes de \pl{Bioconductor} están basados en la programación orientada a objetos y usan la clase S4.
+  \item Acuérdense de que \pl{R} puede ser útil para programar aunque muchos de los que mantienen a \pl{Bioconductor} tienen una formación fuerte en estadística.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Visitemos la página}
+  \begin{itemize}
+  \item Entren a la página de \myurlshort{www.bioconductor.org/}{Bioconductor} y navegen un poco.
+  \item Notarán que hay:
+  \begin{itemize}
+    \item Información sobre cursos.
+	\item Un FAQ.
+	\item Una sección donde te puedes registrar a las "mailing lists" por si quieres pedir ayuda y/o ayudar a otros.
+	\item Información sobre como instalar los paquetes.
+	\item Tal vez la sección más importante para nosotros es la parte de \myurlshort{www.bioconductor.org/packages/release/Software.html}{software}. Generalmente cada paquete tiene PDFs donde lo explican y/o ponen ejercicios demo.
+  \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{CRAN}
+  \begin{itemize}
+  \item Mientras que \pl{Bioconductor} es el repositorio de información y paquetes más relacionado a la genómica, acuérdense de \myurlshort{cran.r-project.org/}{CRAN}.
+  \item Allí pueden encontrar paquetes útiles para ustedes, como es el \BIOCfunction{RMySQL} que veremos adelante.
+  \item En fin, en \pl{Bioconductor} pueden \myurlshort{www.bioconductor.org/download}{bajar} datos experimentales, software, etc.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{limma}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{limma: intro}
+  \begin{itemize}
+  \item Vamos a empezar con el paquete \BIOCfunction{limma} cuya información se encuentra \myurlshort{www.bioconductor.org/packages/release/bioc/html/limma.html}{aquí}.
+  \item \pl{limma} fue principalmente creado para analizar microarreglos, relaciones lineales y encontrar genes diferencialmente expresados.
+  \item Sus derivados gráficos son \pl{limmaGUI} y \pl{affylmGUI} mientras que de cierta forma su competencia es \pl{marray}.
+  \item En sí, solo vamos a ver una parte del paquete ya que es bastante extenso. Incluso su guía oficial no cubre todo.
+  \item Para ejemplificar este paquete y sus funciones, vamos a hacer una de las prácticas básicas.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Problema}
+  \begin{itemize}
+  \item En el caso básico de \pl{limma} trabajamos con 4 mediciones por gene en un microarreglo. Se usan dos colores: Cy3 y Cy5. Primero se hace una medición: WT Cy3, Experimento Cy5. Luego cambian los colores.
+  \item Tenemos datos de \emph{zebrafish}, ya que lo usan para estudiar el desarrollo temprano en vertebrados. Swirl es una mutante puntal del gene BMP2 que afecta al eje "dorsal/ventral" del cuerpo. Nuestro objetivo es usar los datos de este experimento para encontrar los genes con un nivel de expresión alterado en esta mutante comparado con el WT.
+  \item Las hibridaciones del experimento se hicieron en dos sets con tintes intercambiados, por lo que tenemos cuatro mediciones por gene. En cada microarreglo, compararon el RNA del pez mutante swirl con el del pez normal.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Datos}
+  \begin{itemize}
+  \item Para empezar, bajen los siguientes archivos a un directorio:
+  \begin{itemize}
+    \item fish.gal
+	\item swirl.1.spot
+	\item swirl.2.spot
+	\item swirl.3.spot
+	\item swirl.4.spot
+	\item SpotTypes.txt
+	\item SwirlSample.txt
+  \end{itemize}
+  \item Abran \pl{R} y cambien su directorio\footnote{setwd} a donde bajaron los archivos. Podríamos hacer todo vía Internet, pero esto nos va a ahorrar líneas de código.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{readTargets}
+  \begin{itemize}
+  \item Ahora, cargen el paquete \pl{limma} que ya debería estar instalado en los servidores\footnote{Si no lo tienen en su lap, siempren pueden instalarlo con las funciones que vimos la 1era clase}.
+  \item Usen la función \BIOCfunction{readTargets} para leer una tabla con información de nuestro experimento.
+\begin{Schunk}
+\begin{Sinput}
+> library(limma)
+> targets <- readTargets("SwirlSample.txt")
+> targets
+\end{Sinput}
+\begin{Soutput}
+  SlideNumber     FileName       Cy3
+1          81 swirl.1.spot     swirl
+2          82 swirl.2.spot wild type
+3          93 swirl.3.spot     swirl
+4          94 swirl.4.spot wild type
+        Cy5      Date
+1 wild type 2001/9/20
+2     swirl 2001/9/20
+3 wild type 2001/11/8
+4     swirl 2001/11/8
+\end{Soutput}
+\end{Schunk}
+  \item Claro, siempre podrían haber llenado esto a mano :P Pero bueno, ahora ya tenemos información sobre como fue el experimento.
+  \item En sí, nuestros archivos no son los más basicos, ya que los microarreglos fueron leídos por un escáner Axon para producir una imagen \pl{TIFF} que después fue analizada con el software \pl{SPOT}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{read.maimages}
+  \begin{itemize}
+  \item Vamos a usar la función \BIOCfunction{read.maimages} para leer los archivos generados por \pl{SPOT}.
+  \item Nos lee la intensidad \emph{foreground} y \emph{background} para los colores verde y rojo.
+\begin{Schunk}
+\begin{Sinput}
+> RG <- read.maimages(targets$FileName, 
++     source = "spot")
+\end{Sinput}
+\begin{Soutput}
+Read swirl.1.spot 
+Read swirl.2.spot 
+Read swirl.3.spot 
+Read swirl.4.spot 
+\end{Soutput}
+\end{Schunk}
+  \item Usamos nuestro objeto \pl{targets} para obtener los nombres de los archivos. Ahora chequen su objeto \pl{RG}.
+\begin{Schunk}
+\begin{Sinput}
+> RG
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{readGAL}
+  \begin{itemize}
+  \item De una vez nos podemos dar cuenta que los microarreglos de este experimento tienen 8448 puntos.
+  \item Como info aparte, los experimentalisatas usaron 768 puntos de control. Además, la impresora del arreglo funcionó con una cabeza de impresión de arreglo 4x4. Cada cuadrícula consiste de 22x24 puntos que se imprimieron con una punta de impresión.
+  \item En el archivo \pl{GAL} tenemos el nombre del gene asociado con dada punto. Usamos la función \BIOCfunction{readGAL} para leer esta info:
+\begin{Schunk}
+\begin{Sinput}
+> RG$genes <- readGAL("fish.gal")
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{getLayout}
+  \begin{itemize}
+  \item Ahora, como se dieron cuenta, tenemos mucha información previa de como hicieron el microarreglo.
+  \item Podríamos pasar la información (las dimensiones) de la impresora del arreglo manualmente. Claro, es posible que nos equivoquemos :P
+  \item La función \BIOCfunction{getLayout} nos recupera esta información.
+\begin{Schunk}
+\begin{Sinput}
+> RG$printer <- getLayout(RG$genes)
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{imageplot}
+  \begin{itemize}
+  \item Una función del \pl{R} básico que nos ayuda a visualizar una matriz es \BIOCfunction{image}.
+  \item Para esto de los microarreglos hay una función similar (pero especializada) llamada \BIOCfunction{imageplot}.
+  \item Vamos a usar esa función para ver si hay variación en el \emph{background} de nuestros microarreglos.
+\begin{Schunk}
+\begin{Sinput}
+> imageplot(log2(RG$Rb[, 1]), RG$printer, 
++     low = "white", high = "red")
+> imageplot(log2(RG$Gb[, 1]), RG$printer, 
++     low = "white", high = "green")
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{imageplot: rojo}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-008}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{imageplot: verde}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-009}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{normalizeWithinArrays}
+  \begin{itemize}
+  \item Solo vimos la info del primer arreglo, pero nos dimos cuenta de que hay que normalizar los datos.
+  \item Usemos la función \BIOCfunction{normalizeWithinArrays}, la cual nos normaliza los datos con sus \emph{log-ratio} con tal de que la media de estos sea 0 en cada arreglo.
+\begin{Schunk}
+\begin{Sinput}
+> MA <- normalizeWithinArrays(RG, 
++     method = "none")
+\end{Sinput}
+\end{Schunk}
+  \item Ahora veamos una imagen del primer arreglo ya normalizado: 
+\begin{Schunk}
+\begin{Sinput}
+> imageplot(MA$M[, 1], RG$printer, 
++     zlim = c(-3, 3))
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{imageplot: normalizado}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-012}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{o\_O}
+  \begin{itemize}
+  \item La función \pl{imageplot} nos rota al arreglo, por lo que el grupo de hasta abajo a la izquierda es el primero.
+  \item En la última gráfica podemos ver que hay una raya roja. Esto nos dice que había polvo o que el microarreglo estaba rayado.
+  \item Los puntos que están en esa zona del artefacto, pues tendrán valores sospechosos.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{plotMA}
+  \begin{itemize}
+  \item Para esto de los microarreglos, sirve hacer una gráfica "MA".
+  \item En estas, vamos a graficar la razón R vs G contra la intensidad del punto. 
+  \item El valor $M$ está determinado por \displaymath{M = log_{2}(R) - log_{2}(G)}. 
+  \item El valor $A$ representa la intensidad y está dado por \displaymath{A = (log_{2}(R) + log_{2}(G))/2}.
+  \item Para hacer este tipo de gráficas, usamos \BIOCfunction{plotMA}.
+\begin{Schunk}
+\begin{Sinput}
+> plotMA(MA)
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{plotMA: del 1er arreglo}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-015}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{plotPrintTipLoess}
+  \begin{itemize}
+  \item En la anterior gráfica podemos ver como esos valores derivados del artefacto salen en la esquina superior derecha.
+  \item Cuando tenemos muchos datos, luego nos distraemos por los \emph{outliers}. Por eso podemos usar las funciones de R \BIOCfunction{lowess} y \BIOCfunction{loess}. \pl{lowess} hace una "locally weighted polynomial regression". Es más vieja por lo que no utiliza la notación de fórmula.
+  \item Ahora vamos a usar \BIOCfunction{plotPrintTipLoess} para visualisar los datos completos de nuestro primer arreglo y la curva loess con la cual vamos a normalizarlos.
+\begin{Schunk}
+\begin{Sinput}
+> plotPrintTipLoess(MA)
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{plotPrintTipLoess: arreglo 1}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-017}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Normalizando}
+  \begin{itemize}
+  \item Ahora normalizamos los datos con los parámetros default y volvemos a hacer el mismo tipo de gráfica.
+  \item En realidad, vamos a normalizar los valores $M$ para cada arreglo.
+\begin{Schunk}
+\begin{Sinput}
+> MA <- normalizeWithinArrays(RG)
+\end{Sinput}
+\end{Schunk}
+\begin{Schunk}
+\begin{Sinput}
+> plotPrintTipLoess(MA)
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Grafica normalizado}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-020}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Entre arreglos?}
+  \begin{itemize}
+  \item Una vez hecho lo anterior, nos podemos preguntar si es que hay que normalizar entre nuestros 4 microarreglos.
+  \item Para eso usamos la ya tan conocida función \pl{boxplot}:
+\begin{Schunk}
+\begin{Sinput}
+> boxplot(MA$M ~ col(MA$M), names = colnames(MA$M))
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{boxplot: nuestra evidencia}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-022}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{normalizeBetweenArrays}
+  \begin{itemize}
+  \item Ahora, como si hay evidencia de variación entre los arreglos, pues vamos a normalizarlos. Esto no se hace por rutina ya que muchas veces no es necesario.
+  \item Para eso usamos la función \BIOCfunction{normalizeBetweenArrays} y luego comprobamos el resultado con un \pl{boxplot}. Hay varios métodos los cuales pueden checar en la ayuda, pero solo usaremos el default.
+  \item Dicho método es el \pl{Aquantile} que se asegura de que los valores $A$ tengan la misma distribución empírica en los arreglos sin cambiar los valores $M$.
+\begin{Schunk}
+\begin{Sinput}
+> MA <- normalizeBetweenArrays(MA, 
++     method = "scale")
+\end{Sinput}
+\end{Schunk}
+\begin{Schunk}
+\begin{Sinput}
+> boxplot(MA$M ~ col(MA$M), names = colnames(MA$M))
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{normalizeBetweenArrays: res}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/clase-025}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

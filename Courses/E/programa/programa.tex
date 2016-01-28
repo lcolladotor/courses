@@ -1,0 +1,354 @@
+\documentclass[letterpaper,12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Standard Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage{fancyvrb}
+\usepackage{caption}
+\usepackage{comment}
+\usepackage{fancyhdr}
+%Use the latin1 encoding http://fontignie.blogspot.com/2006/04/accents-in-latex.html
+\usepackage[latin1]{inputenc}
+%accents
+\usepackage[cyr]{aeguill}
+%yes, I am french
+\usepackage[spanish]{babel}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Adapted from Sweave %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\DefineVerbatimEnvironment{Rcode}{Verbatim}{fontshape=sl, frame=single, 
+  framesep=2mm, fontsize=\small, baselinestretch=.5}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%% My macros (which of course are borrowed from a million ... %%
+\def\argmax{\operatornamewithlimits{arg\,max}}
+\def\argmin{\operatornamewithlimits{arg\,min}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%% Page and Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\addtolength{\oddsidemargin}{-0.875in}
+\addtolength{\topmargin}{-0.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\textheight}{1.75in}
+
+\captionsetup{margin=15pt,font=small,labelfont=bf}
+
+\renewcommand{\topfraction}{0.9}        % max fraction of floats at top
+\renewcommand{\bottomfraction}{0.8}     % max fraction of floats at bottom
+
+% Parameters for TEXT pages (not float pages):
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}             % 2 may work better
+\setcounter{dbltopnumber}{2}            % for 2-column pages
+\renewcommand{\dbltopfraction}{0.9}     % fit big float above 2-col. text
+\renewcommand{\textfraction}{0.07}      % allow minimal text w. figs
+
+% Parameters for FLOAT pages (not text pages):
+\renewcommand{\floatpagefraction}{0.7}          % require fuller float pages
+
+% N.B.: floatpagefraction MUST be less than topfraction !!
+\renewcommand{\dblfloatpagefraction}{0.7}       % require fuller float pages
+
+%%%%%%%%%%%%%%%%%%%%%% headers and footers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy} 
+\renewcommand{\footrulewidth}{\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plainnat}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%% opening %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Principios de Estadística -- Cuernavaca, Feb-Jun 2009}
+\author{Leonardo Collado Torres y María Gutiérrez Arcelus}
+
+\begin{document}
+\maketitle
+
+\begin{itemize} 
+
+\item[4 Feb] Clase I
+  \begin{description}
+  \item[Introducción y R básico] conociendo el lenguaje
+    \begin{enumerate}
+	  \item Orígenes de R
+      \item ¿Cómo abrir R?
+      \item ¿Cómo obtener ayuda?
+	  \item Índices de vectores
+	  \item ¿Qué se puede hacer con R? (gráficas impresionantes!!)
+	  \item Ejercicios de tarea
+    \end{enumerate}
+  \end{description}
+  
+  \item[9 Feb] Clase II
+  \begin{description}
+  \item[Intro a R] parte II
+    \begin{enumerate}
+	  \item Estructuras de Control
+	  \item Matrices y Dataframes
+	  \item Archivos y Directorios
+      \item List
+	  \item Factor
+	  \item Ejercicios de tarea
+    \end{enumerate}
+  \end{description}
+  
+  \item[11 Feb] Clase III
+  \begin{description}
+  \item[Fin de la intro a R] parte III
+    \begin{enumerate}
+      \item Dudas
+	  \item Ejercicios en clase que involucren probabilidad condicional, regla de Bayes...
+    \end{enumerate}
+  \end{description}
+  
+  \item[16 Feb] Clase IV
+  \begin{description}
+  \item[Estadística Descriptiva] Empieza tema de variables aleatorias discretas
+    \begin{enumerate}
+	  \item Tabla de Contingencia (table)
+	  \item Gráficas de barras (barplot)
+	  \item Estadísticas descriptivas (summary, mean, sd, var, range, IQR, quantile)
+    \end{enumerate}
+  \end{description}
+  
+  \item[18 Feb] Clase V
+  \begin{description}
+  \item[Estadística Descriptiva] Visualización general de datos
+    \begin{enumerate}
+	  \item Histogramas de frecuencias y distribución de frecuencias acumuladas (hist)
+	  \item Diagramas de caja y brazos (boxplot)
+	  \item Detalles gráficos o distribuciones (rbinom, rpois, rgeom)
+	  \item Ejercicios de tarea
+    \end{enumerate}
+  \end{description}
+  
+  \item[23 Feb] Clase VI
+  \begin{description}
+  \item[Más de gráficas] Mosaicos
+    \begin{enumerate}
+      \item Detalles gráficos o distribuciones (rbinom, rpois, rgeom)
+	  \item Diagramas de mosaico (mosaicplot)
+    \end{enumerate}
+  \end{description}
+  
+  \item[25 Feb] Clase VII
+  \begin{description}
+  \item[Primer trabajo aplicado] Por definir
+    \begin{enumerate}
+      \item Describir trabajo aplicado?
+	  \item Tentativamente veríamos algo con funciones y apply
+	  \item Ejercicios de tarea
+    \end{enumerate}
+  \end{description}
+  
+  \item[2 Mar] Clase VIII
+  \begin{description}
+  \item[Título Clase] Variables aleatorias continuas
+    \begin{enumerate}
+      \item por ver
+    \end{enumerate}
+  \end{description}
+  
+  \item[4 Mar] Clase IX
+  \begin{description}
+  \item[Título Clase] VAC II
+    \begin{enumerate}
+      \item por ver
+	  \item Ejercicios de tarea
+    \end{enumerate}
+  \end{description}
+  
+  \item[9 Mar] Clase X
+  \begin{description}
+  \item[Título Clase] VAC III
+    \begin{enumerate}
+      \item por ver
+    \end{enumerate}
+  \end{description}
+  
+  \item[11 Mar] Clase XI
+  \begin{description}
+  \item[Título Clase] VAC IV
+    \begin{enumerate}
+      \item por ver
+	  \item Ejercicios de tarea
+    \end{enumerate}
+  \end{description}
+  
+  \item[18 Mar] Clase XII
+  \begin{description}
+  \item[Título Clase] VAC V
+    \begin{enumerate}
+      \item por ver
+	  \item Ejercicios de tarea
+    \end{enumerate}
+  \end{description}  
+  
+  \item[23 Mar] Clase XIII
+  \begin{description}
+  \item[Título Clase] VAC VI
+    \begin{enumerate}
+      \item por ver
+    \end{enumerate}
+  \end{description}
+  
+  \item[25 Mar] Clase XIV
+  \begin{description}
+  \item[Título Clase] VAC VII
+    \begin{enumerate}
+      \item por ver
+	  \item Ejercicios de tarea
+    \end{enumerate}
+  \end{description}  
+    
+  \item[30 Mar] Clase XV
+  \begin{description}
+  \item[Título Clase] Distribución de probabilidad multivariable
+    \begin{enumerate}
+      \item por ver
+    \end{enumerate}
+  \end{description}
+  
+  \item[1 Abr] Clase XVI
+  \begin{description}
+  \item[Título Clase] DPM II
+    \begin{enumerate}
+      \item por ver
+	  \item Ejercicios de tarea
+    \end{enumerate}
+  \end{description}
+    
+  \item[13 Abr] Clase XVII
+  \begin{description}
+  \item[Título Clase] DPM III
+    \begin{enumerate}
+      \item por ver
+    \end{enumerate}
+  \end{description}
+  
+  \item[15 Abr] Clase XVIII
+  \begin{description}
+  \item[Título Clase] DPM IV
+    \begin{enumerate}
+      \item por ver
+	  \item Ejercicios de tarea
+    \end{enumerate}
+  \end{description}
+  
+  \item[20 Abr] Clase XIX
+  \begin{description}
+  \item[Título Clase] Intervalos de Convianza
+    \begin{enumerate}
+      \item por ver
+    \end{enumerate}
+  \end{description}
+  
+  \item[22 Abr] Clase XX
+  \begin{description}
+  \item[Título Clase] IC II
+    \begin{enumerate}
+      \item por ver
+	  \item Ejercicios de tarea
+    \end{enumerate}
+  \end{description}
+  
+  \item[27 Abr] Clase XXI
+  \begin{description}
+  \item[Título Clase] Pruebas de hipótesis
+    \begin{enumerate}
+      \item por ver
+    \end{enumerate}
+  \end{description}
+  
+  \item[29 Abr] Clase XXII
+  \begin{description}
+  \item[Título Clase] PH II
+    \begin{enumerate}
+      \item por ver
+	  \item Ejercicios de tarea
+    \end{enumerate}
+  \end{description}
+  
+  \item[4 Mayo] Clase XXIII
+  \begin{description}
+  \item[Título Clase] PH III
+    \begin{enumerate}
+      \item por ver
+    \end{enumerate}
+  \end{description}
+  
+  \item[6 Mayo] Clase XXIV
+  \begin{description}
+  \item[Título Clase] PH IV
+    \begin{enumerate}
+      \item por ver
+	  \item Ejercicios de tarea
+    \end{enumerate}
+  \end{description}  
+  
+  \item[11 Mayo] Clase XXV
+  \begin{description}
+  \item[Título Clase] Análisis de Varianza
+    \begin{enumerate}
+      \item por ver
+    \end{enumerate}
+  \end{description}
+  
+  \item[13 Mayo] Clase XXVI
+  \begin{description}
+  \item[Título Clase] ANOVA II
+    \begin{enumerate}
+      \item por ver
+	  \item Ejercicios de tarea
+    \end{enumerate}
+  \end{description}    
+  
+  \item[18 Mayo] Clase XXVII
+  \begin{description}
+  \item[Título Clase] Estadísticos no paramétricos
+    \begin{enumerate}
+      \item por ver
+    \end{enumerate}
+  \end{description}
+  
+  \item[20 Mayo] Clase XXVIII
+  \begin{description}
+  \item[Título Clase] EP II
+    \begin{enumerate}
+      \item por ver
+	  \item Ejercicios de tarea
+    \end{enumerate}
+  \end{description}  
+  
+  \item[25 Mayo] Clase XXIX
+  \begin{description}
+  \item[Título Clase] EP III
+    \begin{enumerate}
+      \item por ver
+	  \item Ejercicios de tarea
+    \end{enumerate}
+  \end{description}
+  
+  \item[27 Mayo] Clase XXX
+  \begin{description}
+  \item[Título Clase] EP IV
+    \begin{enumerate}
+      \item por ver
+    \end{enumerate}
+  \end{description}    
+  
+  \item[1-10 Jun] Semanas de exámenes
+  \begin{description}
+  \item[Fin del Curso]
+  \end{description}
+  
+\end{itemize}
+
+\end{document}

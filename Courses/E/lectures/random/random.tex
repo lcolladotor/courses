@@ -1,0 +1,187 @@
+\input{../header.tex}
+
+
+
+\usepackage{Sweave}
+\begin{document}
+
+%%% set up some options for Sweave and R %%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Números al azar}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conceptos}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Objetivos}
+  \begin{itemize}
+    \item Hoy vamos a aprender como sacar números al azar y otros conceptos de estadística.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Función de densidad}
+  \begin{itemize}
+    \item La función de densidad de probabilidad nos dice como se distribuyen las probabilidades de un evento o suceso dado.
+	\item En sí, es una integral y como la saben el área total bajo la curva de dicha función es igual a 1.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Distribución de probabilidad}
+  \begin{itemize}
+    \item También conocida como \emph{distribución de probabilidad acumulada} nos dice cuál es la probabilidad de que $X$ sea menor o igual al valor que tengamos.
+	\item Dicho de otra forma, $F_{X}(x) = P(X \leq x)$ donde $X$ es una variable aleatoria y su función de distribución es $F_{X}(x)$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Función de cuantiles}
+  \begin{itemize}
+    \item Esta función es la inversa $F^-1$ de la función de distribución acumulada. 
+	\item Toma como valores de entrada probabilidades y nos regresa el valor debajo el cual números obtenidos al azar con dicha distribución caerían el $p * 100$ porciento de las veces.
+	\item Osea, $Pr(X \leq x) = p$
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Ahora en \pl{R}}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Unif}
+  \begin{itemize}
+  \item Ya con los conceptos anteriores\footnote{Si tienen dudas les recomendio Wikipedia en inglés} podemos pasar a R.
+\begin{Schunk}
+\begin{Sinput}
+> `?`(runif)
+\end{Sinput}
+\end{Schunk}
+  \item Ya deben conocer a \BIOCfunction{runif} pues la hemos usado algunas veces. Ahora ponganle un poco más de atención.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Las 4 funciones}
+  \begin{itemize}  
+  \item Como ven, hay 4 usos con \BIOCfunction{unif}.
+  \begin{enumerate}
+    \item \pl{dunif} para usar la función de densidad uniforme.
+	\item \pl{punif} para la función de prob. acumulada uniforme.
+	\item \pl{qunif} para la función de cuantiles uniforme.
+	\item \pl{runif} para obtener números al azar con una distribución uniforme.
+  \end{enumerate}
+  \item \textquestiondown Por qué $punif(u) = u$ y $dunif(u) = 1$ siendo $u$ veinte valores obtenidos con \pl{runif}?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Algo raro..}
+  \begin{itemize}
+  \item Ahora quiero que corran el siguiente comando\footnote{Si lo ponía en la presentación se hacia bastante grande :P}.
+  \item \textquestiondown Qué encuentran de raro? \alert{TIP} Usen \BIOCfunction{ylim} y/o \BIOCfunction{xlim}.
+\begin{Schunk}
+\begin{Sinput}
+> plot(runif(10000))
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Algo raro.. 2}
+  \begin{itemize}
+  \item Ahora prueben este código. \textquestiondown Es lo que esperamos o hay algo raro?
+\begin{Schunk}
+\begin{Sinput}
+> plot(runif(1000), rnorm(1000))
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Graf. del 2}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/random-005}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Un nuevo tipo de gráfica}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Ja!}
+  \begin{itemize}
+  \item \textquestiondown No creen que es muy ineficiente esta forma de comparar distribuciones? Bueno, usemos algo mejor.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{\BIOCfunction{boxplot}}
+  \begin{itemize}
+  \item Una gráfica muy usada el \BIOCfunction{boxplot} que en sí utiliza la información del \Rcode{summary}. Con este tipo de gráfica es fácil visualizar:
+  \begin{itemize}
+    \item Los cuartiles 1, 2 y 3. \alert{Nota:} el segundo cuartil corresponde a la mediana.
+    \item Te pone límites máximo y mínimo usando el cuartil 1 - 1.5 veces el IQR\footnote{o rango intercuartilico por sus siglas en inglés}, el cuartil 3 + 1.5 veces IQR
+	\item Los valores extremos. Estos aparecen como bolitas hasta arriba y/o abajo de los límites.
+  \end{itemize}
+  \item A continuación les muestro un ejemplo:
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Un ejemplo}
+  \begin{figure}[htbp]
+  \begin{centering}
+\includegraphics{plots/random-006}
+  \end{centering}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Terminando}
+  \begin{itemize}
+  \item Ya para terminar, ahora sí comparemos varias distribuciones:
+\begin{Schunk}
+\begin{Sinput}
+> boxplot(runif(100), rnorm(100), 
++     rchisq(100, 1))
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}  
+
+\begin{frame}[fragile]
+  \frametitle{\textquestiondown Se ve así?}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/random-008}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{\textquestiondown O así?}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+\includegraphics{plots/random-009}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

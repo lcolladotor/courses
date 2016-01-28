@@ -1,0 +1,27 @@
+## Este es el ejercicion 1
+library(MASS)
+ hist (DDT, col="light blue")
+ boxplot (DDT, col="light blue")
+ title(main="DDT boxplot")
+ print(mean(DDT))
+ print(sd(DDT))
+ 
+ 
+##Este es el Ejercicio 2
+library (UsingR)
+pdf(file = "Graficas_lawsuits_mdelcast.pdf", height = 6, width = 12)
+par(mfrow=c(1,2))
+hist(lawsuits,col=heat.colors(10))
+hist(log10(lawsuits),col=heat.colors(10))
+dev.off()
+
+
+## EL ejercicio 3
+## La grafica fue sacada de http://www.mundogamers.com/images/imagenes/noticias/revolution/grafica.jpg
+val<-c(60,49,32,34)
+names(val)<-c("NES", "SNES", "N64","Gamecube")
+barplot(val, col="gold")
+title(main="Nintendo console Sales millions of units", col.main="blue")
+
+# Bien! Una gráfica sencilla :)
+# Por cierto, te pudista ahorrar una línea al usar el argumento main adentro de barplot, en vez de luego usar title

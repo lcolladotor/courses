@@ -1,0 +1,258 @@
+\input{../header.tex}
+
+\SweaveOpts{prefix.string=plots/clase}
+
+\begin{document}
+
+%%% set up some options for Sweave and R %%%
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Introducción y R básico parte 2}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Estructuras de Control}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{El famoso "if"}
+  \pl{R} ofrece las estructuras de control más clásicas con lo cual luego podremos hacer funciones.
+  \begin{itemize}
+  \item El \BIOCfunction{if} es la estructura más simple y su sintaxis es bastante sencilla: \Rcode{if (cond1=vdd) \string{cmd1\string} else \string{cmd2\string}}
+  \item El \BIOCfunction{ifelse} no se diferencia tanto, aunque es una función. Mas bien es como en Excel; su sintaxis es: \Rcode{ifelse(prueba, valor-vdd, valor-falso)}
+  \item Aquí les mostramos un par de ejemplos:
+  \end{itemize}
+<<eval = TRUE, echo = TRUE>>=
+if (1==0) {print(1)} else {print(2)}
+x <- 1:10 
+ifelse(x<5 | x>8, x, 0)
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Ciclos}
+  \begin{itemize}
+  \item El \BIOCfunction{for} ya no es tan similar a lo que conocemos. Su sintaxis base es: \Rcode{for(variable in secuencia) \string{comandos\string} }
+  \item El segundo tipo de ciclo más usado es \BIOCfunction{while}. Su sintaxis base es: \Rcode{while(condición) \string{comandos\string} }
+  \item El último y que casi nunca se usa es el \BIOCfunction{repeat}. Realmente no se los recomendamos... en fin, aquí tienen un ejemplo de un ciclo \Rcode{for}:
+  \end{itemize}
+<<eval=TRUE, echo=TRUE>>=
+x <- 1:10; z <- NULL
+for (i in 1:length(x)) { if (x[i]<5) { z <- c(z,x[i]-1)  } else { z <- c(z,x[i]/x[i])  } }
+z
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Usando un while}
+  \begin{itemize}
+    \item Se acuerdan del problema de los números de \textquestiondown{}\myurlshort{es.wikipedia.org/wiki/Sucesión_de_Fibonacci}{Fibonnaci}? Bueno, lo podemos hacer con un \Rcode{while} fácilmente.
+  \end{itemize}
+<<eval=TRUE, echo=TRUE>>=
+i<-0; j<-1; res<- c(i,j)
+while (2*i+j<1000) { temp<-j; i<- i+j; j<- i+temp; res <- c(res, i, j)} 
+res
+@	
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Matrices}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Matrices}
+  \begin{itemize}
+  \item \pl{R} te permite tener variables de tipo matriz. Estas simplemente son vectores con un vector dimensional que es diferente de \pl{NULL}.
+  \item Si le cambias el vector de dimensiones a un vector, lo puedes volver una matriz\footnote{No a fuerzas es de 2 dimensiones!!}. Esto afecta como se imprime como ven a continuación:
+  \end{itemize}
+<<eval = TRUE, echo = TRUE>>=
+V <- runif(81)
+print(V[1:9])
+dim(V)
+dim(V) <- c(9,9)
+print(V[1:2,])
+@
+\end{frame}
+
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Con matrix}
+  \begin{itemize}
+  \item Otra forma de definir una matriz es con la función \BIOCfunction{matrix}:
+<<eval=TRUE, echo=TRUE>>=
+args(matrix)
+X <- matrix(1:16, 4, 4, byrow=TRUE)
+@  
+  \item \textquestiondown{}Cómo es nuestra matriz X? Pueden poner nombres a las líneas o columnas usando \BIOCfunction{rownames} o \BIOCfunction{colnames}.
+  \end{itemize}
+  \begin{block}{Índices en matrices}
+  Para recuperar alguna columna o línea de una matriz usen los índices con el formato \alert{[línea,columna]}. Por ejemplo, la línea 1 con \Rcode{X[1,]} o la columna 2 con \Rcode{X[,2]}.
+  \end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Archivos y directorios}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Leer un archivo}
+  \begin{itemize}
+  \item Algo esencial que todos sepan es como abrir un archivo o directorio en \pl{R}. Dudamos mucho que quieran usar \BIOCfunction{\Rcode{scan()}} y llenar los datos manualmente :P.
+  \item \pl{R} puede manejar varios archivos con números para una sola variable, tablas de números, archivos tipo \pl{csv} y más. Por ejemplo, podríamos haber leido la info de los fagos así: \Rcode{fagos <- scan(file=\string"fagos.txt\string")}\footnote{El archivo tendría que estar en el mismo folder donde estamos trabajando}
+  \item Las funciones principales para leer archivos son \BIOCfunction{\Rcode{scan()}}\footnote{Especificando el archivo de entrada}, \BIOCfunction{\Rcode{read.table()}}, \BIOCfunction{\Rcode{read.csv()}} y \BIOCfunction{\Rcode{source()}}.
+  \item Si quieren especificar el archivo de entrada cuando ejecuten el comando, pueden usar \Rcode{read.table(file=file.choose())}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Data Frame}
+  \begin{block}{Data Frames}
+  Un formato muy usado en \pl{R} son los \emph{data frames}. Estos en realidad son como una hoja de cálculo donde cada columna es una variable. Pueden accesar a cada columna con \Rcode{dataframe\string$variable} o \Rcode{dataframe[[\string"variable\string"]]}. Además pueden usar las funciones \BIOCfunction{\Rcode{attach}} y \BIOCfunction{\Rcode{detach}} para agregar las variables de un \pl{data frame} al ambiente de \pl{R}.\footnote{No es recomendable si piensan modificar los valores del \pl{data frame} o si ya tienen variables con los mismos nombres}; la función \Rcode{with(data.frame, comando)} hace lo mismo. Finalmente, pueden ver el principio o el final de un \pl{data frame} o matriz usen \BIOCfunction{\Rcode{head()}} o \BIOCfunction{\Rcode{tail()}}.
+  \end{block}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{read.table}
+  \begin{example}[Leer una tabla]
+  Para leer una tabla con algo de info sobre unos fagos usen:
+<<eval=TRUE, echo=FALSE>>=
+arch <- "../../data/10biggestPhages.txt"
+@
+<<eval=FALSE, echo=TRUE>>=
+arch <- "10biggestPhages.txt"
+<<eval=TRUE, echo=TRUE>>=
+fagos.gr <- read.table(file=arch, header=TRUE)
+@
+  \pl{R} también te permite leer archivos que están en servidores web. Esta misma tabla también la pueden leer así\footnote{Mejor usen \Rcode{sitio <- "http://kabah.lcg.unam.mx/\~{}lcollado/E/data/10biggestPhages.txt"} -- tuvimos que hacerlo de otra forma por el espacio}:
+  \end{example}
+<<eval=TRUE, echo=TRUE>>=
+sitio <- "http://kabah.lcg.unam.mx/~lcollado/E/"
+sitio <- paste(c(sitio, "data/10biggestPhages.txt"), collapse="")
+fagos.gr <- read.table(file=url(sitio), header=TRUE)
+fagos.gr <- read.table(file=sitio, header=TRUE)
+fagos.gr[c(2:4)]
+fagos.gr$Taxid[2:3]
+@
+  \begin{itemize}
+  \item Noten que las 2 formas de \Rcode{read.table} son iguales, solo que una es más clara en su sintaxis. Además, el output de \Rcode{read.table} es un \pl{data frame}.  
+  \item Chequen los argumentos de la función \Rcode{read.table}; en especial \BIOCfunction{\Rcode{sep}} y \BIOCfunction{\Rcode{header}}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Directorios}
+  \begin{itemize}
+  \item Muchas veces quieres abrir más de un archivo de un directorio o folder. Tal vez no quieres abrir todos, así que tienes que buscar un patrón en sus nombres.
+  \item La forma más automática de hacerlo es así:
+  \end{itemize}
+<<eval=TRUE, echo=FALSE>>=
+setwd("../../data")
+@  
+<<eval=TRUE, echo=TRUE>>=
+files <- list.files(pattern="s.txt$") 
+for(i in files) { 
+x <- read.table(i, header=TRUE)
+assign(i, x)
+print(i)
+}
+@
+<<eval=TRUE, echo=false>>=
+setwd("../lectures/intro")
+@
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{List}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Que son}
+  \begin{itemize}
+  \item \pl{R} ofrece diferentes objetos como son los vectores atómicos\footnote{Donde todos los elementos son del mismo tipo}, matrices y data frames. Otro de estos son los \BIOCfunction{list}.
+  \item Las \Rcode{list} en realidad consisten de una colección de objetos conocidos como sus componentes. Estos pueden ser de cualquier tipo como ven aquí:
+<<eval=TRUE, echo=TRUE>>=
+lista <- list(nombre="Leo", hermano="Alex", edad=21, calif.alumnos=c(6,9,10,8,7))
+lista$nombre == lista[[1]]
+lista$calif.alumnos[1] == lista[[4]][1]
+var <- "hermano"
+lista[["hermano"]] == lista[[var]]
+@
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Accesando una lista}
+  \begin{itemize}
+  \item Como se habrán dado cuenta, hay diferentes formas de accesar a una lista. En general, puedes accesar a cada elemento usando \Rcode{lst[[i]]} donde i va desde 1 hasta \Rcode{length(lst)}.
+  \begin{itemize}
+    \item \$ es útil por si no se acuerdan de que posición corresponde al elemento que quieren recuperar.
+	\item \Rcode{lista[[var]]} es bastante útil si el nombre del elemento que quieren accesar está en una variable.
+	\item Si el elemento de la lista es un vector, pueden accesar a las diferentes posiciones como en el ejemplo de \Rcode{lista[[4]][1]}.
+  \end{itemize}
+  \item Es muy importante que noten la diferencia entre \Rcode{lista[1]} y \Rcode{lista[[1]]}. El primero te regresa una \emph{sublista} mientras que el segundo te regresa el primer elemento de la lista.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Crear una lista}
+  \begin{itemize}
+  \item Crear una lista es bastante sencillo como ya vieron. Es recomendable que especifiques los nombres de cada elemento aunque no es obligatorio.
+<<eval=FALSE, echo=TRUE>>=
+lista <- list(nom.1=ele.1, ..., nom.n=ele.n)
+@
+  \item Una vez creada una lista, pueden añadirle elementos así:
+<<eval=FALSE, echo=TRUE>>=
+lista[n+1] <- list(nom.m=ele.m)
+@
+  \item Pueden contatenar listas usando \Rcode{c()}:
+<<eval=FALSE, echo=TRUE>>=
+lista.ABC <- c(lista.A, lista.B, lista.C)
+@  
+  \item Finalmente, pueden borrar elementos de la lista usando \Rcode{<- NULL}
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Factor}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Que son}
+  \begin{itemize}
+  \item Otro tipo de objeto en \pl{R} son los \BIOCfunction{factor}. Estos los pueden ver como vectores que tienen alguna información con respecto a la clasificación de los datos.
+  \item En sí son como enumeraciones en otros lenguajes y son útiles para generar datos tabulares.
+  \item Cuando usan la función \Rcode{read.table}, todo lo que parece un caracter es leido como un \Rcode{factor}
+  \item Luego lean más sobre la función \Rfunction{cut} para aprender a generar datos tabulares.
+  \item \alert{Un factor no es de tipo numérico!} Por ejemplo, no pueden usar la función \Rcode{mean}. 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Un ejemplo}
+  \begin{itemize}
+  \item Aquí les mostramos un ejemplo donde usamos un \Rcode{factor} \pl{\^}\pl{\^}:
+<<eval=TRUE, echo=TRUE>>=
+fiesta <- factor(sample(c("muerto", "happy", "pedo", "sobrio"), 100, replace=TRUE, prob=c(0.1, 0.4, 0.3, 0.2)))
+fiesta[1:4]
+table(fiesta)
+@  
+  \end{itemize}
+  \begin{block}{Substituciones}
+  \pl{Perl} es excelente para manejar strings, pero \pl{R} también puede hacer sustituciones con la función \BIOCfunction{sub}. Por ejemplo:
+<<eval=TRUE, echo=TRUE>>=
+fiesta2 <- sub('o$', 'os', as.character(fiesta), perl=TRUE) 
+fiesta2[1:10]  
+@
+  \end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

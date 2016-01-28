@@ -1,0 +1,9 @@
+library(UsingR)
+pdf(file="aathie.pdf", height=3.5, width=5)
+par(mfrow=c(1,2))
+hist(logaritmo, main="LOGARITMOS", col=rainbow(8), ylab="frecuencia")
+hist(lawsuits, main="LAWSUITS", col=rainbow(16), ylab="frecuencia")
+dev.off()
+# No defines tu objeto logaritmo :(
+
+# Donde quedaron las preguntas 1 y 3???

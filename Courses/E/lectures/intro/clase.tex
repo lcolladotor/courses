@@ -1,0 +1,116 @@
+\input{../header.tex}
+
+
+
+\usepackage{Sweave}
+\begin{document}
+
+%%% set up some options for Sweave and R %%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Introducción y R básico}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Orígenes}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{De donde viene R}
+  \begin{itemize}
+  \item Para muchos \pl{R} es un dialecto porque es un derivado del lenguaje \pl{S} creado por John Chambers y co en los Bell Labs. En si, \pl{R} fue escrito a mitad de los 90s por Ross Ihaka y Robert Gentleman.
+  \item Desde 1997, \pl{R} ha sido manejado por el \emph{R Development Core Team} y se ha mantenido como open-source.
+  \item Una ventaja de R es que se puede usar en varias plataformas: UNIX, Windows, Mac. 
+  \item \pl{R} en si es un lenguaje de computación creado para facilitar la manipulación de datos, hacer cálculos y gráficas de alto nivel. Es por esto que \pl{R} es fuerte en estadística.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Propiedades de R}
+  \pl{R} es un ambiente para trabajar en estadística computacional y al mismo tiempo es un lenguaje de programación. Hay usuarios que solo van a usar las funciones básicas de \pl{R} (como una calculadora) mientras otros incluso harán paquetes que ligen \pl{R} con \pl{C}. En fin, \pl{R}:
+  \begin{itemize}
+  \item es efectivo en el manejo de datos y su almacenamiento.
+  \item tiene muchos operadores para hacer cálculos en arreglos (vectores) y matrices.
+  \item tiene una gama de herramientas para el análisis de datos. Hay muchos paquetes disponibles, como la familia de Bioconductor.
+  \item tiene un sistema de gráficas muy útil para el análisis de datos. Excel es cosa del pasado ;)
+  \item ya viene con modelos estadísticos.
+  \item hay muchos manuales y un sistema de ayuda bastante bueno. Además hay una comunidad internacional que te puede ayudar :).
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Uso básico de R}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Abrir y cerrar R}
+  \begin{itemize}
+  \item Para abrir \pl{R} simplemente tienen que escribir el comando \Rcode{R} en UNIX. Lo primero que veran es una pequeña descripción de \pl{R} incluyendo la versión que tienen instalada.
+  \item Al abrir \pl{R}, este busca en el directorio donde están información de alguna sesión previa. Esto luego sera útil con los \emph{workspace}.
+  \item Para cerrar \pl{R} simplemente escriban \BIOCfunction{q()}. Les va a pedir si quieren guardar una imagen del workspace -- por ahora digan que no. 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Workspace}
+  \begin{itemize}
+  \item Muchas veces tienes que interrumpir tu trabajo. \pl{R} tiene toda una funcionalidad llamada workspace que te ayuda a retomar tu trabajo de sesiones previas.
+  \item Cuando guardas el workspace se crean dos archivos: \pl{.RData} y \pl{.Rhistory} en el directorio donde estes trabajando. Estos almacenan todos los objetos que haya definido el usuario (vectores, matrices, listas, funciones). La próxima vez que abras R en ese directorio, carga todo lo que creaste antes automáticamente.
+  \item Hay una serie de funciones que les pueden ayudar para organizar su trabajo en R. \Rfunction{getwd} te da tu directorio de trabajo actual, \Rfunction{setwd} lo cambia, \Rfunction{history} te muestra los últimos 25 comandos que usaste y \Rcode{history(max.show=Inf)} te muestra todos.
+  \item Otras funciones útiles son \Rfunction{savehistory} y \Rfunction{loadhistory}. Además si quieres ver que objetos tienes en tu sesión puedes usar \Rfunction{objects} o \Rfunction{ls}; puedes quitar objectos con \Rfunction{rm}.
+  \item Si quieren guardar el workspace manualmente o con un nombre diferente a \pl{.Rdata} usen \BIOCfunction{\Rcode{save.image()}}. De igual forma, pueden cargar un workspace manualmente con \Rfunction{load}.
+  \item Para checar las opciones del ambiente de \pl{R} usen \Rfunction{options}. Por ejemplo, pueden cambiar cuantos dígitos se imprimen en el output.
+  \end{itemize}
+\end{frame}  
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{R como Calculadora}
+  \begin{itemize}
+  \item R es un \emph{expression language}. Aka\footnote{also known as}, una R no es igual a una r. Los nombres de variables tienen que empezar por un punto\footnote{Una letra le tiene que seguir al punto para que sea un nombre válido} o caracteres alfanuméricos.
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> 2 + 2
+> 2^2
+> r <- c(1:3, 4.5, 109)
+> pi * r^2
+> sqrt(36)
+> sin(2 * pi)
+> exp(1)
+> log(10)
+> log(10, base = 10)
+\end{Sinput}
+\end{Schunk}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{Asignación de valores}
+  \begin{itemize}
+  \item En R, hay 3 formas de asignar valores, aunque en general se usan solo dos: \Rcode{=} y \Rcode{<-}
+  \item Preferencialmente usen \BIOCfunction{\Rcode{<-}} simplemente para evitar confusiones. Es que el signo \Rcode{=} se usa para el paso de valores en las funciones.
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> A <- c(a = 1, b = 2)["b"]
+> A = c(a = 1, b = 2)["b"]
+> A
+\end{Sinput}
+\begin{Soutput}
+b 
+2 
+\end{Soutput}
+\end{Schunk}
+  \begin{itemize}
+  \item Aquí queda más clara la asignación en la primera línea, aunque las dos hacen lo mismo.
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

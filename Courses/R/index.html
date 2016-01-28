@@ -1,0 +1,532 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+
+<head>
+  <title>R/Bioconductor. Curso Intensivo Oct-Nov 2008</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link rel="stylesheet" type="text/css" href="./web/courseR.css"/>
+  <script type="text/javascript">//<![CDATA[
+
+function inicio(){
+	change();
+	change_main();
+}
+
+
+var tab = null;
+function change(el){
+	var lis = document.getElementsByTagName("li");
+	if (el == undefined) {
+		// la pestaña home es el li numero 0!!	
+		el = lis[0];
+	}
+	if (el.id == 'current') {
+		tab = el;
+	}else{
+		el.id = "current";
+		if (tab != null){
+			tab.id = "null";
+		}
+		tab = el;
+	}
+}
+
+function change_main(esto){
+	var typo_de_pestana='home';
+	if (esto != undefined) {
+		typo_de_pestana=esto;
+	}
+	var  opciones = document.getElementsByTagName("div");
+	for (LC = 0; LC < opciones.length; LC ++) {
+		if (opciones[LC].className == "opciones") {
+			if (opciones[LC].id == typo_de_pestana) {
+				document.getElementById(opciones[LC].id).style.display = 'inline';
+			}else{
+				document.getElementById(opciones[LC].id).style.display = 'none';
+			}	
+		}
+	}
+}
+
+//]]></script>
+</head>
+<body onload="return inicio()">
+<div id=container_med>
+	<div id=intro_med>
+		<div id=pageHeader_med>
+			<h1><span>R/Bioconductor</span></h1>
+			<h2><span>Curso Intensivo Oct-Nov 2008</span></h2>
+		</div>
+		<div id=quickSummary_med>
+			<div class=p1><span><a href="http://www.lcg.unam.mx/~lcollado/index.php" title="Leonardo Collado webpage" target="_blank">Leonardo Collado</a> &amp; <a href="http://kabah.lcg.unam.mx/~fyanez/" title="Osam Yáñez webpage" target="_blank">Osam Yáñez</a> - Licenciatura en Ciencias Genómicas, LCG-UNAM</span></div>
+			<div class=p2><span>Oct 28 a Nov 14, 2008 - Cuernavaca, México</span></div>
+		</div>
+	</div>
+	<div id="linkList">
+	<ul>
+		<div id="lresources">
+			<br>
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('home')"><b>Inicio</b></span></h3>
+			</li>
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('lectures')"><b>Clases</b></span></h3>
+			</li>
+			<ul>
+				<li><a href="lectures/intro/clase.pdf"
+				       title="introducción a R"
+				       target="_blank">intro-Leo</a>&nbsp;</li> 
+				<li><a href="lectures/intro/Introduccion.ppt"
+				       title="introducción a R"
+				       target="_blank">intro-Osam</a>&nbsp;</li>  
+
+				<li><a href="lectures/univariados/clase.pdf"
+				       title="datos univariados y graficas"
+				       target="_blank">datos univariados y graficas-Leo</a>&nbsp;</li>
+
+				<li><a href="lectures/estadistica/clase.pdf"
+				       title="bi/multivariados y lattice"
+				       target="_blank">bi/multivariados y lattice-Leo</a>&nbsp;</li>
+ 
+				<li><a href="lectures/pruebas/clase.pdf"
+				       title="pruebas de estadística"
+				       target="_blank">pruebas de estadística-Leo</a>&nbsp;</li>
+ 
+				<li><a href="lectures/bioconductor/clase.pdf"
+				       title="bioconductor"
+				       target="_blank">bioconductor-Leo</a>&nbsp;</li>
+
+				<li><a href="lectures/clustering/clase.pdf"
+				       title="clustering"
+				       target="_blank">clustering-Leo</a>&nbsp;</li>
+			</ul>
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('quizes')"><b>Cuestionarios/ejercicios</b></span></h3>
+			</li>
+			<ul>
+				<li><a href="quizes/ej1/ej1.pdf" title="Ejercicio 1"
+				target="_blank">Ejercicio 1</a>&nbsp;</li>
+				<li><a href="quizes/ej2/ej2.pdf" title="Ejercicio 2"
+				target="_blank">Ejercicio 2</a>&nbsp;</li>
+				<li><a href="quizes/ej3/ej3.pdf" title="Ejercicio 3"
+				target="_blank">Ejercicio 3</a>&nbsp;</li>
+				<li><a href="quizes/ej4/ej4.pdf" title="Ejercicio 4"
+				target="_blank">Ejercicio 4</a>&nbsp;</li>
+				<li><a href="lectures/bioconductor/clase.pdf" title="Ejercicio 5"
+				target="_blank">Ejercicio 5</a>&nbsp;</li>
+			</ul>
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('data')"><b>Datos</b></span></h3>
+			</li>
+			<ul>
+				<li><a href="data/fagos.txt" title="fagos.txt" target="_blank">fagos.txt</a>&nbsp;</li>
+				<li><a href="data/10biggestPhages.txt" title="10biggestPhages.txt" target="_blank">10biggestPhages.txt</a>&nbsp;</li>
+				<li><a href="data/fagos_grandes_codon.txt" title="fagos_grandes_codon.txt" target="_blank">fagos_grandes_codon.txt</a>&nbsp;</li>
+				<li><a href="data/swirl/swirl.zip" title="swirl.zip" target="_blank">swirl.zip</a>&nbsp;</li>
+				<li><a href="data/GSE5617/arabidopsis_CEL.zip" title="arabidopsis_CEL.zip" target="_blank">arabidopsis_CEL.zip</a>&nbsp;</li>
+				<li><a href="data/GSE5617/targets.txt" title="targets.txt"" target="_blank">targets.txt</a>&nbsp;</li>
+				<li><a href="data/GSE1110/GSE1110clean.txt" title="GSE1110clean.txt"" target="_blank">GSE1110clean.txt</a>&nbsp;</li>
+			</ul>
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('resources')"><b>Material de Apoyo</b></span></h3>
+			</li>	
+		</div>
+		<br>
+		
+		
+	</ul>
+	</div>
+
+	<div id=supportingText_med>
+		<div id=preambleMargen1>
+			<span></span>
+		</div>
+		
+		<div id=preamble>
+			<div id="home" class="opciones">
+			
+				<h2><span>LCG (English)</span></h2><br>
+				<p class=p2><span>
+				This course was taught at the Undergraduate Program on Genomic Sciences (LCG in Spanish) from the National Autonomous University of Mexico (UNAM in Spanish). It was directed at the fifth semester students from the fourth generation. It was meant as a short R/Bioconductor course and was a part of the Bioinformatics and Statistics I subject. It had an official length of 12 class hours. For more information on this undergraduate program visit LCG's <a href="http://www.lcg.unam.mx/" title ="LCG's Oficial Page" target="_blank">main page</a>. For example, the sections on <a href="http://www.lcg.unam.mx/node/3" title="Development in Mexico" target="_blank">Development of the Genomic Sciences in Mexico</a> and <a href="http://www.lcg.unam.mx/evaluacion" title="International Evaluation" target="_blank">LCG's International Evaluation</a> could be of your interest.
+				</span></p>
+				<br><br>
+				
+				<h2><span>LCG</span></h2><br>
+				<p class=p2><span>
+				Este curso fue impartido en la Licenciatura en Ciencias Genómicas (LCG) de la Universidad Nacional Autónoma de México (UNAM). Fue dirigido a los alumnos de quinto semestre de la cuarta generación. Fue diseñado como un curso rápido de R/Bioconductor y fue parte de la materia de Bioinformática y Estadística I. Su duración oficial fue de 12 horas de clase. Para mayor información sobre la licenciatura visita la <a href="http://www.lcg.unam.mx/" title ="Página Oficial de la LCG" target="_blank">página principal</a> de la LCG. Por ejemplo, las secciones de <a href="http://www.lcg.unam.mx/node/3" title="Desarrollo en México" target="_blank">Desarrollo de las Ciencias Genómicas en México</a> y de <a href="http://www.lcg.unam.mx/evaluacion" title="Evaluación Internacional" target="_blank">Evaluación internacional de la LCG</a> pueden ser de tu interés.
+				</span></p>
+				<br><br>
+				
+				<h2><span>Inicio</span></h2><br>
+				<p class=p2><span>
+				    El objetivo de este pequeño curso de R/Bioconductor es familiarizarlos con el lenguaje R y varios paquetes útiles de Bioconductor. La idea del curso es darles un panorama general de lo que se puede hacer con R y Bioconductor; por lo tanto no nos vamos a meter en detalle en los paquetes aunque si están interesados tendrán los conocimientos básicos para adentrarse. 
+				</span></p>
+				<p class=p2><span>
+				    Les recordamos que no hay ningún experto en R o Bioconductor en la cercanía de la LCG a pesar de ser tan útil en la genómica. En el 2007 Sandrine Dudoit vino a la LCG por el programa de "Frontiers in Genomics". Casi le da un infarto cuando se enteró que no sabíamos nada de R. A principios del 2008, James Bullard del laboratorio de Sandrine dio un curso intensivo al cual asistimos Osam y yo (Leo). Aunque nuestro conocimiento sobre R es limitado, esperamos servirles como catalizadores en su aprendizaje de R. A su vez algunos de ustedes les tocará dar un curso parecido a nuevas generaciones.
+				</span></p>
+				<p class=p2><span>
+				    Si llegan a tener dudas o preguntas ya sea durante el curso como después, hay una comunidad disponible via Internet que te puede ayudar. Dentro del contexto de la LCG, se espera formar una comunidad vía el Nodo Nacional de Bioinformática (NNB) y su foro asociado. En fin, esperamos que su experiencia con R/Bioconductor sea agradable.
+				</span></p>
+				
+				<h2><span>Programa tentativo</span></h2><br>
+				<p class=p2><span>
+				    Osam y yo preparamos un programa para este curso que pueden ver aquí:
+				    <a href="programa/programa.pdf">programa</a>. Este programa mas bien es una propuesta. Las clases de Osam y de Leo no van a ser iguales además de que nos iremos ajustando al interés de cada grupo. Si tienen propuestas son bienvenidas porque queremos que los cursos sean interesantes.
+				    <br>
+				<br><br>
+				
+				
+				
+				</span></p>
+	 	
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen5">
+					<span></span>
+				</div>
+			</div> 
+		
+		</div>
+
+		<div id=preamble>
+			<div id="lectures" class="opciones" style="display:none;">
+				<h2><span>clases</span></h2><br>
+				En esta sección pueden encontrar una pequeña descripción de cada clase. Además, pueden bajar las presentaciones y el código.
+				<br><br>
+				
+				<b><a href="lectures/intro/clase.pdf"
+				title="introducción a R"
+				target="_blank">Introducción a R-Leo</a>&nbsp;
+				  <a href="lectures/intro/clase.R"
+				target="_blank">[código]</a>&nbsp;<a href="lectures/intro/Introduccion.ppt"
+				title="introducción a R"
+				target="_blank">Introducción a R-Osam</a>&nbsp;</b><br> 
+
+				En esta clase vamos a conocer el lenguaje de programación R. Veremos un poco de su historia y aprenderemos lo básico para usar R. Algo muy importante que vamos a revisar es como obtener ayuda. Además, vamos a ver las estructuras de control, como leer archivos, movernos en los vectores y definir funciones. Finalmente vamos a ver como instalar y usar paquetes, ya que estos enriquecen enormemente a R.
+				<br><br>
+				
+				<b><a href="lectures/univariados/clase.pdf"
+				title="datos univariados y graficas"
+				target="_blank">Datos Univariados y Gráficas-Leo</a>&nbsp;
+				  <a href="lectures/univariados/clase.R"
+				target="_blank">[código]</a></b><br> 
+
+				En esta clase vamos a aprender a manejar datos univariados. Con estos se pueden hacer muchas gráficas siendo estas parte fundamental de R. Es crucial que en esta clase vayan copiando y pegando pesados del código para que hagan las gráficas en su terminal/laptop.
+				<br><br>
+				
+				<b><a href="lectures/estadistica/clase.pdf"
+				title="bi/multivariados y lattice"
+				target="_blank">Bi/multivariados y Lattice-Leo</a>&nbsp;
+				  <a href="lectures/estadistica/clase.R"
+				target="_blank">[código]</a></b><br> 
+
+				En esta clase vamos a aprender a explorar datos bi y multivariados. Además, vamos a aprender a hacer gráficas más avanzadas con el paquete lattice.
+				<br><br>
+				
+				<b><a href="lectures/pruebas/clase.pdf"
+				title="Pruebas de estadística"
+				target="_blank">Pruebas de estadística-Leo</a>&nbsp;
+				  <a href="lectures/pruebas/clase.R"
+				target="_blank">[código]</a></b><br> 
+
+				En esta clase vamos a ver varias pruebas de estadística que ofrece R. Veremos intervalos de confianza entre otras cosas. Las ANOVAs solo las vamos a mencionar.
+				<br><br>
+				
+				<b><a href="lectures/bioconductor/clase.pdf"
+				title="bioconductor"
+				target="_blank">Bioconductor-Leo</a>&nbsp;
+				  <a href="lectures/bioconductor/clase.R"
+				target="_blank">[código]</a></b><br> 
+
+				En esta clase vamos a meternos de lleno en Bioconductor. Vamos a conocer varios paquetes y haremos ejercicios sobre un par.
+				<br><br>
+				
+				<b><a href="lectures/clustering/clase.pdf"
+				title="clustering"
+				target="_blank">Clustering-Leo</a>&nbsp;
+				  <a href="lectures/clustering/clase.R"
+				target="_blank">[código]</a></b><br> 
+
+				En esta clase vamos a revisar rápidamente unos métodos de clustering y la función heatmap.
+				<br><br>
+				
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen2">
+				  <span></span>
+				</div>
+			
+				</span></p>
+			</div>
+		</div>
+
+		<div id=preamble>
+			<div id="quizes" class="opciones" style="display:none;">
+				<h2><span>cuestionarios y ejercicios</span></h2><br>
+				Aquí encontraran cuestionarios y ejercicios para poner a prueba sus conocimientos y habilidades en R ^^.
+				<br><br>
+				
+				<b><a href="quizes/ej1/ej1.pdf"
+				title="Ejercicio 1" target="_blank">Ejercicio 1</a></b>
+				<br>
+				Las preguntas y ejercicios en este archivo sirven para reafirmar conocimiento básicos vistos en la clase. Deberán hacerlos una vez terminada la clase de introducción. Además incluí un ejercicio un poco más difícil que involucra leer un archivo ^^. Sé que son bastantes, pero creo que si los hacen podrán manejar bien todo lo básico.
+				<br><br>
+				
+				<b><a href="quizes/ej2/ej2.pdf"
+				title="Ejercicio 2" target="_blank">Ejercicio 2</a></b>
+				<br>
+				Las preguntas y ejercicios en este archivo van a ser evaluadas. Nos van a dar una idea de que tanto aprendieron a hacer gráficas simples en R con datos univariados. Deberán hacerlos una vez terminada la segunda clase. Puse especial enfasís en que su código sea portable además de que ahora son solo 3 ejercicios.
+				<br><br>
+				
+				<b><a href="quizes/ej3/ej3.pdf"
+				title="Ejercicio 3" target="_blank">Ejercicio 3</a></b>
+				<br>
+				Las respuestas a estos ejercicios van a ser evaluadas. Explorarán unos cuantos datos con funciones que vimos en clase :).
+				<br><br>
+				
+				<b><a href="quizes/ej4/ej4.pdf"
+				title="Ejercicio 4" target="_blank">Ejercicio 4</a></b>
+				<br>
+				Las respuestas a estos ejercicios van a ser evaluadas. Van a tener que hacer algunas pruebas no muy complicadas para revisar lo visto en clase.
+				<br><br>
+				
+				<b><a href="lectures/bioconductor/clase.pdf"
+				title="Ejercicio 5" target="_blank">Ejercicio 5</a></b>
+				<br>
+				Van a empezar a trabajar ya con sus datos del proyecto. Las instrucciones vienen al final de la presentación de la clase sobre Bioconductor.
+				<br><br>
+				
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen4">
+				  <span></span>
+				</div>
+			</div>
+		</div>
+
+		
+		<div id=preamble>
+			<div id="data" class="opciones" style="display:none;">
+			
+				<h2><span>datos</span></h2><br>
+				En esta sección puedes encontrar los archivos de datos que vamos a usar en el curso. 
+				<br><br>
+				
+				<u><b>fagos.txt</b></u><br>
+				Contiene los tam. de genomas de unos 10 fagos.
+				<br><br>
+				
+				<u><b>10biggestPhages.txt</b></u><br>
+				Es una tabla con información de los 10 fagos más grandes que están completamente secuenciados.
+				<br><br>
+				
+				<u><b>fagos_grandes_codon.txt</b></u><br>
+				Es una tabla con información de los 10 fagos más grandes que están completamente secuenciados. Lo que hice fue contar cada ocurrencia de los codones excepto los de paro en las secuencias de estos fagos por lo que hay 61 columnas. Con este archivo haremos el ejercicio más complicado de la introducción.
+				<br><br>
+				
+				<u><b>swirl.zip</b></u><br>
+				Son datos de unos experimentos en Zebrafish. Son microarreglos de el tipo "Swirl" que tiene una mutación puntual en el gene BMP2 versus el WT.
+				<br><br>
+				
+				<u><b>arabidopsis_CEL.zip</b></u><br>
+				De aquí pueden bajar los diferentes archivos CEL que vamos a usar para probar un par de funciones del paquete affy. Se pueden bajar de GEO en NCBI.
+				<br><br>
+				
+				<u><b>targets.txt</b></u><br>
+				Es para que lo usen con los archivos CEL de arabidopsis.
+				<br><br>
+				
+				<u><b>GSE1110clean.txt</b></u><br>
+				Vamos a usar este archivo para un ejercicio de clustering. Son datos del GEO en NCBI de arabidopsis, aunque ya previamente filtré algunas líneas que no nos sirven para el ejercicio.
+				<br><br>
+				</span></p>
+				
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen2con5">
+					<span></span>
+				</div>
+			</div>
+		</div>
+
+		<div id=preamble>
+			<div id="resources" class="opciones" style="display:none;">
+			
+			<h2><span>material de apoyo</span></h2><br>
+			Esta sección contiene links a varios archivos pdf o urls de donde nos basamos para el curso o que les pueden servir como referencia. Además, incluimos los del curso que impartió James Bullard.
+			<br><br>
+			
+			<b><a href="resources/EstadisticaDescriptiva.pdf" title="estadística descriptiva"
+			target="_blank">Estadística Descriptiva</a>&nbsp;</b><br><br>
+			<b><a href="resources/latticeIntro.pdf" title="lattice intro"
+			target="_blank">Introducción a Lattice</a>&nbsp;</b><br><br>
+			<b><a href="resources/latticeLab.pdf" title="lattice lab"
+			target="_blank">Lab de Lattice</a>&nbsp;</b><br><br>
+			<b><a href="resources/Sweave-manual-20060104(2).pdf" title="sweave manual"
+			target="_blank">Sweave User Manual</a>&nbsp;</b><br><br>
+			<b><a href="resources/StatisticalAnalysesAndReproducibility.pdf" title="statistical
+			analysis and reproducibility" target="_blank">Statistical Analysis and Reproducible
+			Research</a>&nbsp;</b><br><br>
+			<b><a href="resources/S4Objects.pdf" title="S4Objects" target="_blank">S4 Classes in 15
+			pages, more or less</a>&nbsp;</b><br><br>
+			<b><a href="resources/R-lang.pdf" title="R lang" target="_blank">R language definition</a>&nbsp;</b><br><br>
+			<b><a href="resources/R-intro.pdf" title="R intro" target="_blank">An Introduction to R</a>&nbsp;</b><br><br>
+			<b><a href="resources/Rabiner_HMM_Tutorial.pdf" title="rabiner hmm tutorial"
+			target="_blank">A Tutorial on HMM and Selected Applications in Speech Recognition</a>&nbsp;</b><br><br>
+			<b><a href="resources/not_so_short.pdf" title="not so short" target="_blank">The Not So
+			Short Introduction to LATEX 2e</a>&nbsp;</b><br><br>
+			<b><a href="resources/history_of_S.pdf" title="history of S" target="_blank">A Brief History of
+			S</a>&nbsp;</b><br><br>
+			<b><a href="resources/fancyvrb.pdf" title="fancyvrb" target="_blank">The 'fancyvrb'
+			package. Fancy Verbatims in LATEX</a>&nbsp;</b><br><br>
+			<b><a href="resources/ess_refcard.pdf" title="ess refcard"
+			target="_blank">ESS Reference Card for S and R</a>&nbsp;</b><br><br>
+			<b><a href="resources/ess.pdf" title="ess"
+			target="_blank">ESS - Emacs Speaks Statistics</a>&nbsp;</b><br><br>
+			<b><a href="resources/beameruserguide.pdf" title="beamer user guide"
+			target="_blank">The BEAMER class</a>&nbsp;</b><br><br>
+			<!-- 
+			     <b><a href="resources/Dudoit-smoothing-2x2.pdf"
+				   title="Sandrine Dudoit's smoothing slides"
+				   target="_blank">R code and notes on
+				   smoothing</a>&nbsp;</b><br><br>
+			     -->
+			<b><a href="resources/mixed-models-fox.pdf" title="linear mixed models"
+			target="_blank">Linear Mixed Models</a>&nbsp;</b><br><br>
+			<b><a href="resources/ExpressionSetIntroduction.pdf" title="ExpressionSet"
+			target="_blank">An Introduction to Bioconductor's <i>ExpressionSet</i> Class</a>&nbsp;</b><br><br>
+			<b><a href="resources/ALLintro.pdf" title="ALL data for Bioc" target="_blank">Intro to ALL data for
+			Bioc monograph</a>&nbsp;</b><br><br>
+			<b><a href="resources/R_intro_easy.pdf" title="R intro"
+			target="_blank">An Easy Introduction to R</a>&nbsp;</b><br><br>
+			<b><a href="resources/MetaDataBioconductor.pdf" title="metadata"
+			target="_blank">Metadata in Bioconductor</a>&nbsp;</b><br><br>
+			<b><a href="resources/limma-usersguide.pdf" title="limma" target="_blank">limma: Linear Models for
+			Microarray Data. User's Guide</a>&nbsp;</b><br><br>
+			<b><a href="resources/LeischS4.pdf" title="S4"
+			target="_blank">S4 Classes and Methods</a>&nbsp;</b><br><br>
+
+			<h2><span>páginas web</span></h2><br>
+			Aquí encontrarás un par de páginas web útiles para R. Incluímos las que propuso James Bullard.
+			<br><br>
+			<b><a href="http://www.faculty.ucr.edu/~tgirke/Documents/R_BioCond/R_Programming.html" 
+			      title="Programming in R"
+			      target="_blank">
+			    Programming in R -- tgirke</a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="http://www.harding.edu/fmccown/R/" 
+			      title="Producing Simple Graphs with R"
+			      target="_blank">
+			    Producing Simple Graphs with R</a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="http://dsarkar.fhcrc.org/lattice-lab/" 
+			      title="Lattice Tutorial Links"
+			      target="_blank">
+			    Lattice Tutorial Links</a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="http://www2.warwick.ac.uk/fac/sci/moac/currentstudents/peter_cock/r/" 
+			      title="Peter's R Programming Pages"
+			      target="_blank">
+			    Peter's R Programming Pages </a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="http://www1.maths.lth.se/help/R/" 
+			      title="Help @ MC"
+			      target="_blank">
+			    Help @ MC </a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="http://zoonek2.free.fr/UNIX/48_R/02.html" 
+			      title="Programming in R"
+			      target="_blank">
+			    Programming in R -- zoonek </a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="http://faculty.ucr.edu/~tgirke/Documents/R_BioCond/R_BioCondManual.html" 
+			      title="R Bioconductor Manual"
+			      target="_blank">
+			    R Bioconductor Manual</a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="www.bepress.com/bioconductor/"
+			      title="Bioconductor Working Papers"
+			      target="_blank">Bioconductor Working Papers</a>&nbsp;
+			</b><br><br>
+			<b><a href="http://bioconductor.org/workshops/"
+			      title="Bioconductor Work Shops"
+			      target="_blank">Bioconductor Work Shops</a>&nbsp;
+			</b><br><br>
+			<b><a href="http://www.omegahat.org/"
+			      title="Bioconductor Work Shops"
+			      target="_blank">Bioconductor Work Shops</a>&nbsp;
+			</b><br><br>
+
+			<b><a href="http://psc.maths.lancs.ac.uk/shortCourses/?q=node/20"
+			      title="Short Course On GLMs in R"
+			      target="_blank">Short Course On GLMs in R</a>&nbsp;
+			</b><br><br>
+
+			<h2><span>libros</span></h2><br>
+			Aquí puedes encontrar varios libros sobre R/Bioconductor. Incluímos los propuestos por James Bullard.
+			<br><br>
+			John Verzani (2005). <br><b>UsingR for Introductory Statistics.</b><br>
+			Chapman & Hall-CRC.
+			<br><br>
+			Venables WN, Ripley BD (1999). <br><b>Modern Applied Statistics with S-PLUS.</b><br>
+			New York, Springer-Verlag.
+			<br><br>
+			Paul Murrel (2005).<br><b>R graphics.</b><br>Chapman & Hall/CRC.
+			<br><br>
+			Peter Dalgaard (2002).<br><b>Introductory Statistics with R.</b><br>Springer.
+			<br><br>
+			William S. Cleveland (1993).<br><b>Visualizing Data.</b><br>Hobart Press, Summit, New Jersey.
+			<br><br>
+			S. Dudoit and M. J. van der Laan (2008).<br><b>Multiple Testing Procedures with Applications
+			to Genomics.</b><br>Springer Series in Statistics.
+			</span></p>
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen1">
+					<span></span>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div id=preambleMargen1>
+		<span><p>El formato de la página y de las presentaciones de la clase están basados en uno creado por y con permiso de <a href=mailto:bullard@berkeley.edu>James Bullard</a>. Incluso algunas explicaciones y ejemplos están basados en el curso que impartío en Cuernavaca en Enero del 2008. Pueden checar su curso <a href="http://wiki.biostat.berkeley.edu/~bullard/courses/T-mexico-08/">aquí</a>.</p></span>
+	</div>
+	<a href="http://www4.clustrmaps.com/counter/maps.php?url=http://www.lcg.unam.mx/~lcollado/R/" id="clustrMapsLink"><img src="http://www4.clustrmaps.com/counter/index2.php?url=http://www.lcg.unam.mx/~lcollado/R/" style="border:0px;" alt="Locations of visitors to this page" title="Locations of visitors to this page" id="clustrMapsImg" onerror="this.onerror=null; this.src='http://www2.clustrmaps.com/images/clustrmaps-back-soon.jpg'; document.getElementById('clustrMapsLink').href='http://www2.clustrmaps.com';" />
+</a>
+
+	<div id=footer_med>
+		<p><span id=dcha_med><i>Escribe tus comentarios en el <a class=up
+		href="http://foros.nnb.unam.mx/viewforum.php?f=32"> foro</a> Oct 23 2008</i></span></p>
+	</div>
+</div>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-3152397-3");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+\frametitle {Anatomy of a boxplot}
+  \begin{itemize}
+  \item A, B : lower/upper adjacent values:
+    \begin{eqnarray}
+      r & \triangleq & | q_{75} - q_{25} | \\
+      A & = & \textrm{inf}\{x_i : x_i > q_{25} - 1.5r\} \\
+      B & = & \textrm{sup}\{x_i : x_i < q_{75} + 1.5r\}
+    \end{eqnarray}
+  \end{itemize}
+
+\includegraphics{plots/eda-003}

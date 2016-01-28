@@ -1,0 +1,23 @@
+##problema1
+
+library(MASS)
+hist(DDT, col=rgb(0,.4,0,1),main="mediciones independientes del pesticida DDT en Brassica oleracea",breaks=10)
+boxplot(DDT, col=rgb(0,.4,0,1),main="mediciones independientes del pesticida DDT en Brassica oleracea")
+ddt<-c(desviacion_estandar=sd(DDT),media=mean(DDT))
+print(ddt)
+
+##problema2
+
+library(UsingR)
+pdf(file = "problema2_vcantu.pdf", height = 3.5, width = 7)
+par(mfrow=c(1,2))
+hist(lawsuits,col=rainbow(10))
+hist(log10(lawsuits),col=rainbow(10))
+dev.off()
+
+##problema3
+## tengo el articulo en xibalba http://www.lcg.unam.mx/~vcantu/nature07285.pdf por si te interesa, es la grafica de la figura2.f
+pez=c(-.4,-.3,-.3,-.2,-.2,-.2,-.2,-.2,-.1,-.1,-.1,-.1,-.1,0,0,0,0,0,0,0,0,0,0,0.1,0.1,0.1,0.1,0.2,0.2,0.2,0.3)
+hist(pez,breaks=10,col=rainbow(10),xlab="Preference score",ylab="Frequency")
+
+## Muy bien, no veo errores :D

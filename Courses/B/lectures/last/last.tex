@@ -1,0 +1,315 @@
+\input{../header_1_en.tex}
+
+
+
+
+\usepackage{Sweave}
+\begin{document}
+
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\section*{Class outline}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Working with HTS data: a \emph{simulated} case study}
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Intro}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{:O}
+  Prepare yourself!
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{About}
+  \begin{itemize}
+  \item The idea is to learn how to use R as a scripting language to call external programs such as BLAST, Velvet and Bowtie.
+  \item We'll run these programs with as many default options as we can :)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{For today you'll need}
+  \begin{itemize}
+  \item \BIOCfunction{formatdb}
+  \item \BIOCfunction{blastall}\footnote{With Ubuntu use: \pl{sudo apt-get install blast2} and voilá :)}
+  \item \BIOCfunction{Velvet} \\ \url{http://www.ebi.ac.uk/~zerbino/velvet/}
+  \item \BIOCfunction{Bowtie} \\ \url{http://bowtie-bio.sourceforge.net/index.shtml}
+  \item Of course, some Bioconductor:
+\begin{Schunk}
+\begin{Sinput}
+> source("http://bioconductor.org/biocLite.R")
+> biocLite(c("chipseq"))
+\end{Sinput}
+\end{Schunk}
+  \item And a LINUX or UNIX environment :)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{External programs}
+  \begin{itemize}
+  \item As you know, \BIOCfunction{BLAST} is \alert{very} used and useful to find local alignments.
+  \item \BIOCfunction{Velvet} is a great program to assemble short reads into contigs.
+  \item \BIOCfunction{Bowtie} is great to align short reads to a reference genome.
+  \end{itemize}
+\end{frame}
+
+\section{R for scripts}
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Running R scripts}
+  \begin{itemize}
+  \item Thanks to functions like \BIOCfunction{system}, you can use R as your scripting language.
+  \item Of course, a lot of people prefer to use \pl{shell} directly.
+  \item Using R can be useful to make some plots on the fly and \BIOCfunction{proc.time} helps us track the time spent running our script.
+  \item You can either use: \\ \pl{R CMD BATCH file.R} or \\ \pl{Rscript file.R > file.log} as a shortcut
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Use \pl{paste}}
+  \begin{itemize}
+  \item To build system calls, the \BIOCfunction{paste} function with the \pl{sep} or \pl{collapse} arguments is quite useful:
+\begin{Schunk}
+\begin{Sinput}
+> args <- c(1, 2)
+> call <- paste("-arg1", args[1], 
++     "-arg2", args[2], sep = " ")
+> print(call)
+\end{Sinput}
+\begin{Soutput}
+[1] "-arg1 1 -arg2 2"
+\end{Soutput}
+\begin{Sinput}
+> call2 <- paste(c("-args", args), 
++     collapse = " ")
+> print(call2)
+\end{Sinput}
+\begin{Soutput}
+[1] "-args 1 2"
+\end{Soutput}
+\end{Schunk}
+  \item Using a \BIOCfunction{print} coupled to a \BIOCfunction{system.time} can be useful for \alert{slow} commands.
+  \end{itemize}
+\end{frame}
+
+
+\section{BLAST}
+\begin{frame}[allowframebreaks]
+  \frametitle{Command line}
+  \begin{itemize}
+  \item You all know how it works, and have run it through the web interface: \\ \url{http://www.ncbi.nlm.nih.gov/BLAST/}
+  \item To run BLAST in command-line you mainly need two programs:
+  \begin{enumerate}
+  \item \alert{formatdb}: builds the database (targets)
+  \item \alert{blastall}: actually runs BLAST
+  \end{enumerate}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{formatdb}
+  Main arguments:
+  \begin{itemize}
+  \item \alert{-i}: the input file
+  \item \alert{-p}: the type of database. Use \alert{T} for proteins or \alert{F} for nucleotides.
+  \item \alert{-n}: the output name, meaning the name of the database.
+  \end{itemize}
+  Optional ones I use:
+  \begin{itemize}
+  \item \alert{-t}: the title
+  \item \alert{-l}: the log file name
+  \item \alert{-V}: to check the names of the targets use \alert{V}
+  \end{itemize}
+  For more info check:
+  \begin{itemize}
+  \item \pl{formatdb - -help} on the terminal
+  \item \url{http://www.molbiol.ox.ac.uk/analysis_tools/BLAST/formatdb.shtml}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{blastall}
+  Main arguments:
+  \begin{itemize}
+  \item \alert{-p}: the type of BLAST to be run. BLASTP, BLASTN, \ldots
+  \item \alert{-d}: the database name\footnote{For custom dbs, use the path to the db.}
+  \item \alert{-i}: the input file name.
+  \item \alert{-o}: the output file name.
+  \end{itemize}
+  Optional ones I use:
+  \begin{itemize}
+  \item \alert{-e}: the maximum e value allowed for the output file.
+  \item \alert{-m}: the format of the output file. I like format 8 :) \myurlshort{www.molbiol.ox.ac.uk/analysis_tools/BLAST/BLAST_blastall/blastall_examples.shtml}{Click here for examples.}
+  \end{itemize}
+  For more info check:
+  \begin{itemize}
+  \item \pl{blastall - -help} on the terminal
+  \item \url{http://www.molbiol.ox.ac.uk/analysis_tools/BLAST/BLAST_blastall.shtml}
+  \end{itemize}
+\end{frame}
+
+\section{Velvet}
+\begin{frame}[allowframebreaks]
+  \frametitle{Quick intro}
+  \begin{itemize}
+  \item Published in 2008, \BIOCfunction{Velvet} is the most popular \emph{de novo} genome assembler for short reads such as those generated by Illumina.
+  \item Its based on \emph{de Brujin graphs} and its most important parameter is the k-mer length; similar to the word size.
+  \item For more info check the paper: \url{http://www.ncbi.nlm.nih.gov/pubmed/18349386}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{velveth}
+  In order to use Velvet we first need to run \BIOCfunction{velveth} and specify the:
+  \begin{itemize}
+  \item output dir: first value (without any flag)
+  \item k-mer length: an integer up to 31.\footnote{The lower the value, the slower it runs.}
+  \item input file format: main options are fasta and fastq.
+  \item type of data: mainly either short or long.
+  \item input file name
+  \end{itemize}
+  For more info type \pl{velveth} or check the Velvet manual.
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{velvetg}
+  After running \pl{velveth} we can run \BIOCfunction{velvetg} one or more times on the same directory. \\ Velvetg actually runs Velvet and creates the contigs. \\ To run it type \pl{velvetg} specifying:
+  \begin{itemize}
+  \item the output dir: again, the first unflagged value.
+  \item some filtering or output options such as \pl{min\_contig\_lgth}
+  \end{itemize}
+  For more info type \pl{velvetg} or check the Velvet manual.
+\end{frame}
+
+\section{Bowtie}
+\begin{frame}[allowframebreaks]
+  \frametitle{Quick intro}
+  \begin{itemize}
+  \item \BIOCfunction{Bowtie} is a second generation\footnote{If you consider MAQ to be the first generation.} short read aligner that is \alert{VERY} fast.
+  \item It's based on the Burrows-Wheeler Transform (BWT) as other fast aligners. Therefore, it builds an index\footnote{Similar to the BLAST database.} of the reference genome, which speeds up the process.
+  \item It's very well maintained and for more info check the homepage and related paper :)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{bowtie-build}
+  \begin{itemize}
+  \item It's very simple to use :)
+  \item Just specify the input file\footnote{In FASTA format.} and the output name for the index.
+  \item After building the index, move the output files\footnote{Yup, a few are created.} into \pl{PathToBowtie/indexes/}
+  \end{itemize}
+  For more info type: \pl{bowtie-build -h}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{bowtie}
+  After building your index a quick way to check it is to type: \\ \pl{bowtie -c IndexName GCGTGAGCTATGAGAAAGCGCCACGCTTCC} \\ Then to run Bowtie I normally use the following arguments:
+  \begin{itemize}
+  \item \alert{-f}: the input file name
+  \item \alert{- -all}: to force Bowtie to find all the alignments.\footnote{Obviously increases the time quite a bit on real cases.}
+  \item \alert{- -al}: the output name for the FASTA file with the reads that were aligned.
+  \item \alert{- -un}: the reads that did not align.
+  \item Other useful arguments are \alert{-m} and \alert{- -max}.
+  \end{itemize}
+  For more info type \pl{bowtie -h} or check the \myurlshort{bowtie-bio.sourceforge.net/manual.shtml}{manual}.
+\end{frame}
+
+\section{Work}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Data and problem to solve}
+  \begin{itemize}
+  \item I generated 18 sets of 70 thousand 50bp reads. One set per student ;)\footnote{To find out which one is yours, use the order from \emph{Usuarios} at \emph{Cursos}. For example, Fonseca is number 4 and Zepeda Martinez is 17.}
+  \item Imagine that these sequences come from a genome related to our species of interest. We want to find variation signatures such as: deletions, invertions and duplications.
+  \item Always be open to \emph{fishy} stuff!
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Part I}
+  \begin{itemize}
+  \item We don't know the \alert{name} of our species of interest!!!
+  \item Find it out by building contigs and aligning them versus all known genomes (nucleotides).
+  \item Explore\footnote{Check the files, check the alphabet by cycle frequency, \ldots} the reads that were not used to build the contigs.
+  \item Conclude, remark, etc.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Part II}
+  \begin{itemize}
+  \item How many \alert{protein coding genes} did we cover at 90\% or greater identity and 90\% or greater query coverage?
+  \item You will need to download the FASTA file with the sequence from those genes. Easy to do with the GenBank identifier :)
+  \item Conclude, remark, etc.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Part III}
+  \begin{itemize}
+  \item Align the reads versus our the reference genome of our species of interest.
+  \item Explore and compare the reads that align more than once and those that aling only once.
+  \item Identify the number of deletions, duplications and inversions. Plots like \BIOCfunction{coverageplot}, \BIOCfunction{densityplot} and \BIOCfunction{stripplot} will be most useful. To use  them re-check the \BIOCfunction{chipseq} workflow :) Make some example plots and for the latter two try to make plots spanning all the genome\footnote{Only where you have reads mapped to it.}.
+  \item Conclude, remark, etc.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Optional parts}
+  \begin{itemize}
+  \item Using the \BIOCfunction{chipseq} worflow, explore only those reads that map to more than one spot.
+  \item Plot the reads using \BIOCfunction{GenomeGraphs} and add boxes for every known gene.
+  \item Try to pinpoint the exact deleted, duplicated and/or inverted bases. Specially the breakpoints.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Time to work!}
+  \begin{itemize}
+  \item Once you are done, let me know and I'll upload all files related to your case :)
+  \item Compare your conclusions with files such as \pl{segments.txt} and explore the \pl{fig} folder.
+  \item The \pl{ref.fa} file is the actual \emph{reference} genome from where I got the 70k reads. Feel free to map your reads to it; some will cannot be uniquely aligned!
+  \item Once everyone is done, I'll upload the \BIOCfunction{fastagen.R} script that created all the data.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{SessionInfo} \scriptsize
+\begin{Schunk}
+\begin{Sinput}
+> sessionInfo()
+\end{Sinput}
+\begin{Soutput}
+R version 2.10.0 (2009-10-26) 
+i686-pc-linux-gnu 
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8      
+ [2] LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8       
+ [4] LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=C             
+ [6] LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8      
+ [8] LC_NAME=C                 
+ [9] LC_ADDRESS=C              
+[10] LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8
+[12] LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices
+[4] utils     datasets  methods  
+[7] base     
+\end{Soutput}
+\end{Schunk}
+\end{frame}
+
+\end{document}
+

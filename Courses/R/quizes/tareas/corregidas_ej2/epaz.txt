@@ -1,0 +1,77 @@
+### primera parte
+
+
+library(MASS)
+
+
+colors <- c("green" , "yellow")> hist(DDT, col=colors, main="DDT en Brassica oleracea", xlab="Mediciones", col.lab="blue")
+# Supongo que eran dos líneas y las separaste mal.
+
+hist(DDT, col=colors, main="DDT en Brassica oleracea",
+ xlab="Mediciones", col.lab="blue", ylab= "Frecuencia",
+ col.lab = "blue")
+ 
+ # Mejor hehe
+ 
+ 
+hist(DDT, col=colors, main="DDT en Brassica oleracea",+  xlab="Mediciones", col.lab="blue", ylab= "Frecuencia",
+col.lab = "blue", axes = TRUE, ann = TRUE)
+# Supongo que era 1 línea :P
+# Aún juntandolo no corre este codigo, tienes símbolos extras
+
+print ("observando la grafica la media debe estar aproximadamente en la mitad de la barra amarilla")
+
+mean <-mean(DDT)
+
+sdev <- sd(DDT)
+
+datos <-summary(DDT)
+  
+print ("LA MEDIANA Y LOS CUARTILES UNO Y TRES SON SEÑALADOS EN A GRAFICA")
+
+
+print ("los valores son: mediana= 3.33, 1st Qu= 3.075, 3rd Qu= 3.36, la desviacion estandar es 0.4371531")
+
+
+hist(DDT, col=colors, main="DDT en Brassica oleracea", xlab="Mediciones de DDT\nLa media es 3.328 y la desviacion estandar 0.4371531", col.lab="blue", ylab="Frecuencia", col.lab="blue")
+axis(1, at = c(datos[2],datos[3],datos[4]), lab = c("1Q", "M", "3Qu"), font = 4,, cex.axis = 2)
+# o_O mejoró bastante :D
+
+boxplot(DDT, col="cyan", main="DDT en Brassica oleracea", ylab="Mediciones", col.lab="blue",xlab="\nLa media es 3.328 y la desviacion estandar 0.4371531",col.lab="blue")
+
+
+
+### segunda parte
+
+
+library(UsingR)
+
+pdf("epaz.pdf", height=5, width=12)
+
+par(mfrow=c(1,2))
+
+hist(lawsuits, col="green", main="Histograma de Lawsuits", xlab="Rangos", ylab="Frecuencia")
+
+hist(log(lawsuits), col=colores, main="Histograma de logaritmos de Lawsuits", xlab="Rangos", ylab="Frecuencia")
+
+dev.off()
+# bien bien :D
+
+
+
+#### tercera parte
+
+print ("Lo siguiente lo hice para la grafica es de la figura de el equilibrio de AHL.\n TIME TAKEN TO REACH AHL STEADY STATE\n URL: http://2008.igem.org/Team:LCG-UNAM-Mexico/Simulation")
+
+colors2 <- c("blue")
+
+x <- c(0,10,20,50,60,100,150,200,250,300,350,400,600,1000,1400,2000,3000,6300,10000)
+y <- c(0,6000,6300,6800,7000,8000,8200,8400,8600,8800,9000,9200,9400,9600,9800,10000,11000,12200,14300)
+
+names(x) <- c("0", "2000", "4000", "6000", "8000", "10000") 
+names(y) <- c("0", "2000", "4000", "6000", "8000", "10000", "12000", "14000", "16000")
+
+plot(x,y, col=colors2, ylim = c(0, 16000), main="TIME TAKEN TO REACH AHL STEADY TATE",xlab = "AHL CONCENTRATION", ylab="TIME (seconds)")
+legend(5000, 6000, c("AHL STEADY STATE"), cex=1, pch=19, col=colors2)
+# te salió bien :D Solo te faltó usar el argumento type="o" en tu línea de plot
+print ("gracias")

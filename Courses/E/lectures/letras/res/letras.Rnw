@@ -1,0 +1,277 @@
+\input{../header.tex}
+
+\SweaveOpts{prefix.string=plots/letras, height=5.7}
+
+\begin{document}
+
+%%% set up some options for Sweave and R %%%
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Letras y universo}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Un problema curioso}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Intro}
+  \begin{itemize}
+    \item Lo que vamos a ver hoy es un problema curioso relacionado a conteo y tamaño de muestras. 
+	\item Pero primero vamos a ver un par de cosas de \pl{R}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Gráficas}
+  \begin{itemize}
+    \item Una parte muy importante de \pl{R} es poder visualizar tus datos con diferentes tipos de gráficas. Para esto existen muchos tipos de funciones que se dividen en:
+	\begin{itemize}
+	  \item \emph{bajo nivel} porque son funciones que pueden graficar encima de gráficas previas. Por ejemplo, \BIOCfunction{lines}.
+	  \item \emph{alto nivel} porque siempre crean un nuevo espacio gráfico. Por ejemplo, \BIOCfunction{hist}.
+	\end{itemize}
+  \item Para ver un índice de las funciones básicas escriban: \pl{library(help="graphics")}	
+  \end{itemize}
+\end{frame}  
+
+
+\begin{frame}[allowframebreaks]
+  \frametitle{\BIOCfunction{par}}	
+  \begin{itemize}
+	\item Otro mundo de diversidad es el de los parámetros de estas funciones. En sí muchos están definidos por \BIOCfunction{par}.
+	\item Chequen la ayuda de esta función.
+	\begin{enumerate}
+		\item \textquestiondown Cúal es el parámetro para ponerle título a una gráfica?
+		\item \textquestiondown Qué parámetro usarían para definir los límites del eje $Y$?
+	\end{enumerate}
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Plot}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{\BIOCfunction{plot}}
+  \begin{itemize}
+    \item La función de gráficas que vamos a usar hoy es \BIOCfunction{plot}. Con esta pueden graficar puntos fácilmente.	
+	\item Primero chequen su ayuda y luego definan $x$ y $y$.
+  \end{itemize}
+<<echo=TRUE, eval=TRUE>>=
+x <- 1:100
+y <- (1:100)^2
+@ 
+  \begin{itemize}
+	\item Ahora grafiquen los puntos.
+  \end{itemize}
+<<echo=TRUE, eval=FALSE>>=
+plot(x, y)
+@ 
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{plot(x,y)}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+plot(x, y)
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Plot mejorada}
+  \begin{itemize}
+    \item Ahora hacemos una gráfica más completa
+  \end{itemize}
+<<echo=TRUE, eval=FALSE>>=
+plot(x, y, main="Una exponencial", ylab="Valores en Y", xlab="Valores en X", col="blue", type="l")
+@ 
+  \begin{itemize}
+	\item \textquestiondown Qué hace el argumento \pl{type="l"}?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Plot mejorada}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+plot(x, y, main="Una exponencial", ylab="Valores en Y", xlab="Valores en X", col="blue", type="l")
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Pequeña revisión del \BIOCfunction{for}}
+  \begin{itemize}
+    \item Solo para que se acuerden :)
+  \end{itemize}
+<<echo=TRUE, eval=TRUE>>=
+res <- NULL
+for (i in 1:10) {
+	if (i == 1) {
+		res <- c(res, runif(1, 0, 10))
+	} else {
+		res <- c(res, res[i-1] ^ (1/i))
+	}
+}
+@
+<<echo=TRUE, eval=FALSE>>=
+plot (1:10, res, main="Recordando el for", type="o", ylim=c(0,10), col="forestgreen")
+@ 
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Recordando el for}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+plot (1:10, res, main="Recordando el for", type="o", ylim=c(0,10), col="forestgreen")
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Problema}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{El origen}
+  \begin{itemize}
+  \item Bueno, ya con la super intro podemos ahora plantear y resolver el problema.
+  \item Todo surgió porque Osam está buscando cosas raras que pasen con los números al azar. Lo que me planteó recientemente es que si tienes un alfabeto de posibilidades (o números) de tamaño 50...
+  \begin{itemize}
+	\item Si sacas 5 elementos al azar, no esperarías que ninguno se repita.
+	\item Si sacas 50, no esperarías tener uno de cada uno, pues es probable que se repita al menos uno.
+	\item Si sacas 1000, esperarías tener todos tus elementos al menos una vez con varios repetidos.
+  \end{itemize}
+  \item Lo que queremos saber es que tan grande tiene que ser tu muestra para que tengas todos tus elementos al menos una vez. \textquestiondown Alguien sabe?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Caso específico}
+  \begin{itemize}
+  \item Luego de hablar con Osam, nos pusimos Sur y yo a intentar encontrar la respuesta. 
+  \item Digamos que tienes $k$ número de elementos (en el caso anterior era 50) y $h$ es el número de elementos que sacamos al azar.
+  \item Digamos que $k = 2$ y $h = 2$. \textquestiondown Cúal es la prob. de que aparezcan al menos una vez tus dos elementos? Pues con esta $k$ y $h$ hay 4 casos en donde en 2 se cumple lo que quieres. Osea tu probabilidad es de $2/4$ ó $0.5$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Una fórmula}
+  \begin{itemize}
+  \item \textquestiondown Qué pasa cuando $k = 2$ y $h = 3$? Tienes 8 casos en los cuales se cumple lo que buscas en 6. Solo hay 2 casos donde o todos son águila o todos son sol (si fuera una monéda), así que tu prob. es de $6/8$. Con $k = 2$ y $h = 4$ tu prob es de $14/16$.
+  \item La probabilidad de que con una muestra de tamaño $h$ aparezcan al menos una vez tus $k$ elementos es igual a uno menos la probabilidad de que no aparezcan.
+  \item Generalizando, la fórmula que te da tu probabilidad es:
+  \begin{displaymath}
+	Prob = 1 - \frac{\sum_1^k (1 - P(k_i))^h}{k-1}
+  \end{displaymath}
+  \item Donde $P(k_i)$ es la probabilidad de que aparezca el elemento $k_i$. Por ahora digamos que todo elemento tiene la misma probabilidad, que es $1/k$.
+  \end{itemize}
+\end{frame} 
+
+\begin{frame}[allowframebreaks]
+  \frametitle{A trabajar :)}
+  \begin{itemize}
+    \item Quiero que hagan un barrido de parámetros de la siguiente forma.
+	\item Examinen a las $k$ desde 2 hasta 100. 
+	\item Para cada $k$ examinen las $h$ desde 1 hasta 1000.
+	\item Para cada $k$, \textquestiondown cuál es la $h$ a partir de donde nuestra probabilidad\footnote{De que aparezcan al menos una vez los $k$ elementos.} es de 0.95 o mayor?
+	\item Para alguna $k$, grafiquen las probabilidades en el eje $Y$ y las $h$ en el eje $X$.
+	\item Grafiquen su resultado con las $k$ en el eje $Y$ y las $h$ determinantes en el eje $X$.
+	\item \textquestiondown Qué es lo que notan?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Unos tips}
+  \begin{itemize}
+    \item Una forma de resolverlo es con:
+	\begin{itemize}
+	  \item 2 ciclos tipo \pl{for}.
+	  \item 2 objetos para almacenar sus resultados. Acuérdense de definirlos como \pl{NULL} antes.
+	  \item Acuérdense de las funciones \BIOCfunction{which} y \BIOCfunction{sum}.
+	\end{itemize} 
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Resultado}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Respuesta}
+  \begin{itemize}
+    \item Así lo pueden resolver:
+  \end{itemize}
+<<echo=TRUE, eval=TRUE>>=
+res.k <- NULL
+for (k in 2:100) {
+	res.h <- NULL
+	for (h in 1:1000) {
+		no.salir <- NULL
+		for (i in 1:k) { no.salir <- c(no.salir, (1- 1/k) ^ h)}
+		res.h <- c(res.h, 1- ( sum(no.salir) / (k-1) ) )
+	}
+	res.k <- c(res.k, which(res.h >= 0.95)[1])
+}
+head(res.k)
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Gráficas}
+  \begin{itemize}
+    \item Ya solo viendo el \pl{head(res.k)} pueden darse cuenta de hacia donde vamos...
+  \end{itemize}
+<<echo=TRUE, eval=FALSE>>=
+plot(res.h, lty=2, xlab="H", ylab="Prob.", main="Hs para una K", col="blue") #prob de que salgan todos al menos 1 vez
+plot(res.k, 2:100, xlab="H determinante", ylab="K", main="H determinantes para un barrido de Ks", col="blue")
+@ 
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Hs para K}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+plot(res.h, lty=2, xlab="H", ylab="Prob.", main="Hs para una K", col="blue") #prob de que salgan todos al menos 1 vez
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Hs determ. para K}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+plot(res.k, 2:100, xlab="H determinante", ylab="K", main="H determinantes para un barrido de Ks", col="blue")
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Conclusión}
+  \begin{itemize}
+    \item Podemos concluir que con $P(k_i)$ iguales para todas las $k_i$ y $h = 3 * k$ tenemos $0.95$ de probabilidad de que nuestros $k$ elementos aparezcan al menos 1 vez.
+	\item \textquestiondown Por qué? :)
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

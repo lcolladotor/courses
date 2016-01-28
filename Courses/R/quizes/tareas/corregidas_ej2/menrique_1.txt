@@ -1,0 +1,51 @@
+#Para empezar
+ library(MASS)
+ DDT
+
+
+#1)
+#Histograma
+ hist(DDT, main="DDT", col=rainbow(5))
+
+#BoxPlot
+ boxplot(DDT, main="DDT", col="blue")
+
+#Media
+ mean(DDT)
+#[1] 3.328
+
+#Imprimir la mediay la desviación estandar
+ print("La media estimada es 3.25 y la desviacion estandar es 0.5") 
+#[1] "La media estimada es 3.25 y la desviacion estandar es 0.5"
+
+
+#2)
+
+#Para usar la librería
+ library(UsingR)
+
+#Creando el archivo PDF
+ pdf("menrique_ej2.pdf")
+
+#Sacando los valores logarítmicos
+ logls<-log(lawsuits)
+
+#Creando las gráficas
+ par(mfrow=c(1,2))
+ hist(lawsuits, main="Demandas menrique", col=rainbow(10), col.main="darkblue")
+ hist(logls, main="Versión con valores log menrique", col=rainbow(20), col.main="dark blue")
+
+#Cerrando
+ dev.off()
+
+
+#3)
+
+#http://www.biomedcentral.com/1471-2407/6/159/figure/F3?highres=y
+
+ datos<-c(170, 147, 127, 60, 57, 56, 53, 48, 30, 29, 27, 26, 23, 23, 20, 19)  
+ names(datos)<-c("KDR", "MAP2K6", "ICAM1", "ANXA5", "CDK8", "CDKN1A", "JUNB", "TGFBR2", "TNF", "TNFAIP1", "CCND3", "PDGFRL", "MAPK12", "GAPDH","PTGS2", "PDGFB") 
+
+ barplot (datos, main="Figure 3.", xlab="Genes", ylab="Frequencies", col=gray(0.8), col.main="dark blue", space=0.1, cex.axis=1.2, las=1, names.arg=c("KDR", "MAP2K6", "ICAM1", "ANXA5", "CDK8", "CDKN1A", "JUNB", "TGFBR2", "TNF", "TNFAIP1", "CCND3", "PDGFRL", "MAPK12", "GAPDH", "PTGS2", "PDGFB"), cex=0.5, las=2) 
+
+# Muy bien! No tienes errores y tu gráfica si se parece a la que me referiste :D

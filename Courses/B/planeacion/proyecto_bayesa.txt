@@ -1,0 +1,43 @@
+# Proyecto Enrique Bayesa
+# 5 de Agosto 2009
+# Verificación estadística de posiciones históricas en la regulación
+
+Datos
+Microarreglo ya con RMA
+no hay que hacer nada...
+
+Conjuntos de parejas de genes
+Perl -- 150 líneas
+1- Parejas de un mismo operón
+2- Parejas entre operones distintos pero mismo regulón
+3- Parejas del mismo TF - TG (target gene)
+4- Parejas aleatorias
+
+Los 2 llegan a:
+Info Mutua usando Density Kernel Estimation en 2 dimensiones (la de 2d no viene en R) -- correlación
+density en vez de histograma
+para lo de 2d, Bayesa ya tiene un script
+Con la densidad conjunta, luedo la independiente de cada variable, con esa se calcula la información mutua
+R -- 150 líneas
+
+Sigue a:
+Formulación de preguntas biológicas y su respuesta estadística
+correlaciones, distribuciones para grupo
+tabla 1:
+parejas operón \t info mutua
+tabla 2...
+las tablas son data frame que se pueden expandir
+comparar distribuciones, generar gráficas, calcular regresiones lineales
+R
+-- a nivel de donde pueden empezar --
+como hay varias preguntas que se generan de aquí, vale la pena el data package
+
+Sigue a:
+Página web
+PHP?
+
+
+Todo lo hizo con R base.
+
+The Mutual information: detecting and evaluating dependencies between variables
+R. Steuer et al 2002

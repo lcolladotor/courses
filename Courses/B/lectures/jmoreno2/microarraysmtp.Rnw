@@ -1,0 +1,513 @@
+\documentclass{beamer}
+
+\mode<presentation>
+{
+ \usetheme{Berkeley}
+\usecolortheme{sidebartab}
+\usecolortheme{seahorse}
+\setbeamercovered{transparent}
+\useinnertheme{circles}
+}
+
+\usepackage{color}
+\usepackage{amsfonts}
+\usepackage{comment}
+
+%%% Al parecer necesito esto en ubuntu para los acentos
+\usepackage[spanish]{babel}
+\selectlanguage{spanish}
+\usepackage[utf8]{inputenc}
+
+\definecolor{myblue}{rgb}{0.25, 0, 0.75}
+\definecolor{mygold}{rgb}{1,0.8,0.2}
+\definecolor{gray}{rgb}{0.5, 0.5, 0.5}
+\definecolor{lucia}{rgb}{0.8,0.4,0.7} 
+
+\newcommand{\myurl}[1]{\href{http://#1}{\textcolor{gray}{\texttt{#1}}}}
+\newcommand{\myem}[1]{\structure{#1}}
+\newcommand{\myurlshort}[2]{\href{http://#1}{\textcolor{gray}{\textsf{#2}}}}
+
+\newcommand{\RPackage}[1]{\textcolor{gray}{\textsf{#1}}}
+\newcommand{\pl}[1]{\texttt{#1}}
+\newcommand{\RCode}[1]{\texttt{#1}}
+\newcommand{\RFunction}[1]{\textsf{#1}}
+\newcommand{\RClass}[1]{\textcolor{mygold}{\textsf{#1}}}
+\newcommand{\BIOCfunction}[1]{\textcolor{orange}{#1}}
+
+\setbeamercolor{example text}{fg=lucia}
+\setbeamertemplate{sections/subsections in toc}[ball unumbered]
+\setbeamertemplate{frametitle continuation}[from second][]
+\setbeamertemplate{itemize subitem}[triangle]
+\setbeamertemplate{footline}[page number]
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{navigation symbols}{}
+
+\renewcommand{\footnotesize}{\fontsize{6.10}{12}\selectfont}
+
+\def\argmax{\operatornamewithlimits{arg\,max}}
+\def\argmin{\operatornamewithlimits{arg\,min}}
+
+\title{Seminar III: R/Bioconductor}
+\subtitle{Microarray Data Analysis, Multitesting and SpeCond.}
+\author[V\'ictor Moreno]{Jos\'e V\'ictor Moreno Mayar \\ jmoreno@lcg.unam.mx}
+\institute{LCG - UNAM}
+\date{August - December, 2009}
+
+
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@ 
+
+\begin{document}
+
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\section*{Class Overview.}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Microarray Data Analysis, Multitesting and SpeCond.}
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+\section{Packages for this class.}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Packages for this class.}
+These are the packages that we will use this class.
+<<eval=FALSE, echo=TRUE>>=
+source("http://bioconductor.org/biocLite.R")
+biocLite("affy")
+biocLite("limma")
+biocLite("genefilter")
+biocLite("annaffy")
+biocLite("KEGG.db")
+biocLite("GO.db")
+biocLite("hgu133a2.db")
+biocLite("SpeCond")
+install.packages("multtest")
+@
+\end{frame}
+
+\section{From .CEL files to ExpressionSet objects.}
+
+\begin{frame}[allowframebreaks, fragile]
+\frametitle{Preprocessing Microarrays.}
+As we discussed last class, there is a whole ritual while working with microarrays. It goes like this:
+\begin{enumerate}
+	\item Reading in probe level data.
+	\item Background correction.
+	\item Normalization.
+	\item Probe specific background correction, e.g. subtracting MM.
+	\item Summarizing the probe set values into one expression measure and, in some cases, a standard error for this summary.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{rma.}
+\begin{itemize}
+	\item{\alert{rma()} does the work for us.}
+	\item{It converts an \alert{AffyBatch} object into \alert{expression measures}.}
+	\item{The data from the AffyBatch objet is passed directly to the \alert{ExpressionSet} object.}
+\item{There are some other methods for doing this, such as \alert{expresso, threestep or mas5}, explore them.}
+\end{itemize}
+\begin{enumerate}
+	\item{Probe specific correction through a signal$+$noise model.}
+	\item{Quantile normalization.}
+	\item{Calculation of expression measure.}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{Practice.}
+\begin{itemize}
+	\item{Let us use the experiment that we used last class.}
+	\item{Then, assign the phenoData as we learned last class.}
+	\item{The file for the phenoData is called pdata1422rep.txt, download it.}
+	\item{Use rma to extract the expression data from the AffyBatch object.}
+	
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{Practice.}
+<<eval=T, echo=TRUE>>=
+library(affy)
+library(ArrayExpress)
+Data = ArrayExpress("E-MEXP-1422", save = T)
+pd<-read.AnnotatedDataFrame(filename="pdata1422rep.txt", header=T)
+pData(pd)
+slot(Data, "phenoData")<-pd
+pData(slot(Data, "phenoData"))
+eset<-rma(Data)
+@
+You can access the expression measure with the function \alert{exprs()}.
+<<eval=T, echo=TRUE>>=
+e<-exprs(eset)
+head(e)
+@
+\end{frame}
+
+\section{Comparing Chips.}
+
+\begin{frame}[allowframebreaks, fragile]{Subsetting Experiments.}
+\begin{itemize}
+	\item{As you know, microarray experiments are useful when comparing between two different conditions.}
+	\item{Our dataset contains 3 conditions (two experimental siRNAs and a control siRNA.)}
+	\item{We have to generate an index to know which samples come from which condition.}
+	\item{This is where the phenoData \alert{finally} becomes useful.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{Subsetting Experiments.}
+<<eval=T, echo=TRUE>>=
+Index1<-which(eset$Source.Name=="PROX1_siRNA-1")
+Index2<-which(eset$Source.Name=="PROX1_siRNA-2")
+Index3<-which(eset$Source.Name=="GFP_siRNA")
+@
+Now, you can select a specific condition, just by specifying an index.
+<<eval=F, echo=TRUE>>=
+e[, Index1]
+@
+\end{frame}
+
+\section{Initial Exploration.}
+
+\begin{frame}[allowframebreaks, fragile]{MvA Plot.}
+\begin{itemize}
+	\item{As you learned last class, \alert{MvA} plots are very useful when comparing between replicate sets of arrays.}
+	\item{Let us make an MvA plot for the arrays corresponding to Index1 (siRNA-1) and Index3 (control siRNA).}
+	\item{What is plotted in an MvA plot?}
+	\item{How do you get M?}
+	\item{How do you get A?}
+	\item{Plotting time. =)}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{MvA Plot.}
+<<eval=T, echo=TRUE>>=
+M<-rowMeans(e[, Index1])-rowMeans(e[, Index3])
+A<-rowMeans(e)
+@
+<<eval=F, echo=TRUE>>=
+plot(A, M, pch = ".", ylim = c(-3.5, 3.5))
+@
+Fit an lm() and a lowess() curve, which one fits the best?
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{MvA plot.}
+<<eval=T, echo=F,fig=TRUE,height=5>>=
+plot(A, M, pch = ".", ylim = c(-3.5, 3.5), col="grey")
+abline(lm(M~A), col = "blue")
+lines(lowess(A,M), col="red")
+leg<-c("lm","lowess")
+cols<-c("blue","red")
+legend("topright", leg, col=cols, lty=1)
+@
+\end{frame}
+
+\section{t tests.}
+
+\begin{frame}[allowframebreaks, fragile]{Student's $t$ tests.}
+\begin{itemize}
+	\item{As you learned in the limma class, a way to get DEGs is making \alert{$t$ tests}.}
+	\item{What does a $t$ test tests?}
+	\item{The \alert{genefilter} package gives the possibility of making multivariate tests.}
+	\item{We will perform a two-sample $t$ test between arrays from Index1 and Index3(control).}
+	\item{First of all, let us subset our experiment, and then apply the test.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{Student's $t$ tests.}
+<<eval=T, echo=TRUE>>=
+weset<-eset[,c(Index1, Index3)]
+weset$Source.Name<-factor(weset$Source.Name)
+library(genefilter)
+tt <- rowttests(weset, "Source.Name")
+head(tt)
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{Student's $t$ tests.}
+\begin{itemize}
+	\item{Why do we made Source.Name a factor?\footnote{See the rowttests help.}}
+	\item{Which other tests can be performed by the genefilter package?}
+	\item{What does the p-value represents?\footnote{Think of false positives.}}
+	\item{Now, let us make a volcano plot.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{Volcano Plot.}
+<<eval=F, echo=TRUE>>=
+lod <- -log10(tt$p.value)
+plot(M, lod, cex = 0.25, main = "Volcano plot for t-test", col="purple")
+abline(h = 2, col="red")
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{Volcano Plot.}
+<<eval=T, echo=F,fig=TRUE,height=5>>=
+lod <- -log10(tt$p.value)
+plot(M, lod, cex = 0.25, main = "Volcano plot for t-test", col="purple")
+abline(h = 2, col="red")
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{Volcano Plot.}
+\begin{itemize}
+	\item{Why is the cutoff set at 2?}
+	\item{Which points would you believe to be worth validating experimentally.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{eBayes.}
+\begin{itemize}
+	\item{When there is a small number of replicates, $t$ tests are not so appropriate.}
+	\item{As you learned in the limma class, there is an alternative to this.}
+	\item{You can use a moderated $t-$statistic to solve this problem.\footnote{eBayes.}}
+	\item{Compare the volcano plots.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{eBayes.}
+<<eval=T, echo=TRUE>>=
+library("limma")
+design <- model.matrix(~weset$Source.Name)
+fit <- lmFit(weset, design)
+ebayes <- eBayes(fit)
+@
+<<eval=F, echo=TRUE>>=
+plot(M, -log10(ebayes$p.value[, 2]), xlim = c(-1, 1), cex = 0.25, main = "Volcano plot for t-test", col="purple")
+abline(h = 2, col="red")
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{Volcano Plot for eBayes.}
+<<eval=T, echo=F,fig=TRUE,height=5>>=
+plot(M, -log10(ebayes$p.value[, 2]), xlim = c(-3.5, 3.5), cex = 0.25, main = "Volcano plot for t-test", col="purple")
+abline(h = 2, col="red")
+@
+\end{frame}
+
+\section{Annotated Lists of Interesting Genes.}
+
+\begin{frame}[allowframebreaks, fragile]{Annotation.}
+\begin{itemize}
+	\item{Another important aspect of a microarray experiment, is the annotation of the chip.}
+	\item{Actually, there are custom chips for different organisms and given experiments.}
+	\item{So, the probe annotation is given by the environment you are using.}
+	\item{For each AffyBatch object, you can know which annotation is used by entering to the Annotation slot.}
+	\item{You can also know the annotation used for an ExpressionSet by using the \alert{annotation()} function.}
+	\item{Which is the environment for our Data object?\footnote{You can download different environments.}}
+\end{itemize}
+<<eval=F, echo=TRUE>>=
+library(affy)
+slot(Data, "annotation")
+library("annotate")
+annotation(weset)
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{HTML Reports.}
+\begin{itemize}
+	\item{Now that we have a set of p-values, we can get a table of interesting genes with some functions you already know.}
+	\item{We will use our ebayes object and the function \alert{topTable}.}
+	\item{We will also obtain the gene names as they will be useful later.}
+\end{itemize}
+<<eval=T, echo=TRUE>>=
+tab<-topTable(ebayes, coef=2, adjust.method="BH", n=15)
+genenames<-as.character(tab$ID)
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{HTML Reports.}
+\begin{itemize}
+	\item{Now that we have a list of 15 interesting genes, it would be interesting to know which ones are them.}
+	\item{We will generate two reports, one containing the stats of our interesting genes and one containing some other interesting facts about them, such as GOs, chromosome location, and pathways in which they participate.}
+	\item{There are many functions which will helps you to get information on the probes for a determined chip.}
+	\item{Some of them are \alert{getLL() and getSYMBOL()}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{HTML reports.}
+<<eval=T, echo=TRUE>>=
+library("hgu133a2.db")
+library("annotate")
+ll<-getLL(genenames, "hgu133a2")
+sym<-getSYMBOL(genenames, "hgu133a2")
+tab<-data.frame(sym, tab[, -1])
+htmlpage(as.data.frame(ll), filename = "GeneList1.html", title = "HTML report", othernames = tab, table.head = c("Locus ID", colnames(tab)), table.center = TRUE)
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{annaffy.}
+A great way to get a more detailed report is by using the \alert{annaffy} package.
+<<eval=T, echo=TRUE>>=
+library("annaffy")
+library("KEGG.db")
+library("GO.db")
+anntab<-aafTableAnn(genenames, "hgu133a2.db", aaf.handler())
+saveHTML(anntab, file = "GeneList2.html")
+@
+\begin{itemize}
+	\item{What do you think \alert{aaf.handler()} is for?}
+\end{itemize}
+\end{frame}
+
+\section{The Multitesting Problem.}
+
+\begin{frame}[allowframebreaks, fragile]{Multitesting.}
+\begin{itemize}
+	\item{We are done with $t-$tests, but there must be a criterion to measure the reliability of the obtained $p-$values.}
+	\item{This is because we are analyzing huge sets of observations.}
+	\item{How many genes are we testing in our experiment?\footnote{Use \alert{dim()}.}}
+	\item{If we set a cutoff at a $p-$value of .01, how many \alert{false positives} will we get?}
+	\item{\alert{=S}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{Multitesting Corrections.}
+\begin{itemize}
+	\item{Do not worry, there are several ways to adjust the $p-$values.}
+	\item{Actually, we have already tried one, which is the default parameter \alert{adjust.method="BH"} of the \alert{topTable()} function of the limma package.}
+	\item{Let us see some other ones.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{Important Concepts.}
+\begin{itemize}
+	\item{Family-Wise Error Rate (FWER).}
+		\begin{itemize}
+			\item{A family of hypotheses is defined.}
+			\item{So the FWER is defined as the probability of finding at least one \alert{false positive} in the family of tests}
+		\end{itemize}
+\end{itemize}
+	\begin{equation}
+	FWER=1-(1-pval)^m
+	\end{equation}
+\begin{itemize}
+	\item{False Discovery Rate}
+	\begin{itemize}
+		\item{It is defined as how many \alert{false positives} will be discovered in the whole set of comparisons.}
+		\item{The same as we did before.}
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{Multitesting Corrections.}
+\begin{itemize}
+	\item{The \alert{Bonferroni correction} is achieved by setting a new threshold by muliplying the $p-$values by the number of observations.}
+	\item{Other methods that control the FWER are the \alert{Holm}, \alert{Hochberg}, and \alert{Hommel} corrections.}
+	\item{More powerful corrections are the \alert{Benjamini and Hochberg} and the \alert{Benjamini and Yekutieli} corrections which take control over the FDR, being less conservative.}
+\end{itemize}
+\end{frame}
+
+\section{multtest.}
+
+\begin{frame}[allowframebreaks, fragile]{multtest.}
+\begin{itemize}
+	\item{\alert{multtest} is a package which performs Multiple Testing Procedures.}
+	\item{The main function is called \alert{MTP()}.}
+	\item{This function gives you the oportunity to decide which \alert{test} is to be performed, which \alert{type I error rate} is to be controlled, how should the \alert{null distribution} will be built, and which one is the \alert{rejection threshold} to be used.}
+	\item{The arguments that control these parameters are \alert{test}, \alert{typeone}, \alert{nulldist and B}, and \alert{alpha}.}
+	\item{Do not forget that a factor indicating how are the two samples composed has to be passed in \alert{Y}.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{Some MTP practice.}
+\begin{itemize}
+	\item{For this practice, we will use a bigger dataset called golub.}
+	\item{Apply \alert{MTP} to golub with the default $t-$test, an \alert{$\alpha$} of .01, an fdr \alert{type I error rate}, and 50 \alert{bootstrap} distributions.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{Some MTP practice.}
+<<eval=T, echo=TRUE>>=
+library(multtest)
+data(golub)
+t.multi.test.golub<-MTP(golub, Y=golub.cl, typeone="fdr", B=50, alpha=.01)
+slotNames(t.multi.test.golub)
+summary(t.multi.test.golub)
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{Some MTP practice.}
+\begin{itemize}
+	\item{What is a rejection in this case?}
+	\item{Where can you find the new $p-$values?}
+	\item{The gene names for this experiment are contained in golub.gnames, how would you know the names of the DEGs in this test?}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{Some MTP practice.}
+<<eval=T, echo=TRUE>>=
+head(golub.gnames[,2][slot(t.multi.test.golub, "reject")])
+@
+This is it for affy and mtp, now, let us move on to \alert{SpeCond}.
+\end{frame}
+
+\section{SpeCond.}
+
+\begin{frame}[allowframebreaks, fragile]{SpeCond Overwiew.}
+\begin{itemize}
+	\item{The \alert{SpeCond} package finds specific DEGs for different conditions.}
+	\item{The process is made by fitting a null distribution to the gene expression measures.}
+	\item{The model is made by a mixture of normal distributions.}
+	\item{As soon as there is a null distribution, significantly DEGs are identified.}
+	\item{Adjusted $p-$values are used, as you may imagine}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{Important Parameters.}
+There are some important parameters used for the definition of condition specific DEGs.
+\begin{itemize}
+	\item{\alert{lambda} is involved in the model choosing process by choosing 1, 2 or 3 normal distributions.}
+	\item{\alert{beta} is involved in the distributions' variance.}
+	\item{\alert{per} is how many specific conditions may be found per gene.}
+	\item{\alert{md} is the median distance between two normal components.\footnote{To find outliers.}}
+	\item{\alert{mlk} (minimum log-likelihood)is used to cluster separate different conditions, so a gene may be defined as an outlier.}
+	\item{\alert{rsd} (standard deviation ratio) is used to compare against the standard deviation of the null distribution, so outliers can be found.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{SpeCond Important Functions.}
+\begin{itemize}
+	\item{There are 3 imporant functions which are considered to be the most important.}
+	\item{\alert{SpeCond} is the most important function, it does the fitting and the detection.}
+	\item{\alert{getFullHtmlSpeCondResult} saves the results for all genes in an HTML report.}
+	\item{\alert{getGeneHtmlPage} makes an HTML report for each gene.}
+	\item{Time for some practice.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{SpeCond Demo.}
+\begin{itemize}
+	\item{The package already includes a dataset}
+	\item{expSetSpeCondExample contains 64 chips, 32 duplicated conditions, with 220 features each.}
+	\item{How would you check this if expSetSpeCondExample is an ExpressionSet object?\footnote{You should know by now.}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{SpeCond Demo.}
+<<eval=T, echo=TRUE>>=
+library(SpeCond)
+data(expressionSpeCondExample)
+data(expSetSpeCondExample)
+expSetSpeCondExample
+Mexp=expressionSpeCondExample
+MexpS=getMatrixFromExpressionSet(expSetSpeCondExample, condition.factor=expSetSpeCondExample$Tissue,condition.method="mean")
+generalResult=SpeCond(expSetSpeCondExample, param.detection=NULL, multitest.correction.method="BY", prefix.file="E", print.hist.pv=TRUE, fit1=NULL, fit2=NULL, specificOutlierStep1=NULL, condition.factor=expSetSpeCondExample$Tissue, condition.method="mean")
+specificResult=generalResult$specificResult
+getFullHtmlSpeCondResult(SpeCondResult=generalResult, param.detection=specificResult$param.detection, page.name="Example_SpeCond_results", page.title="Tissue specific results", sort.condition="all", heatmap.profile=TRUE, heatmap.expression=FALSE, heatmap.unique.profile=FALSE, expressionMatrix=Mexp)
+genePageInfo=getGeneHtmlPage(Mexp, specificResult, name.index.html="index_example_SpeCond_Results.html", gene.html.ids=c(1:20))
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]{SpeCond Pros.}
+\begin{itemize}
+	\item{What step that we did in the weset example does getMatrixFromExpressionSet summarize?\footnote{Remember the subsetting step?}}
+	\item{What is the difference between this approach and the $t-$test approach that we followed earlier?\footnote{How many tissues (conditions) are tested?}}
+	\item{How would you solve this?\footnote{Tell me a statistical test for several data groups.}}
+	\item{The reports are already in HTML.}
+\end{itemize}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,4 @@
+\beamer@endinputifotherversion {3.07pt}
+\beamer@sectionintoc {1}{Clase htest}{3}{0}{1}
+\beamer@sectionintoc {2}{Ejemplos prácticos}{10}{0}{2}
+\beamer@sectionintoc {3}{Problema de la clase}{15}{0}{3}

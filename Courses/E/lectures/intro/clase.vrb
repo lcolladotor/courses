@@ -1,0 +1,19 @@
+\frametitle {Asignación de valores}
+  \begin{itemize}
+  \item En R, hay 3 formas de asignar valores, aunque en general se usan solo dos: \Rcode{=} y \Rcode{<-}
+  \item Preferencialmente usen \BIOCfunction{\Rcode{<-}} simplemente para evitar confusiones. Es que el signo \Rcode{=} se usa para el paso de valores en las funciones.
+  \end{itemize}
+\begin{Schunk}
+\begin{Sinput}
+> A <- c(a = 1, b = 2)["b"]
+> A = c(a = 1, b = 2)["b"]
+> A
+\end{Sinput}
+\begin{Soutput}
+b
+2
+\end{Soutput}
+\end{Schunk}
+  \begin{itemize}
+  \item Aquí queda más clara la asignación en la primera línea, aunque las dos hacen lo mismo.
+  \end{itemize}

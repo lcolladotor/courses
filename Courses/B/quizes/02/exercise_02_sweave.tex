@@ -1,0 +1,103 @@
+%\VignetteIndexEntry{Exercise 02 from Seminar III: R/Bioconductor}
+%\VignetteDepends{}
+%\VignetteKeywords{R, Bioconductor}
+%\VignettePackage{SIII: R/Bioc}
+\documentclass[letterpaper,12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Standard Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{epsfig}
+%\usepackage{graphicx}
+%\usepackage{graphics}
+%\usepackage{amssymb}
+%\usepackage{amsmath}
+%\usepackage{mathrsfs}
+%\usepackage{caption}
+%\usepackage{comment}
+\usepackage{fancyvrb}
+\usepackage{fancyhdr}
+
+\usepackage[a4paper]{geometry}
+\usepackage{hyperref,graphicx}
+
+%\usepackage[spanish]{babel}
+%\selectlanguage{spanish}
+%\usepackage[utf8]{inputenc}
+
+%%%%%%%%%%%%%%%%%%%%%% some personal commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\pl}[1]{\texttt{#1}}
+\newcommand{\myurlshort}[2]{\href{http://#1}{{\textsf{#2}}}}
+
+%%%%%%%%%%%%%%%%%%%%%% headers and footers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy} 
+\renewcommand{\footrulewidth}{\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plainnat}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% sweave options  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%% opening %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\textbf{Seminar III: \texttt{R}/\texttt{Bioconductor}\\ \small August-December 2009}}
+\author{Leonardo Collado Torres\\[1em]Bachelor in Genomic Sciences (LCG),\\ UNAM, Cuernavaca, Mexico\\[1em]\texttt{lcollado@lcg.unam.mx}\\[1em]\url{http://www.lcg.unam.mx/~lcollado/}}
+
+\usepackage{Sweave}
+\begin{document}
+\maketitle
+
+\medskip
+\noindent{\small\textbf{Assistants:} Alejandro Reyes \pl{areyes@lcg.unam.mx}, Jos\'e Reyes \pl{jreyes@lcg.unam.mx} and V\'ictor Moreno \pl{jmoreno@lcg.unam.mx}}
+
+\medskip
+\noindent{\small\textbf{Note:} Questions through the \myurlshort{foros.nnb.unam.mx/viewforum.php?f=111}{forum} please. Those who are not from the sixth LCG generation send us an email so we can register you on the forum.}
+
+\medskip
+\begin{abstract}
+With the following exercises you'll take your first steps into using Sweave and explore the ALL dataset.
+\end{abstract}
+
+\section{Sweave}
+  \begin{enumerate}
+  \item Create your own template Sweave document.
+  \begin{itemize}
+  \item Title: course name, homework number
+  \item Author: name, email, include a link to your personal academic webpage if you have one.\footnote{You will probably make one this semester on the PHP course.}
+  \item Abstract: short description on the homework and any notes you might want to add
+  \item A sample homework solution: meaning a short description and some code. For example, how to sum $2 + 3$.
+  \end{itemize}
+  \end{enumerate}
+
+\section{ALL dataset}
+  \begin{itemize}
+  \item You'll have to explore the ALL dataset\footnote{John Quackenbush mentioned it on Monday as the most studied dataset.} and create your first homework as a vignette document.
+  \item Install the \pl{ALL} package and explore the \pl{ALL} object.
+\begin{Schunk}
+\begin{Sinput}
+> library(ALL)
+> data(ALL)
+\end{Sinput}
+\end{Schunk}
+  \item Select the samples from the B-cell tumors.\footnote{What's the name of the function to look for text in Unix? Well, a function with the same name is available in \pl{R}. Use it}
+  \item Select those of molecular type \pl{BCR/ABL} or \pl{NEG}.\footnote{A binary operator such as \%in\% is useful here}
+  \item Combine the previous two subsets and keep the \emph{intersect}ion
+  \item Eliminate unused factor levels on your resulting subset.
+  \item Use the \pl{nsFilter} function from the \pl{genefilter} package to keep those with \emph{entrez} ID, \emph{GOBP}, remove duplicate \emph{entrez} and the following arguments:
+\begin{Schunk}
+\begin{Sinput}
+> nsFilter(var.fun = IQR, var.cutoff = 0.5, feature.exclude = "^AFFX")
+\end{Sinput}
+\end{Schunk}
+  \item Meaning that we'll use the interquantile range with a variance cutoff of 0.5 to eliminate those with small variation and by excluding \pl{AFFX} we'll take out the controls AFFY probes.
+  \item How many:
+  \begin{enumerate}
+  \item duplicates were removed?
+  \item control features were excluded?
+  \item had low variance (small variation)?
+  \item had no GO?
+  \item had no entrez ID?
+  \end{enumerate}
+  \end{itemize}
+
+\end{document}

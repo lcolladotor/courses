@@ -1,0 +1,111 @@
+##############################
+# Practica 4		     #
+# R			     #
+##############################
+
+library(UsingR)
+
+
+#################################################################################################
+#1. Asume que una poblacion esta dividia en dos sobre alguna decision (p = 1/2). Toman una	#
+#muestra aleatoria de tamaño 1000. Cual es la probabilidad de que la muestra aleatoria tendra	#
+#550 o mas votos a favor de la decision? Responde usando una aproximacion normal.		#
+#												#
+#     R = 0.0009707699										#
+#################################################################################################
+
+mu <- 0.5*1000
+sigma <- sqrt(0.5*0.5*1000)
+pnorm(549,mean=mu,sd=sigma, lower.tail = FALSE)
+
+# Otra forma era hacerlo así:
+muestra <- NULL
+for (i in 1:10000) muestra[i] <- sum(sample(c(0,1),1000, replace=TRUE, prob=c(0.5,0.5)))
+1-pnorm(550, mean(muestra), sd(muestra)) # Nota que mean(muestra) =~ 500 y sd(muestra) =~ sqrt(250)
+
+#################################################################################################
+#2. Para que valor de n la distribucion X se ve aproximadamente como una normal cuando cada	#
+#Xi es de tipo exponencial (1)1. Corre varias simulaciones para diferentes n's hasta que decidas#
+#cuando empieza a verse como normal.								#
+#												#
+#	R = aproximadamente 100 simulaciones							#
+#################################################################################################
+
+m <- 500
+res.6 <- c()
+res.25 <- c()
+res.100 <- c()
+res.400 <- c()
+res.1600 <- c()
+f <- function(n) mean(rexp(n))
+for(i in 1:m) res.6[i] <- f(6)
+for(i in 1:m) res.25[i] <- f(25)
+for(i in 1:m) res.100[i] <- f(100)
+for(i in 1:m) res.400[i] <- f(400)
+for(i in 1:m) res.1600[i] <- f(1600)
+plot(density(res.1600), xlim = range(res.6), type = "l", main = "Distribucion de Xi", xlab = "Simulaciones", col = "purple")
+lines(density(res.400), col = "pink")
+lines(density(res.100), col = "orange")
+lines(density(res.25), col = "purple")
+lines(density(res.6), col = "red")
+legend(2, 6, c("1600", "400", "100", "25", "6"), col = c("pink", "magenta", "purple", "red", "orange"), lty = 1)
+
+
+# En realidad es como n=25
+res = c();for(i in 1:500) res[i] = mean(rexp(25,1));qqnorm(res)
+
+#################################################################################################
+#3. Usa el set de datos cabinet del paquete UsingR. Este contiene informacion sobre la cantidad	#
+#de dinero que se ahorraron los miembros del comite de Bush en el 2003 cuando pasaron una	#
+#nueva ley sobre impuestos. Esta informacion esta almacenada en la variable est.tax.savings.	#
+#Encuentra un intervalo de confianza de 90% para la mediana.					#
+#												#
+#	R = 560 32444										#
+#################################################################################################
+
+x <- c(cabinet$est.tax.savings)
+n <- length(x)
+j <- qbinom(0.05, n, 1/2)
+sort(x)[c(j,n+1-j)]
+
+# Forma complicada y un poco errónea. Solución:
+require(UsingR)
+attach(cabinet)
+t.test(est.tax.savings,conf.level=0.90) 
+qqnorm(est.tax.savings) # Evidentemente no es una normal! Pero puedes usar la t.test porque n es chica (n=19)
+wilcox.test(est.tax.savings, conf.int=TRUE,conf.level=0.9) # Te da un intervalo más pequeño
+detach(cabinet)
+
+#########################################################################################################
+#4. El set de datos babies de UsingR tiene las edades de las madres en la variable age y la de los	#
+#padres en dage. Haz una prueba de significancia de la hipotesis nula de edades iguales contra		#
+#una de alternativa de un solo lado donde los papas estan mas viejos. Reporta el valor p y tu		#
+#conclusion sobre H0.											#
+#													#
+# R = considerando la hipótesis nula como aquella en la que las edades son las mismas y considerando un #
+#     valor p de 2.2e-16 se puede concluir que los padres son más viejos que las madres, al rechazar H0	# # El valor p no es igual a 2.2e-16
+#     y tener suficiente evidencia.									# 
+#########################################################################################################
+
+x <- c(babies$age)
+y <- c(babies$dage)
+plot(density(x))
+lines(density(y), lty = 2)
+t.test(x, y, alt = "less", var.equal = TRUE)
+
+#################################################################################################
+#5. El set de datos pi2000 de UsingR tiene los primeros 2000 digitos de pi. Haz una prueba de	#
+#hipotesis para ver si los digitos aparecen con la misma probabilidad. Usa la prueba de la 	#
+#chi-cuadrada.											#
+#												#
+# R = X-squared = 4.42, df = 9, p-value = 0.8817 (no es significativo)				#
+#################################################################################################
+
+
+y <- table(pi2000[pi2000 < 98])
+y
+p = c(0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1)
+chisq.test(y, p = p)
+
+
+# Super parecido al de rarzate de nuevo

@@ -1,0 +1,523 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<html>
+
+<head>
+  <title>Principios de Estadística. Feb-Jun 2009</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link rel="stylesheet" type="text/css" href="./web/courseR.css"/>
+  <script type="text/javascript">//<![CDATA[
+
+function inicio(){
+	change();
+	change_main();
+}
+
+
+var tab = null;
+function change(el){
+	var lis = document.getElementsByTagName("li");
+	if (el == undefined) {
+		// la pestaña home es el li numero 0!!	
+		el = lis[0];
+	}
+	if (el.id == 'current') {
+		tab = el;
+	}else{
+		el.id = "current";
+		if (tab != null){
+			tab.id = "null";
+		}
+		tab = el;
+	}
+}
+
+function change_main(esto){
+	var typo_de_pestana='home';
+	if (esto != undefined) {
+		typo_de_pestana=esto;
+	}
+	var  opciones = document.getElementsByTagName("div");
+	for (LC = 0; LC < opciones.length; LC ++) {
+		if (opciones[LC].className == "opciones") {
+			if (opciones[LC].id == typo_de_pestana) {
+				document.getElementById(opciones[LC].id).style.display = 'inline';
+			}else{
+				document.getElementById(opciones[LC].id).style.display = 'none';
+			}	
+		}
+	}
+}
+
+//]]></script>
+</head>
+<body onload="return inicio()">
+<div id=container_med>
+	<div id=intro_med>
+		<div id=pageHeader_med>
+			<h1><span>Principios de Estadística</span></h1>
+			<h2><span>Febrero-Junio 2009</span></h2>
+		</div>
+		<div id=quickSummary_med>
+			<div class=p1><span><a href="http://www.lcg.unam.mx/~lcollado/index.php" title="Página de Leonardo Collado Torres" target="_blank">Leonardo Collado Torres</a> &amp; <a href="http://kabah.lcg.unam.mx/~mgutierr/" title="Página de María Gutiérrez" target="_blank">María Gutiérrez Arcelus</a> - Licenciatura en Ciencias Genómicas, LCG-UNAM</span></div>
+			<div class=p2><span>Feb-Jun, 2009 - Cuernavaca, México</span></div>
+		</div>
+	</div>
+	<div id="linkList">
+	<ul>
+		<div id="lresources">
+			<br>
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('home')"><b>Inicio</b></span></h3>
+			</li>
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('lectures')"><b>Presentaciones</b></span></h3>
+			</li>
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('quizes')"><b>Ejercicios</b></span></h3>
+			</li>
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('respuestas')"><b>Respuestas</b></span></h3>
+			</li>
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('data')"><b>Datos</b></span></h3>
+			</li>
+
+		</div>
+		<div id="lresources">
+			<br>
+			<li id="" onClick="change(this);">
+			<h3><span onclick="return change_main('resources')"><b>Material de Apoyo</b></span></h3>
+			</li>	
+		</div>
+		<br>
+		
+		
+	</ul>
+	</div>
+
+	<div id=supportingText_med>
+		<div id=preambleMargen1>
+			<span></span>
+		</div>
+		
+		<div id=preamble>
+			<div id="home" class="opciones">
+			
+						
+				<h2><span>LCG (English)</span></h2><br>
+				<p class=p2><span>
+				This course was taught at the Undergraduate Program on Genomic Sciences (LCG in Spanish) from the National Autonomous University of Mexico (UNAM in Spanish). It was directed at the second semester students from the sixth generation. It was a part of the Principles of Statistics topic and was meant as an introductory R course. It had an official length of 16 class hours. For more information on this undergraduate program visit LCG's <a href="http://www.lcg.unam.mx/" title ="LCG's Oficial Page" target="_blank">main page</a>. For example, the sections on <a href="http://www.lcg.unam.mx/node/3" title="Development in Mexico" target="_blank">Development of the Genomic Sciences in Mexico</a> and <a href="http://www.lcg.unam.mx/evaluacion" title="International Evaluation" target="_blank">LCG's International Evaluation</a> could be of your interest.
+				</span></p>
+				<br><br>
+				
+				<h2><span>LCG</span></h2><br>
+				<p class=p2><span>
+				Este curso fue impartido en la Licenciatura en Ciencias Genómicas (LCG) de la Universidad Nacional Autónoma de México (UNAM). Fue dirigido a los alumnos de segundo semestre de la sexta generación. Fue parte de la materia de Principios de Estadística y sirvió como un curso introductorio de R. Su duración oficial fue de 16 horas de clase. Para mayor información sobre la licenciatura visita la <a href="http://www.lcg.unam.mx/" title ="Página Oficial de la LCG" target="_blank">página principal</a> de la LCG. Por ejemplo, las secciones de <a href="http://www.lcg.unam.mx/node/3" title="Desarrollo en México" target="_blank">Desarrollo de las Ciencias Genómicas en México</a> y de <a href="http://www.lcg.unam.mx/evaluacion" title="Evaluación Internacional" target="_blank">Evaluación internacional de la LCG</a> pueden ser de tu interés.
+				</span></p>
+				<br><br>
+				
+				<h2><span>inicio</span></h2><br>
+				<p class=p2><span>
+				Está página es el soporte para el curso de Principios de Estadística impartido por Julio Martínez a la 6ta generación de la LCG. Nosotros somos los ayudantes de dicho curso y tenemos varios objetivos. Uno de ellos es que aprendan a usar R a la par del curso de estadística, pues la gran mayoría de la gente utiliza algún paquete estadístico (Excel, MATLAB, Minitab, R, ...) en vez de hacer los cálculos a mano. Además, queremos que la página sea útil como referencia para dichos alumnos y otros de diversas generaciones. Aparte, queremos aprender más de estadística nosotros mismos y ayudar en la formación de la nueva generación.
+				</span></p>
+				<p class=p2><span>
+				Durante la duración del curso, tendremos aproximadamente 30 minutos por clase para dar una cápsula de estadística y R, que equivale a un cuarto del curso. Vamos a preparar ejemplos sencillos, unos de índole genómica y ejercicios para que reafirmen los conceptos que vean con Julio Martínez. Nosotros, María y Leonardo, aprendimos R con un curso impartido por James Bullard del laboratorio de Sandrine Dudoit y lo hemos utilizado en áreas diferentes: la diversidad genómica humana y la de bacteríofagos.
+				</span></p>
+				<p class=p2><span>
+				A lo largo del curso esperamos cubrir las presentaciones (conceptos básicos, ejemplos sencillos, unos complejos, ejercicios) de acuerdo al programa tentativo que pueden ver <a href="http://www.lcg.unam.mx/~lcollado/E/programa/programa.pdf">aquí</a>. Además, esperamos que nos pregunten y hagan comentarios a través del <a href="http://foros.nnb.unam.mx/viewforum.php?f=88">foro</a> del curso. De esta forma, si hay preguntas repetidas solo las respondemos una vez y respetan nuestro tiempo... pues también tenemos que trabajar :P Finalmente tenemos que evaluar el 25% de la materia, lo cual pensamos hacerlo a través de ejercicios. 
+				</span></p>
+				<p class=p2><span>
+				Para los ejercicios, tendremos 2 tipos. Para el primero, que serán la mayoría, se los damos en una clase. Para la siguiente nos entregan sus respuestas vía la página de <a href="http://cursos.lcg.unam.mx/">cursos</a> y les damos las respuestas correctas vía un código documentado. Para estos ejercicios simplemente contaremos que los entreguen a tiempo y completos -- es muy fácil darse cuenta si se están copiando. Para el segundo tipo de ejercicio, los evaluaremos a detalle y estos serán ejercicios extensos. Haremos uno de estos cada mes. Los regulares valdrán 10% y los otros el 15%, lo cual nos da nuestro 25% de evaluación.
+				</span></p>
+				<p class=p2><span>
+				En sí, no nos preocupa la parte de la evaluación, pero queremos dejarla clara. Nuestro interés primordial es que aprendan y disfruten de la clase ^^.
+				</span></p>
+				<br><br>
+				
+				
+				</span></p>
+	 	
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen5">
+					<span></span>
+				</div>
+			</div> 
+		
+		</div>
+
+		<div id=preamble>
+			<div id="lectures" class="opciones" style="display:none;">
+				<h2><span>presentaciones</span></h2><br>
+				En esta sección pueden encontrar una pequeña descripción de cada presentación. Además, pueden bajar las presentaciones en formato PDF y/o el código R.
+				<br><br>
+				
+				<b><a href="lectures/intro/intro.pdf"
+				title="introducción a R"
+				target="_blank">Introducción a R</a>&nbsp;
+				  <a href="lectures/intro/intro.R"
+				target="_blank">[código]</a>&nbsp;</b><br> 
+
+				En esta presentación vamos a conocer el lenguaje de programación R. Veremos un poco de su historia y aprenderemos lo básico para usar R. Algo muy importante que vamos a revisar es como obtener ayuda. Además, vamos a ver como movernos en los vectores.
+				<br><br>
+				
+				<b><a href="lectures/introII/introII.pdf"
+				title="introducción a R"
+				target="_blank">Introducción a R - parte 2</a>&nbsp;
+				  <a href="lectures/introII/introII.R"
+				target="_blank">[código]</a>&nbsp;</b><br> 
+
+				En esta presentación vamos a continuar con la introducción a R básico. Vamos a ver las estructuras de control, como leer archivos y generar matrices. Además, conoceremos a los objetos tipo list y factor.
+				<br><br>
+				
+				<b><a href="lectures/letras/letras.pdf"
+				title="un problema curioso de conteo"
+				target="_blank">Letras y Universo</a>&nbsp;
+				  <a href="lectures/letras/letras.R"
+				target="_blank">[código]</a>&nbsp;</b><br> 
+
+				Vamos a resolver un problema curioso de letras y universo o números y muestreo... como lo quieran ver ;). Aprenderemos a usar la función plot y utilizaremos los ciclos for.
+				<br><br>
+				
+				<b><a href="lectures/rnas/rnas.pdf"
+				title="imitando gráficas de una artículo"
+				target="_blank">Gráficas sobre RNAs</a>&nbsp;
+				  <a href="lectures/rnas/rnas.R"
+				target="_blank">[código]</a>&nbsp;</b><br> 
+
+				Vamos a aprender a usar tres funciones gráficas: pie, barplot y mosaicplot. Usaremos datos de una artículo sobre RNAs del cual imitaremos gráficas. Además, haremos una mejor de las que publicaron ;)
+				<br><br>
+				
+				<b><a href="lectures/sample/sample2.pdf"
+				title="haciendo unas simulaciones"
+				target="_blank">Simulaciones sobre "letras y universo" [versión completa]</a>&nbsp;
+				  <a href="lectures/sample/sample2.R"
+				target="_blank">[código]</a>&nbsp;</b><br> 
+
+				Aprenderemos a muestrar usando sample, lo cual nos va a servir para hacer unas simulaciones. Graficaremos con plot los resultados.
+				<br><br>
+				
+				<b><a href="lectures/random/random.pdf"
+				title="números al azar"
+				target="_blank">Más sobre números al azar</a>&nbsp;
+				  <a href="lectures/random/random.R"
+				target="_blank">[código]</a>&nbsp;</b><br> 
+
+				Entenderemos un poco más de como sacar números al azar y como comparar diferentes distribuciones visualmente usando boxplot.
+				<br><br>
+				
+				<b><a href="lectures/hist/hist.pdf"
+				title="histogramas and the like"
+				target="_blank">Histogramas y similares</a>&nbsp;
+				  <a href="lectures/hist/hist.R"
+				target="_blank">[código]</a>&nbsp;</b><br> 
+
+				Veremos como hacer histogramas, qqplots, qqnorms y otras gráficas para visualizar y comparar distribuciones.
+				<br><br>
+				
+				<b><a href="lectures/eda/eda.pdf"
+				title="Diaps. EDA de Jim"
+				target="_blank">Boxplots</a>&nbsp;
+				  <a href="lectures/eda/eda.R"
+				target="_blank">[código]</a>&nbsp;</b><br> 
+
+				Son unas diapositivas de James Bullard sobre los boxplots.
+				<br><br>
+				
+				<b><a href="lectures/htest/htest.pdf"
+				title="Bases de htest"
+				target="_blank">Htest</a>&nbsp;
+				  <a href="lectures/htest/htest.R"
+				target="_blank">[código]</a>&nbsp;</b><br> 
+
+				Bases del uso de las pruebas de hipótesis y los objetos de clase htest.
+				<br><br>
+				
+				<b><a href="lectures/anova/anova.pdf"
+				title="Bases de ANOVAs"
+				target="_blank">ANOVA</a>&nbsp;
+				  <a href="lectures/anova/anova.R"
+				target="_blank">[código]</a>&nbsp;</b><br> 
+
+				Intro a ANOVAs sencillas usando oneway.test y aov. Incluye 3 problemas a resolver.
+				<br><br>
+				
+				<b><a href="lectures/anova/ANOVA.ppt"
+				title="PPT ANOVAs"
+				target="_blank">ANOVA.ppt</a>&nbsp;</b><br> 
+
+				ANOVA.ppt -- presentación de María
+				<br><br>
+				
+				<b><a href="lectures/pareadasYnoParametricas.ppt"
+				title="PPT no parametricas"
+				target="_blank">pareadasYnoParametricas.ppt</a>&nbsp;</b><br> 
+
+				pareadasYnoParametricas.ppt -- presentación de María
+				<br><br>
+				
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen2">
+				  <span></span>
+				</div>
+			
+				</span></p>
+			</div>
+		</div>
+
+		<div id=preamble>
+			<div id="quizes" class="opciones" style="display:none;">
+				<h2><span>cuestionarios y ejercicios</span></h2><br>
+				Aquí encontrarán cuestionarios y ejercicios para poner a prueba sus conocimientos y habilidades de estadística y R ^^.
+				<br><br>
+				
+				<b><a href="quizes/ej1/ej1.pdf"
+				title="Ejercicio 1" target="_blank">Ejercicio 1</a>&nbsp;<a href="quizes/ej1/ej1.R" target="_blank">[código]</a>&nbsp;</b>
+				<br>
+				Las preguntas en este archivo servirán para reafirmar conocimiento básicos vistos en la introducción.
+				<br><br>
+				
+				<b><a href="quizes/ej2/ej2.pdf"
+				title="Ejercicio 2" target="_blank">Ejercicio 2</a>&nbsp;<a href="quizes/ej2/ej2.R" target="_blank">[código]</a>&nbsp;</b>
+				<br>
+				Vamos a terminar de redondear unos conceptos de la introducción. Además, haremos un ejercicio de combinaciones y otro de probabilidades condicionales.
+				<br><br>
+				
+				<b><a href="quizes/ji/codigo.R"
+				title="Examen de Ji cuadrada" target="_blank">Examen de Ji^2</a>&nbsp;</b>
+				<br>
+				Son las instrucciones para el examen de Ji Cuadrada.
+				<br><br>
+				
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen4">
+				  <span></span>
+				</div>
+			</div>
+		</div>
+
+		<div id=preamble>
+			<div id="respuestas" class="opciones" style="display:none;">
+				<h2><span>respuestas</span></h2><br>
+				Aquí encontrarán las respuestas a los ejercicios en forma de códigos documentados. Si no entienden algo, por favor háganlo saber a través del <a href="http://foros.nnb.unam.mx/viewforum.php?f=88">foro</a>. Gracias!
+				<br><br>
+				
+				<b><a href="quizes/ej1/ej1_respuestas.R"
+				title="Ejercicio 1" target="_blank">ej1_respuestas.R</a></b>
+				<br>
+				Archivo con las respuestas al Ejercicio 1.
+				<br><br>
+				
+				<b><a href="quizes/ej2/ej2_respuestas.R"
+				title="Ejercicio 2" target="_blank">ej2_respuestas.R</a></b>
+				<br>
+				Archivo con las respuestas al Ejercicio 2.
+				<br><br>
+				
+				<b><a href="quizes/ji/resultado.R"
+				title="Examen Ji" target="_blank">resultado.R</a></b>
+				<br>
+				Archivo con la respuesta esperada al examen de Ji Cuadrada.
+				<br><br>
+				
+				<b><a href="quizes/ejercicioPoissonSAGE_respuestas.R"
+				title="SAGE" target="_blank">ejercicioPoissonSAGE_respuestas.R</a></b>
+				<br>
+				Archivo con las respuestas a los problemas con SAGE.
+				<br><br>
+				
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen4">
+				  <span></span>
+				</div>
+			</div>
+		</div>
+		
+		<div id=preamble>
+			<div id="data" class="opciones" style="display:none;">
+			
+				<h2><span>datos</span></h2><br>
+				En esta sección puedes encontrar los archivos de datos que vamos a usar en el curso y en diversos ejercicios. 
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/fagos.txt">fagos.txt</a></b></u><br>
+				Contiene los tamaño del genoma de 10 fagos.
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/10biggestPhages.txt">10biggestPhages.txt</a></b></u><br>
+				Es una tabla con información de los 10 fagos más grandes. Los nombres de las columnas (separadas por tabs) vienen especificados en la primera línea.
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/rnas.csv">rnas.csv</a></b></u><br>
+				Es un archivo derivado de la tabla suplementaria 1 del artículo que usamos en la clase de rnas.pdf Está en formato csv y listo para ser usado con R.
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/mirnas.csv">mirnas.csv</a></b></u><br>
+				Es un archivo derivado de la tabla suplementaria 2 del artículo que usamos en la clase de rnas.pdf Está en formato csv y listo para ser usado con R. Vean el original por las notas que le pusieron.
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/SAGE/GSM676.txt">GSM676.txt</a></b></u><br>
+				Es una tabla con datos de SAGE para un ejercicio. Parte 1.
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/SAGE/GSM697.txt">GSM697.txt</a></b></u><br>
+				Es una tabla con datos de SAGE para un ejercicio. Parte 2.
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/ult/gorriones.txt">gorriones.txt</a></b></u><br>
+				gorriones.txt
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/ult/lobos.txt">lobos.txt</a></b></u><br>
+				lobos.txt
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/ult/oncillas.txt">oncillas.txt</a></b></u><br>
+				oncillas.txt
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/ult/polluelo.txt">polluelo.txt</a></b></u><br>
+				polluelo.txt
+				<br><br>
+				
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/ult/garcetaRobaTuristas.txt">garcetaRobaTuristas.txt</a></b></u><br>
+				garcetaRobaTuristas.txt
+				
+				<br><br>
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/ult/gorrionesPantaneros.txt">gorrionesPantaneros.txt</a></b></u><br>
+				gorrionesPantaneros.txt
+				
+				<br><br>
+				<u><b><a href="http://www.lcg.unam.mx/~lcollado/E/data/ult/mapaches.txt">mapaches.txt</a></b></u><br>
+				mapaches.txt
+				
+
+				</span></p>
+				
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen2con5">
+					<span></span>
+				</div>
+			</div>
+		</div>
+
+		<div id=preamble>
+			<div id="resources" class="opciones" style="display:none;">
+			
+			<h2><span>material de apoyo</span></h2><br>
+			Esta sección contiene links a varios archivos pdf o urls de donde nos basamos para el curso o que les pueden servir como referencia.
+			<br><br>
+			
+			<b><a href="resources/EstadisticaDescriptiva.pdf" title="estadística descriptiva"
+			target="_blank">Estadística Descriptiva</a>&nbsp;</b><br><br>
+			<b><a href="resources/R-lang.pdf" title="R lang" target="_blank">R language definition</a>&nbsp;</b><br><br>
+			<b><a href="resources/R-intro.pdf" title="R intro" target="_blank">An Introduction to R</a>&nbsp;</b><br><br>
+			<b><a href="resources/R_intro_easy.pdf" title="R intro"
+			target="_blank">An Easy Introduction to R</a>&nbsp;</b><br><br>
+
+			<h2><span>páginas web</span></h2><br>
+			Aquí puedes ver un par de páginas web útiles para estadística y R.
+			<br><br>
+			<b><a href="http://www.faculty.ucr.edu/~tgirke/Documents/R_BioCond/R_Programming.html" 
+			      title="Programming in R"
+			      target="_blank">
+			    Programming in R -- tgirke</a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="http://www.harding.edu/fmccown/R/" 
+			      title="Producing Simple Graphs with R"
+			      target="_blank">
+			    Producing Simple Graphs with R</a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="http://www2.warwick.ac.uk/fac/sci/moac/currentstudents/peter_cock/r/" 
+			      title="Peter's R Programming Pages"
+			      target="_blank">
+			    Peter's R Programming Pages </a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="http://zoonek2.free.fr/UNIX/48_R/02.html" 
+			      title="Programming in R -- zoonek"
+			      target="_blank">
+			    Programming in R -- zoonek </a>&nbsp;
+			</b>
+			<br><br>
+			<b><a href="http://www.statmethods.net/index.html" 
+			      title="Quick-R for SAS/SPSS/Stata Users"
+			      target="_blank">
+			    Quick-R for SAS/SPSS/Stata Users</a>&nbsp;
+			</b>
+			<br><br>
+
+
+			<h2><span>libros</span></h2><br>
+			Aquí puedes encontrar varios libros sobre estadística y R.
+			<br><br>
+			John Verzani (2005).<br><b>UsingR for Introductory Statistics.</b><br>
+			Chapman & Hall-CRC.
+			<br><br>
+			Darrell Huff (1993).<br><b>How to Lie With Statistics.</b><br>
+			W.W. Norton & Company, Inc.
+			<br><br>
+			John Maindonald and John Braun (2007).<br><b>Data Analysis and Graphics Using R - an Example-Based Approach.</b><br>
+			Cambridge University Press.
+			<br><br>
+			Jerrold H. Zar (1999).<br><b>Biostatistical Analysis.</b><br>
+			Prentice-Hall.
+			<br><br>
+			Deborah Rumsey (2003).<br><b>Statistics for Dummies.</b><br>
+			Wiley Publishing, Inc.
+			<br><br>
+			Bernard Rosner (2006).<br><b>Fundamentals of Biostatistics.</b><br>
+			Thomson Books/Cole.
+			<br><br>
+			Mario F. Triola (2004).<br><b>Estadística.</b><br>
+			Pearson.
+			<br><br>
+			</span></p>
+				<!-- si te falta espacio puedes poner margenes!!! el preambleMargen1 es mas corto, el 5 el mas largo-->
+				<div id="preambleMargen1">
+					<span></span>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div id=preambleMargen1>
+		<span><p>El formato de la página y de las presentaciones de la clase están basados en uno creado por y con permiso de <a href=mailto:bullard@berkeley.edu>James Bullard</a>. Él impartió un curso de Bioconductor y R en Enero del 2008 en la LCG, lo pueden checar <a href="http://wiki.biostat.berkeley.edu/~bullard/courses/T-mexico-08/">aquí</a>.</p></span>
+	</div>
+	<a href="http://www4.clustrmaps.com/counter/maps.php?url=http://www.lcg.unam.mx/~lcollado/E/" id="clustrMapsLink"><img src="http://www4.clustrmaps.com/counter/index2.php?url=http://www.lcg.unam.mx/~lcollado/E/" style="border:0px;" alt="Locations of visitors to this page" title="Locations of visitors to this page" id="clustrMapsImg" onerror="this.onerror=null; this.src='http://www2.clustrmaps.com/images/clustrmaps-back-soon.jpg'; document.getElementById('clustrMapsLink').href='http://www2.clustrmaps.com';" />
+</a>
+
+	<div id=footer_med>
+		<p><span id=dcha_med><i>Escribe tus preguntas y comentarios en el <a class=up
+		href="http://foros.nnb.unam.mx/viewforum.php?f=88"> foro.</a></i></span></p>
+	</div>
+</div>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-3152397-3");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</body>
+</html>

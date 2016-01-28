@@ -1,0 +1,172 @@
+\input{../header_1_en.tex}
+
+
+
+
+\usepackage{Sweave}
+\begin{document}
+
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\section*{Class outline}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Public Data}
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Intro}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Install}
+  \begin{itemize}
+  \item Packages:
+\begin{Schunk}
+\begin{Sinput}
+> install.packages("RMySQL")
+> source("http://bioconductor.org/biocLite.R")
+> biocLite("AnnotationDBI")
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{RMySQL}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{RMySQL}
+  \begin{itemize}
+  \item Installing this package is not that simple. 
+  \item In Windows, you will need to download a libmysql.dll file and copy it to the RMySQL folder.
+  \item On Linux, you need to install the mysql libraries\footnote{Probably the dev ones too for compiling}.
+  \item For now use Montealban :)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Explore the pkg}
+  \begin{itemize}
+  \item You can explore quite a bit of the package using
+\begin{Schunk}
+\begin{Sinput}
+> help(package = "RMySQL")
+\end{Sinput}
+\end{Schunk}
+  \item Its \alert{important} to close every connection you open.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Sample session}
+  \begin{itemize}
+  \item A sample session would look be similar to this. First we connect to the database.
+\begin{Schunk}
+\begin{Sinput}
+> con <- dbConnect(MySQL(), user = "lcollado", 
++     password = "LOL", dbname = "BPdB", 
++     host = "kabah.lcg.unam.mx")
+\end{Sinput}
+\end{Schunk}
+  \item Then we do some queries, list the tables, download some tables into data frames, etc.
+\begin{Schunk}
+\begin{Sinput}
+> dbListTables(con)
+> df <- dbReadTable(con, "tablename")
+\end{Sinput}
+\end{Schunk}
+  \item And we end by closing the connection:
+\begin{Schunk}
+\begin{Sinput}
+> dbDisconnect(con)
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Queries vs downloading tables}
+  \begin{itemize}
+  \item SQL is faster for doing joins between tables, so you might want to use queries then.
+  \item If all the info is on one table, and you are in local network with the database server, you might prefer to download the table. Then use a tapply or other functions if you have a grouping variable.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Exercise I}
+  \begin{itemize}
+  \item Use \BIOCfunction{RMySQL} to access your own database from the Bioinformatics and Statistics I course.
+  \item Use a query to retrieve data and make a plot :)
+  \item If you don't have your own database, let me know.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{SQLite}
+  \begin{itemize}
+  \item An alternative for MySQL that seems to be faster is SQLite.
+  \item If you are using that SQL language, you might want to install the \pl{RSQLite} R package :)
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{AnnotationDbi}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Intro}
+  \begin{itemize}
+  \item Its an alive package :) Meaning that its under intensive development.\footnote{Regretabbly, the latest version has an installation bug.} 
+  \item This package is the key interface to access the gamma of annotation packages.
+  \item It allows you to retrieve data from them using some \pl{R} functions, or by directly using SQL queries.
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]
+  \frametitle{A lab}
+  \url{http://bioconductor.org/workshops/2009/BioC2009/labs/annotations/AnnotationDbi.pdf}
+  \begin{itemize}
+  \item Check the above lab :) Its a very complete description of the \pl{AnnotationDbi} package.
+  \item Read the document and pay attention to exercises 1, 2, 3, and 5. If you have a working installation, then try to do them :)
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{SessionInfo} \scriptsize
+\begin{Schunk}
+\begin{Sinput}
+> sessionInfo()
+\end{Sinput}
+\begin{Soutput}
+R version 2.10.0 Under development (unstable) (2009-07-25 r48998) 
+i686-pc-linux-gnu 
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8      
+ [2] LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8       
+ [4] LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=C             
+ [6] LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8      
+ [8] LC_NAME=C                 
+ [9] LC_ADDRESS=C              
+[10] LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8
+[12] LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices
+[4] utils     datasets  methods  
+[7] base     
+\end{Soutput}
+\end{Schunk}
+\end{frame}
+
+
+\end{document}
+

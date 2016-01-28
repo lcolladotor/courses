@@ -1,0 +1,164 @@
+\documentclass[letterpaper,12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Standard Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage{fancyvrb}
+\usepackage{caption}
+\usepackage{comment}
+\usepackage{fancyhdr}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Adapted from Sweave %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\DefineVerbatimEnvironment{Rcode}{Verbatim}{fontshape=sl, frame=single, 
+  framesep=2mm, fontsize=\small, baselinestretch=.5}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%% My macros (which of course are borrowed from a million ... %%
+\def\argmax{\operatornamewithlimits{arg\,max}}
+\def\argmin{\operatornamewithlimits{arg\,min}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%% Page and Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\addtolength{\oddsidemargin}{-0.875in}
+\addtolength{\topmargin}{-0.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\textheight}{1.75in}
+
+\captionsetup{margin=15pt,font=small,labelfont=bf}
+
+\renewcommand{\topfraction}{0.9}        % max fraction of floats at top
+\renewcommand{\bottomfraction}{0.8}     % max fraction of floats at bottom
+
+% Parameters for TEXT pages (not float pages):
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}             % 2 may work better
+\setcounter{dbltopnumber}{2}            % for 2-column pages
+\renewcommand{\dbltopfraction}{0.9}     % fit big float above 2-col. text
+\renewcommand{\textfraction}{0.07}      % allow minimal text w. figs
+
+% Parameters for FLOAT pages (not text pages):
+\renewcommand{\floatpagefraction}{0.7}          % require fuller float pages
+
+% N.B.: floatpagefraction MUST be less than topfraction !!
+\renewcommand{\dblfloatpagefraction}{0.7}       % require fuller float pages
+
+
+%%%%%%%%%%%%%%%%%%%%%%% options for sweave %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\SweaveOpts{prefix.string=plots/ej1}
+
+%%%%%%%%%%%%%%%%%%%%%% headers and footers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy} 
+\renewcommand{\footrulewidth}{\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plainnat}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%% Now Edit %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fancyhead[L]{\em Leonardo Collado Torres}
+\fancyhead[R]{\em ej1}
+\fancyfoot[L]{\em \today}
+\fancyfoot[C]{}
+\fancyfoot[R]{\em \thepage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%% opening %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Ejercicios 1: probando lo visto en la intro}
+\author{Leonardo Collado Torres}
+
+\begin{document}
+\maketitle
+\begin{enumerate}
+  \item Empiezen por hacer el ejercicio simple de tarea que les puse en la clase.
+  \bigskip
+  
+  \item Abran \texttt{R} y utilicen los datos \texttt{2 5 4 10 8} para:
+  \begin{enumerate}
+    \item Almacenarlos en un vector de datos x.
+	\item Encuentren el cuadrado de cada número.
+	\item Substraigan 3 de cada número.
+	\item Substraigan 5 de cada número y luego encuentren su raíz.
+  \end{enumerate}
+  Hagan esto usando funciones (aprovéchense del reciclaje).
+  \bigskip
+  
+  \item Siendo \texttt{x} \& \texttt{y}:
+<<eval=FALSE, echo =TRUE>>=
+x <- c(1,3,5,7,9)
+y <- c(2,3,5,7,11,13)
+@
+  Sin correr los comandos, cual es el resultado de:
+  \begin{enumerate}
+    \item x+1
+    \item y*2
+	\item length(x) y length(y)
+	\item x + y (hay reciclaje)
+	\item sum(x>5) y sum(x[x>5])
+	\item sum(x>5 | x<3)
+	\item y[3]
+	\item y[-3]
+	\item y[x] (Que es NA?)
+	\item y[y>=7]
+  \end{enumerate}
+  \bigskip
+  
+  \item Usen el conjunto de datos \texttt{islands} que viene en \texttt{R}. Este contiene el tamaño de los bloques de tierra cuya área excede las 10 mil millas cuadradas. Encuentren las 7 más grandes y las 2 más chicas.
+  Les recomiendo que usen lo visto en índices de vectores y la función \texttt{sort}.
+  \bigskip
+
+  \item Qué imprime el siguiente código?
+<<eval=FALSE, echo=TRUE>>=
+funej <- function(x) {
+  x <- x^2 + x
+  return (x)
+}
+x <- 5
+funej(x)
+x
+@
+  \bigskip
+  
+  \item Con los números del 65 al 89, construye una matrix 5x5 llamada \texttt{M}.
+  \begin{enumerate}
+    \item Encuentra la matrix \texttt{M5} al multiplicar \texttt{M} por el vector 5.
+    \item Multiplica \texttt{M5} por \texttt{M} para encontrar \texttt{N}.	Encuentra "manualmente" el valor de la casilla (3,4) de \texttt{N} y luego verifica tu resultado con \texttt{R}.
+	\item Encuentra el resultado de la ecuación (1):
+	\begin{equation}
+N - M(M^TM)^{-1}M^TN
+    \end{equation}
+  \end{enumerate}
+  \bigskip
+  
+  \item Ahora si viene el ejercicio bueno :D.
+  \begin{enumerate}
+    \item Almacenen en un \texttt{data frame} el archivo de datos \texttt{fagos\_grandes\_codon.txt}. Usen cualquiera la forma para leer archivos que mas se acomode a los datos o que les guste usar.
+	\item Escriban una función para encontrar la suma de cada columna: tienen que usar el ciclo \texttt{for}. Estos resultados los pueden almacenar en un vector; relativícenlos con la suma total de las todas columnas para encontrar la frecuencia relativa de cada columna. NOTA: Si quieren hacer un ejercicio más avanzado, relativicen las columnas por amino ácido codificado; por ejemplo la columna D\_GAT tendría el valor de (D\_GAT) / ( D\_GAT + D\_GAC ).
+	\item Encuentren los nombres de las columnas donde la frecuencia relativa\footnote{La que encontraron en el anterior punto} es mayor a 3\%\footnote{Son 6 columnas :)}. Para los que hagan la versión avanzada, encuentren el codón más frecuente para todos los amino ácidos.
+<<eval=FALSE, echo=FALSE>>=
+## Forma para resolver el ejercicio en la version sencilla
+grandes.fagos <- read.table(file="fagos_grandes_codon.txt", header = TRUE) # Es facil cambiar la ruta para usar la página web.
+total <- sum(grandes.fagos)
+res <- NULL
+for (i in 1:length(grandes.fagos[1,])) {
+  temp <- sum(grandes.fagos[,i])
+  res <- c(res, temp)
+}
+res <- res/total
+colnames(grandes.fagos)[which(res>0.03)]  
+@
+  \end{enumerate}
+  \bigskip
+  
+\end{enumerate}
+
+
+\end{document}

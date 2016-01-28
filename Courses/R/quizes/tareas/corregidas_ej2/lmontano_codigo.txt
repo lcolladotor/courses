@@ -1,0 +1,30 @@
+
+######################histograma DDT
+library(MASS)
+mean(DDT)
+sqrt(var(DDT))###no pude imprimir el texto mas que en el titulo. no entendi los parametros de text que son un chingo y no explican bien
+hist(DDT, col="violet", xlab="unidades", ylab="concentracion.media= 3.328. desviacion estandar=0.4371", main="concentracion  DDT por unidades")
+#######boxplot
+boxplot(DDT, col="red", main="distribucion de valores DDT\nmedia=3.328\ndesv est=.437")
+########inciso b
+library(UsingR)
+lawsuits
+pdf("lmontano.pdf", height=3.5, width=5) 
+par(mfrow=c(1,2))
+hist (lawsuits,main="Lawsuits", ylab="Cantidad", col=rgb(r=.7, g=.1, b=1))
+hist (log(lawsuits),ylab= "Cantidad", main="Log lawsuits", col=rgb(r=.9, g=.6, b=.3))
+# Se te olvidó el dev.off()
+######### inciso c
+
+arts<- c(2.91, 5.46, 2.4, 1.74, 4.34)###no se como definir bien las coordenadas y como usar el legend y como usar el box, que me salen con problemas siempre.
+####tampoco encontre como lograr poner los numeros encima de cada barra. me puedes echar una mano para esto luego? en serio lo intente...
+names(arts)<- c('UAM', 'UN', 'USal.', 'USev.', 'UNAM')
+box()
+barplot(arts, ylim=c(0,6), col= rgb(r=.6, g=.6, b=1),space=1.3, main="http://www.revista.unam.mx\n/vol.5/num6/art38/imagenes/grafica.htm#a")
+legend(x = 5.8, y = 4, c("Num. de articulos per\n capita"),cex = 1,bty = "y", fill = rgb(r=.6, g=.6, b=1))
+
+###ahi esta la pagina en el titulo de la grafica.
+
+
+# No veo el problema con el legend, pues si sale cuando corro tu código.
+# Para poner los números arriba de cada barra tendrías que usar un text.

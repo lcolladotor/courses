@@ -1,0 +1,50 @@
+require(UsingR)
+require(lattice)
+#1. Usen el set de datos diamond del paquete UsingR.
+#(a) Hagan un scatterplot de las variables carat y price.
+plot(diamond$carat ~ diamond$price)
+#(b) A˜nadenle la l´?nea de regresi´on lineal simple.
+#(c) Haz una predicci´on del valor de un diamante de un tercio de carat con esta regresi´on.
+reg <- lm(diamond$carat ~ diamond$price)
+abline(reg, col="blue", lwd=2)
+lines(c(100, 1200), c(0.333, 0.333), col="red")
+# Precio aprox:950
+(1/3 - reg$coefficients[1])/reg$coefficients[2]
+# El precio es de 991.2697
+
+# La predicción se hace así:
+library(UsingR)
+attach(diamond)
+predict(lm(price ~ carat), data.frame(carat = 1/3))
+detach(diamond)
+
+#2. Usen el set de datos cancer del paquete UsingR.
+#(a) Haz una gr´afica con los boxplots de las variables stomach, bronchus, colon, ovary y
+#breast.
+#(b) Cual tiene la cola m´as larga?cancer de seno
+#(c) Cual es la m´as compacta?cancer de bronqueos
+#(d) Todos los centros son similares? todos entre si no, entre pares si
+# a) boxplots
+boxplot(cancer$stomach, cancer$bronchus, cancer$colon, cancer$ovary, cancer$breast, names=c("Stomach", "Bronchus", "Colon", "Ovary", "Breast"))
+#3. Usa el set de datos kid.weights del paquete UsingR.
+#(a) Explora la relaci´on entre el peso y la edad usando lattice.
+xyplot(age ~ weight, data=kid.weights, pch=21)
+#(b) Particiona a las edades en intervalos de 0-3, 3-6, 6-9 y 9-12. Se mantiene la misma relaci´on
+#en los grupos?
+xyplot(age ~ weight, data=kid.weights, col=c("red", "blue", "green", "yellow")[unclass(cut(kid.weights$age, breaks=12*seq(0, 12, 3)))])
+# Al parecer si se mantiene cierta relacion, pero se dispersa un poco al final
+
+# En realidad el 4to grupo ya no mantiene la relación lineal de los otros grupos de edades.
+
+#4. Usa el set de datos female.inc del paquete UsingR. Son datos de mujeres en el 2001 en USA.
+#(a) Hay alguna diferencia del ingreso entre las razas? Usa boxplots con lattice para ayudarte
+#a responder la pregunta.
+#(b) Encuentra el resumen de estad´?sticas para cada grupo racial.
+# Se percibe una ligera diferencia entre razas. Las mujeres blancasy las negras tienen tipo similar de ingresos, teniendo una media similair con valores extremos en las blancas, 
+#mientras que las hispanicas siempre son las que menos ganan.
+
+# esta bien :D
+
+bwplot(female.inc$race ~ female.inc$income)
+
+# Faltó la parte b

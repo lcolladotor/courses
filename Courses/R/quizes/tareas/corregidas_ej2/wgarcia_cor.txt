@@ -1,0 +1,20 @@
+ library(MASS)
+ DDT
+boxplot(DDT, col="navy", main="DDT BOX PLOT",ylab="PPM" )
+hist(DDT, main="DDT BOX PLOT", density=seq(10,50, by=10), xlab="PPM OF DDT IN LAKE", col="grey", col.main="darkgrey")
+ DS<-sd(DDT)
+ Mean<-mean(DDT)
+ print(Mean)
+ print(SD)
+
+
+library(UsingR)
+lawsuits
+loglaw<-c(log(lawsuits))
+pdf(file="Lawsuits.pdf" bg="grey") # No usa el argumenot BG!
+par(mfrow=c(1,2))
+hist(lawsuits, bg="grey", col="Navy", density=seq(0,55, by= 5), main="LAW SUIT SETTLEMENTS")
+hist(loglaw, col="Navy", density=seq(0,40, by =5), main="LAW SUIT SETTLEMENTS", ylab="Log frequency")
+dev.off()
+
+# Falta el ejercicio 3

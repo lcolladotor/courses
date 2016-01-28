@@ -1,0 +1,559 @@
+\input{../header_1_en.tex}
+
+\SweaveOpts{prefix.string=plots/fig,eps=FALSE,echo=FALSE}
+
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@ 
+
+\begin{document}
+
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\section*{Class outline}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Genomic Plots}
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Intro}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{About}
+  \begin{itemize}
+  \item On this short class we'll learn how to make some plots that are focused on \emph{genomics}.
+  \item The basic idea is a tool that enables you to visualize \emph{tracks} of information.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Session packages}
+  \begin{itemize}
+  \item Install commands:
+<<eval=FALSE, echo=TRUE>>=
+install.packages("RMySQL")
+source("http://bioconductor.org/biocLite.R")
+biocLite("rtracklayer")
+biocLite("humanStemCell")
+biocLite("GenomeGraphs")
+@  
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{GenomeGraphs}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{GenomeGraphs}
+  \begin{itemize}
+  \item It uses \pl{grid} graphics\footnote{Just like lattice.} and works great with \BIOCfunction{biomaRt}.
+  \item The syntax is different and \BIOCfunction{longer} from what we are used to.
+  \item Much more flexible than other packages, and I find it to be more stable :)
+  \item Who are the authors of the package?
+  \item For more \alert{info}, check this \myurlshort{www.ncbi.nlm.nih.gov/pubmed/19123956}{paper}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{gdPlot}
+  \begin{itemize}
+  \item To start off, we'll use the \BIOCfunction{gdPlot} function, which is the main one.
+<<eval=TRUE, echo=TRUE>>=
+library(GenomeGraphs)
+@  
+<<eval=FALSE, echo=TRUE>>=
+?gdPlot
+@  
+  \item What kind of object does it need as input?
+  \item What determines the plotting order?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{gdObjects}
+  \begin{itemize}
+  \item So we need to create a \pl{list} with \BIOCfunction{gdObjects}.
+  \item How do we find them?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{gdObjects II}
+  \begin{itemize}
+  \item You can always look at the examples from the \pl{gdPlot} help and find a few.
+  \item I would either browse the package help using:
+<<eval=FALSE, echo=TRUE>>=
+help(package = GenomeGraphs)
+@  
+  \item Or thanks to some previous info, I know that the functions that create this kind of objects start with \alert{make}. So we can use \BIOCfunction{apropos}.
+<<eval=FALSE, echo=TRUE>>=
+apropos("make")
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{makeBaseTrack}
+  \begin{itemize}
+  \item Lets create an object of class \pl{BaseTrack} using \BIOCfunction{makeBaseTrack}\footnote{Yes, it's a long name :P}. \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+args(makeBaseTrack)
+@  
+\normalsize
+  \item The first arguments are quite simple.
+  \begin{enumerate}
+  \item \pl{base} has the position values; the $x$ coordinates.
+  \item \pl{value} is the analog for the $y$ axis.
+  \item \pl{strand} is just a "+" or "-" character.
+  \end{enumerate}
+  \item Lets create a simple track for positions 1 to 100 with random log-normal values.
+<<eval=TRUE, echo=TRUE>>=
+makeBaseTrack(1:100, rlnorm(100))
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{makeBaseTrack II}
+  \begin{itemize}
+  \item The first lines print the \pl{head} for \pl{base} and \pl{value}. The next ones inform us of the graphical parameters such as \pl{lwd} (line width).
+  \item Lets save our track into the object \pl{a} assigning it to the positive strand.
+<<eval=TRUE, echo=TRUE>>=
+a <- makeBaseTrack(1:100, rlnorm(100), strand="+")
+@    
+  \item Lets make the plot now :)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{Simple gdPlot}
+<<echo=TRUE,fig=TRUE,height=4>>=
+gdPlot(a)
+@ 
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{gdPlot exercise}
+  \begin{itemize}
+  \item Now create and object \pl{b} using \BIOCfunction{makeBaseTrack} for the first 100 positions using random normal values and assign them to the negative strand.
+  \item Then plot both \pl{a} and \pl{b} using \BIOCfunction{gdPlot}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{Short solution}
+<<echo=TRUE,fig=TRUE,height=4>>=
+info <- list(makeBaseTrack(1:100, rlnorm(100), strand="+"), makeBaseTrack(1:100, rnorm(100), strand="-"))
+gdPlot(info)
+@ 
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{What is the difference?}
+<<echo=TRUE,fig=TRUE,height=4>>=
+info2 <- list(makeBaseTrack(1:100, rlnorm(100), strand="+"), makeBaseTrack(1:100, rnorm(100), strand="-"), makeGenomeAxis())
+gdPlot(info2)
+@ 
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{DisplayPars}
+  \begin{itemize}
+  \item In \pl{GenomeGraphs}, to change graphical arguments we need to use the \BIOCfunction{DisplayPars} function.
+  \item However, the arguments differ for every \pl{gdObject}. So we need to check them before using them.
+  \item Lets go back to \pl{makeBaseTrack} and change the color of the negative strand values.
+<<eval=TRUE, echo=TRUE>>=
+b <- makeBaseTrack(1:100, rnorm(100), strand="-", dp = DisplayPars(color="blue"))
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{Changing colors}
+<<echo=TRUE,fig=TRUE,height=4>>=
+gdPlot(list(a, b, makeGenomeAxis()))
+@ 
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Finding args}
+  \begin{itemize}
+  \item In practice, its better to find the arguments using \BIOCfunction{showDisplayOptions}
+  \item For example:
+<<eval=TRUE, echo=TRUE>>=
+showDisplayOptions("BaseTrack")
+@  
+  \item How many graphical arguments does the genome axis object have?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Names}
+  \begin{itemize}
+  \item Say we want to add the strand names to our previous plots and to our axis.
+  \item Any ideas? Remember that we are using a list.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{gdPlot with names}
+<<echo=TRUE,fig=TRUE,height=4>>=
+gdPlot(list("+" = a, "-" = b, Base = makeGenomeAxis()))
+@ 
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Interaction with biomaRt}
+  \begin{itemize}
+  \item \pl{GenomeGraphs} can retrieve information from public databases using \pl{biomaRt}.
+  \item To do so, we use the function \BIOCfunction{makeGeneRegion}: \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+args(makeGeneRegion)
+@  
+\normalsize
+  \item The \pl{biomart} argument is a \pl{mart} object. Lets create one:
+<<eval=TRUE, echo=TRUE>>=
+bsub <- useMart("bacterial_mart_54", dataset = "bac_6_gene")
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{GeneRegion exercise}
+  Using our \pl{bsub} mart,
+  \begin{enumerate}
+  \item Create a \pl{GeneRegion} object \pl{c} with info from the genes from the bases 12000 to 20000 for the positive strand.
+  \item Create an object \pl{d} for those on the negative strand.
+  \item Create a plot with the axis using \BIOCfunction{gdPlot}.
+  \end{enumerate}
+  You will need to get the chromosome name. You might want to use \pl{listAttributes} and/or do a simple \pl{getBM}, or check on web biomart, or guess it ;)
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Step by step solution}
+  \begin{itemize}
+  \item To find the chromsome name, I simply checked the attributes list. \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+head(listAttributes(bsub))
+@  
+\normalsize
+  \item Of course, we can verify this with by using \BIOCfunction{getBM}\footnote{I just modified one of the code lines we used on the \pl{biomaRt} class.}:
+<<eval=TRUE, echo=TRUE>>=
+res <- getBM(attributes=c("chromosome_name"), filters= c("start", "end"), values = list("1", "1000"), mart = bsub)
+res
+@
+  \item Then we can get the info for the genes on the positive strand:
+<<eval=TRUE, echo=TRUE>>=
+c <- makeGeneRegion(12000, 20000, chromosome="Chromosome", strand = "+", biomart=bsub)
+@  
+  \item For the \pl{d} object, we use nearly the same code and we finish the job with \pl{gdPlot}:
+<<eval=TRUE, echo=TRUE>>=
+d <- makeGeneRegion(12000, 20000, chromosome="Chromosome", strand = "-", biomart=bsub)
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{Resulting plot}
+<<echo=TRUE,fig=TRUE,height=4>>=
+gdPlot(list("+"=c, "-"=d, Bsub=makeGenomeAxis()))
+@ 
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Microarray data}
+  \begin{itemize}
+  \item Lets make more complicated plots with microarray data from David et al.
+  \item We'll be using a different mart and the example dataset \alert{seqDataEx}
+<<eval=TRUE, echo=TRUE>>=
+mart <- useMart("ensembl", "scerevisiae_gene_ensembl")
+data("seqDataEx")
+head(seqDataEx$david)
+@  
+  \item Lets take a peak at chromosome IV:
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{Basic plot}
+<<echo=TRUE,fig=TRUE,height=4>>=
+gdPlot(makeGeneRegion(10000, 50000, chr = "IV", strand = "+", biomart = mart), 10000, 50000)
+@ 
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Gene names}
+  \begin{itemize}
+  \item Lets add the \alert{gene names} (plot ids).
+<<eval=FALSE, echo=TRUE>>=
+showDisplayOptions("GeneRegion")
+@  
+  \item What are the options to:
+  \begin{enumerate}
+  \item Add the gene names?
+  \item Change the rotation angle of the names? 
+  \item Change the letter size?
+  \item Set the color? For example, to black.
+  \end{enumerate}
+  \item Re-make the previous plot with the names parallel to the $x$ axis, letter size 0.5 instead of 1, and in black.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{Basic plot with names}
+<<echo=TRUE,fig=TRUE,height=4>>=
+gdPlot(makeGeneRegion(10000, 50000, chr = "IV", strand = "+", biomart = mart, dp = DisplayPars( plotId=TRUE, idRotation=0, cex=0.5, idColor = "black")), 10000, 50000)
+@ 
+\end{frame}
+
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{GenericArray}
+  \begin{itemize}
+  \item Not much, right?
+  \item Lets make one with the microarray data using \BIOCfunction{makeGenericArray}: \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+args(makeGenericArray)
+@  
+\normalsize
+  \item For less typing, lets save the data into a shorter object:
+<<eval=TRUE, echo=TRUE>>=
+david <- seqDataEx$david
+@    
+  \item We did a \pl{head} earlier on the data, so lets use \pl{location} for \pl{probeStart} and \pl{expr} for \pl{intensity} arguments respectively.
+  \item As a short parenthesis, look at this neat trick:
+<<eval=TRUE, echo=TRUE>>=
+head(david[,"expr", drop=FALSE])
+head(david[,"expr", drop=TRUE])
+@    
+  \item Neat eh? :) Lets use \BIOCfunction{makeGenericArray} now:
+<<eval=TRUE, echo=TRUE>>=
+e <- makeGenericArray(david[, "expr",drop = FALSE], david[, "location"])
+@    
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{GenericArray plot}
+<<echo=TRUE,fig=TRUE,height=4>>=
+gdPlot(list(e, makeGenomeAxis()))
+@ 
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Something... complicated :)}
+  Now, lets make a \alert{complicated} plot
+  \begin{itemize}
+  \item One GeneRegion for each strand
+  \item One GenericArray for each strand
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Code:}
+<<eval=TRUE, echo=TRUE>>=
+df <- as.data.frame(seqDataEx$david)
+lst <- lapply(c("+", "-"), function(s) {
+    a <- as.matrix(subset(df, strand == ifelse(s == "+", 1, -1)))
+    c(makeGenericArray(a[,"expr", drop = FALSE], a[,"location"]),
+      makeGeneRegion(start = min(df[,"location"]),
+                     end = max(df[,"location"]),
+                     chr = "IV", 
+                     strand = s, 
+                     biomart = mart, dp = DisplayPars(plotId=TRUE, idRotation = 0, cex = .5, idColor = "black")))
+})
+yeastLst <- c(unlist(lst), makeGenomeAxis())
+@  
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{A great plot!}
+<<echo=TRUE,fig=TRUE,height=4>>=
+gdPlot(yeastLst)
+@ 
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Overlays}
+  \begin{itemize}
+  \item We can also add some rectangles and text to highlight interesting parts of the plot.
+  \item To do so, we use \BIOCfunction{makeRectangleOverlay} and \BIOCfunction{makeTextOverlay}: \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+args(makeRectangleOverlay)
+args(makeTextOverlay)
+@  
+\normalsize
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Rectangle overlay exercise}
+  \begin{itemize}
+  \item Lets add a rectangle overlay to the previous plot.
+  \item Which display argument enables us to make the rectangle semi-transparent? Use \BIOCfunction{showDisplayOptions}:
+<<eval=TRUE, echo=TRUE>>=
+showDisplayOptions("RectangleOverlay")
+@  
+  \item Add a rectangle overlay starting at 1301500, ending at 1302500, covering the first 2 panels and at exactly mid-transparency.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{Solution :)}
+<<echo=TRUE,fig=TRUE,height=4>>=
+ovlay <- makeRectangleOverlay(1301500, 1302500, region = c(1, 2), dp = DisplayPars(alpha = 0.5))
+gdPlot(yeastLst, overlays = c(ovlay))
+@ 
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{With text}
+  \begin{itemize}
+  \item Now, lets add some text using \BIOCfunction{makeTextOverlay}
+<<eval=TRUE, echo=TRUE>>=
+tovlay <- makeTextOverlay("SpecialRegion", 1303500, 0.75, region = c(1, 1), dp = DisplayPars(color = "black"))
+@  
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{End result}
+<<echo=TRUE,fig=TRUE,height=4>>=
+gdPlot(yeastLst, overlays = c(ovlay, tovlay))
+@ 
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Transcripts}
+  \begin{itemize}
+  \item For those of you who love splicing, \BIOCfunction{makeTranscript} will be most useful :)
+  \item Lets take a look at gene ENSG00000168309: \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+args(makeTranscript)
+hMart <- useMart("ensembl", "hsapiens_gene_ensembl")
+trans <- makeTranscript("ENSG00000168309", biomart = hMart)
+@  
+\normalsize
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{Alternative splicing}
+<<echo=TRUE,fig=TRUE,height=4>>=
+gdPlot(list(trans, makeGenomeAxis()))
+@ 
+\end{frame}
+
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Exons and gene models}
+  \begin{itemize}
+  \item Visualizing data can be troublesome when you have mixed ranges. Say a small exon, then a large intron, a medium exon, etc.
+  \item If you have exon microarray data, then \BIOCfunction{makeExonArray} and \BIOCfunction{makeGeneModel} will be useful to you :)\footnote{For the curious ones, you can make custom annotation tracks using \BIOCfunction{makeAnnotationTrack}.} \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+args(makeExonArray)
+args(makeGeneModel)
+@  
+\normalsize
+  \item Here is an example using the \pl{unrData} dataset:
+<<eval=TRUE, echo=TRUE>>=
+data("unrData", package = "GenomeGraphs")
+class(unrData)
+dim(unrData)
+head(unrPositions)
+@
+  \item First we create the \BIOCfunction{exon track} which zooms into every exon, and then a \BIOCfunction{gene model} so we don't lose the forest :)
+<<eval=TRUE, echo=TRUE>>=
+exon <- makeExonArray(intensity = unrData, probeStart = unrPositions[,3], 
+                      probeEnd = unrPositions[,4], probeId = as.character(unrPositions[,1]), 
+                      nProbes = unrNProbes, 
+                      dp = DisplayPars(color = "blue", mapColor = "dodgerblue2"), 
+                      displayProbesets = FALSE)
+geneModel <- makeGeneModel(start = unrPositions[,3], end = unrPositions[,4])
+@
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{Example plot}
+<<echo=TRUE,fig=TRUE,height=4>>=
+gdPlot(list(exon, geneModel, makeGenomeAxis()))
+@ 
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Conclusions}
+  \begin{itemize}
+  \item Fast! Which is great for a quick exploration of your data by regions.
+  \item Once you get the basics, its easy to use :)
+  \item Very flexible!
+  \item Has several handy functions for making genomic plots.
+  \item Has the same limitations as other \pl{R} plots.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Credits}
+  Nearly all the GenomeGraphs examples and exercises are from James Bullard's recent lab at BioC2009 available \myurlshort{www.bioconductor.org/workshops/2009/BioC2009/labs/biomaRtGenomeGraphs/GenomeGraphs.pdf}{here}. I modified some and expanded the explanations so it'd be easier to understand :)
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{rtracklayer}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Genome Browsers intro}
+  \begin{itemize}
+  \item I suppose that quite a few of you have heard about genome browsers, mainly the \BIOCfunction{UCSC Genome Browser}: \url{http://genome.ucsc.edu/}
+  \item Its probably the most popular web tool for exploring genomes, specially eukaryotic genomes.
+  \item Nowadays, they added quite a few nice tools and you can easily access data from a lot of information tracks: conservation, repeats, SNPs, etc.
+  \item Other tools are BLAT (similar to BLAST), a PCR in silico tool, \ldots
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{GBs}
+  \begin{itemize}
+  \item Genome Browsers (GBs) are great for biologists. You don't need to write any code to use it.
+  \item It simplifies the process of gathering data for you (aka, getting the tracks).
+  \item You don't need any special software to use it, just a browser like Firefox.
+  \item However, the formats are tedious to work with\ldots
+  \item If you have custom tracks, you'll need to do lots of uploading.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{rtracklayer}
+  Michael Lawrence developed \BIOCfunction{rtracklayer} which lets you:
+  \begin{enumerate}
+  \item Import and export data to a GB (there are several formats).
+  \item Create tracks using \BIOCfunction{IRanges}. And of course, manipulate them :)
+  \item Browsing the data on the genome browser.
+  \end{enumerate}
+  \begin{itemize}
+  \item However, I ran into problems when using the package recently :P
+  \item Its not as easy to understand as \pl{GenomeGraphs}.
+  \item So why learn about it? Michael is \alert{VERY} active on the mailing lists and I'm sure that he'll fix whatever is wrong right now. Also, GBs are very popular so you might need to use them in the future.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{To learn}
+  \begin{itemize}
+  \item If you want to learn about the package, check the vignette and the \pl{R} code file available at \myurlshort{www.bioconductor.org/packages/devel/bioc/html/rtracklayer.html}{here}.
+  \item Note that your computer might freeze on page 9 of the vignette file.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{SessionInfo} \scriptsize
+<<eval=TRUE, echo=TRUE>>=
+sessionInfo()
+@  
+\end{frame}
+
+\end{document}
+

@@ -1,0 +1,25 @@
+1.-
+
+library(MASS)
+hist(DDT,col=rainbow(5) main="Mediciones Independientes de DDT en B. Oleracea")
+# Te faltó una coma entre los argumentos col y main
+boxplot(DDT, col=rainbow(5),main="Mediciones Independientes de DDT en B. Oleracea")
+DDT_stats<-c(desviacion_estandar=sd(DDT),media=mean(DDT))
+print(DDT_stats)
+
+2.-
+
+library(UsingR)
+pdf(file = "jquintan.pdf")
+par(mfrow=c(1,2))
+hist(lawsuits,col=rainbow(10),main="jquintan")
+hist(log10(lawsuits),col=rainbow(10),main="jquintan")
+dev.off()
+
+3.-
+
+!!!Esta grafica demuestra la relacion inversa entre el cambio de temperatura y el numero de piratas(http://www.venganza.org/about/open-letter/)!!!
+piratas=c(35000,45000,20000,15000,5000,400,17)
+temperatura=c(14.2,14.4,14.6,14.8,15.3,15.5,15.8)
+plot(piratas,temperatura,type="b", main="Verdadera Grafica Piratas VS Temperatura")
+# Tu gráfica tiene la info de la original, pero no se parece mucho. Aunque no sería una copia exacta, simplemente pudiste haber usado el argumento xlim=c(50000,10)

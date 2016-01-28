@@ -1,0 +1,20 @@
+\frametitle {Problema 3}
+  \begin{itemize}
+  \item Una compañía necesita de cierto químico como materia prima y está buscando donde mandarlo a hacer. Antes de tomar una decisión, le pide a 4 laboratorios que le hagan 5 muestras. Vemos los resultados en alguna métrica en la siguiente tabla.
+  \item \textquestiondown Hay una diferencia entre las medias de las poblaciones?
+% latex table generated in R 2.8.0 by xtable 1.5-4 package
+% Wed May 20 02:13:38 2009
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{rrrrrr}
+  \hline
+  \hline
+Lab 1 & 4.13 & 4.07 & 4.04 & 4.07 & 4.05 \\
+  Lab 2 & 3.86 & 3.85 & 4.08 & 4.11 & 4.08 \\
+  Lab 3 & 4.00 & 4.02 & 4.01 & 4.01 & 4.04 \\
+  Lab 4 & 3.88 & 3.89 & 3.91 & 3.96 & 3.92 \\
+   \hline
+\end{tabular}
+\caption{Producción de un químico}
+\end{center}
+\end{table}  \end{itemize}

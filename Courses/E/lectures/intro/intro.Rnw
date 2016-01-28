@@ -1,0 +1,372 @@
+\input{../header.tex}
+
+\SweaveOpts{prefix.string=plots/intro}
+
+\begin{document}
+
+%%% set up some options for Sweave and R %%%
+<<echo=FALSE, eval=TRUE>>=
+options(width=40)
+@ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Introducción y R básico}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Orígenes}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{De donde viene R}
+  \begin{itemize}
+  \item Para muchos \pl{R} es un \alert{dialecto} porque es un derivado del lenguaje \pl{S} creado por John Chambers y co en los Bell Labs. En sí, \pl{R} lo escribieron a mitad de los 90s Ross Ihaka y Robert Gentleman.
+  \item Desde 1997, \pl{R} ha sido manejado por el \emph{R Development Core Team} y se ha mantenido como open-source.
+  \item Una ventaja de R es que se puede usar en varias plataformas: UNIX, Windows, Mac. 
+  \item \pl{R} en sí es un lenguaje de computación creado para facilitar la manipulación de datos, hacer cálculos y gráficas de alto nivel. Es por esto que \pl{R} es fuerte en estadística.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Propiedades de R}
+  \pl{R} es un ambiente para trabajar en estadística computacional y al mismo tiempo es un lenguaje de programación. Hay usuarios que solo van a usar las funciones básicas de \pl{R} (como una calculadora) mientras otros incluso harán paquetes que liguen \pl{R} con \pl{C}. En fin, \pl{R}:
+  \begin{itemize}
+  \item es efectivo en el manejo de datos y su almacenamiento.
+  \item tiene muchos operadores para hacer cálculos en arreglos (vectores) y matrices.
+  \item tiene una gama de herramientas para el análisis de datos. Hay muchos paquetes disponibles, como la familia de Bioconductor.
+  \item tiene un sistema de gráficas muy útil para el análisis de datos. \alert{Excel es cosa del pasado ;)}
+  \item ya viene con modelos estadísticos.
+  \item hay muchos manuales y un sistema de ayuda bastante bueno. Además hay una comunidad internacional que te extiende la mano :).
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Uso básico de R}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Abrir y cerrar R}
+  \begin{itemize}
+  \item Para abrir \pl{R} simplemente tienen que escribir el comando \BIOCfunction{R} en UNIX. Lo primero que verán es una pequeña descripción de \pl{R} incluyendo la versión que tienen instalada.
+  \item Al abrir \pl{R}, este busca en el directorio donde están información de alguna sesión previa. Esto luego sera útil con los \emph{workspace}.
+  \item Para cerrar \pl{R} simplemente escriban \BIOCfunction{q()}. Les va a pedir si quieren guardar una imagen del workspace -- por ahora digan que no. 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Workspace}
+  \begin{itemize}
+  \item Muchas veces tienes que interrumpir tu trabajo. \pl{R} tiene toda una funcionalidad llamada workspace que te ayuda a retomar tu trabajo de sesiones previas.
+  \item Cuando guardas el workspace se crean dos archivos: \alert{.RData} y \alert{.Rhistory} en el directorio donde estes trabajando. Estos almacenan todos los objetos que haya definido el usuario (vectores, matrices, listas, funciones). La próxima vez que abras R en ese directorio, carga todo lo que creaste antes automáticamente.
+  \item Hay una serie de funciones que les pueden ayudar para organizar su trabajo en R. \Rfunction{getwd} te da tu directorio de trabajo actual, \Rfunction{setwd} lo cambia y \Rfunction{history} te muestra los últimos 25 comandos que usaste.
+  \end{itemize}
+\end{frame}  
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{R como Calculadora}
+  \begin{itemize}
+  \item R es un \emph{expression language}. Aka\footnote{also known as}, una \alert{R} no es igual a una \alert{r}. Los nombres de variables tienen que empezar por un punto\footnote{Una letra le tiene que seguir al punto para que sea un nombre válido} o caracteres alfanuméricos.
+  \item Hagan los siguientes comandos:
+  \end{itemize}
+<<eval=FALSE, echo=TRUE>>=
+2+2
+2^2
+r <- c(1:3, 4.5, 109)
+pi*r^2
+sqrt(36)
+sin(2*pi)
+exp(1) # es exp(x) = e^x
+log(10) # log base e
+log(10, base = 10)
+@
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{Asignación de valores}
+  \begin{itemize}
+  \item En R, hay 3 formas de asignar valores, aunque en general se usan solo dos: \Rcode{=} y \Rcode{<-}
+  \item Preferencialmente usen \BIOCfunction{\Rcode{<-}} simplemente para evitar confusiones. Es que el signo \BIOCfunction{=} se usa para el paso de valores en las funciones.
+  \end{itemize}
+<<eval=TRUE, echo=TRUE>>=
+A <- c(a=1, b=2)["b"]
+A = c(a=1, b=2)["b"]
+A
+@
+  \begin{itemize}
+  \item Aquí queda más clara la asignación en la primera línea, aunque las dos hacen lo mismo.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{Vectores}
+  \begin{itemize}
+  \item \pl{R} es un lenguaje vectorizado, así que puedes ver todas tus variables como vectores. Hay varios \emph{modos}: \pl{numeric, character, logical}.
+  \item Tal vez la función más usada en \pl{R} es \BIOCfunction{\Rcode{c()}}. Con esta función puedes generar vectores de datos.
+  \end{itemize}
+<<eval=FALSE, echo=TRUE>>=
+v1 <- c(1:10)
+v2 <- runif(10)
+v3 <- sample(c("A", "C", "G", "T"), size = 10, replace = TRUE)
+v4 <- v3 %in% c("A", "G")
+v5 <- c("foo", 2, TRUE)
+v6 <- c(2, "3")
+@
+  \begin{itemize}
+  \item Puedes usar la función \Rfunction{mode} para encontrar que tipo de vector tienes. Además, con \Rfunction{as} puedes cambiar el modo de un vector. Intenten cambiar al modo \emph{numeric} los vectores \pl{v5 y v6}:
+  \end{itemize}
+<<eval= FALSE, echo = TRUE>>=
+as.numeric(v5)
+as.numeric(v6)
+@
+  \begin{itemize}
+    \item La familia de la función \Rcode{as} es muy extensa, aunque los principales son: \Rcode{as.character}, \Rcode{as.data.frame}, \Rcode{as.matrix} y \Rcode{as.factor}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Un ejemplo sencillo}
+  \begin{example}[Tamaño Fagos]
+  Conocemos el tamaño del genoma de 10 bacteríofagos y queremos explorar esta información. Sus tamaños en mbs son: \pl{233.2 180.5 280.3 244.8 252.4 178.2 211.2 196.2 176.8 185.7} Almacenen esta informaciónel en el vector \pl{fagos} y encuentren:
+    \begin{enumerate}
+    \item La suma de los tamaño de los genomas
+	\item La longitud del vector fagos
+	\item El tamaño promedio de los genomas
+	\end{enumerate}
+  \end{example}
+  Así se resuelve:
+<<eval=TRUE, echo = TRUE>>=
+fagos <- c(233.2, 180.5, 280.3, 244.8, 252.4, 178.2, 211.2, 196.2, 176.8, 185.7)
+sum(fagos)
+length(fagos)
+sum(fagos)/length(fagos)
+mean(fagos)
+@
+  Además, pueden usar \pl{sort(), min(), max(), range(), diff(), cumsum()} y \alert{summary()}.
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Reciclaje de vectores}
+  \begin{itemize}
+  \item En \pl{R} la mayoría de las funciones están \alert{vectorizadas}\footnote{En las que no, es porque no tendría sentido vectorizarlas}. Por ejemplo cuando hacemos \Rcode{x = 2; y = 3; x + y} en realidad estamos haciendo $x[i] + y[i], i \in 1, ... \max\{|x|,|y|\}$
+  \item Si la longitud de los dos vectores no es la misma, \pl{R} \alert{recicla} el más chico con tal de llegar a la longitud del grande.
+  \item Prueben con \Rcode{c(2,3) + c(3,4,5)} y compárenlo con \Rcode{c(2,3) + c(3,4,5,8)}
+  \item Siempre tengan cuidado con los warnings que salen. En el caso del reciclaje, estos solo salen si \Rcode{(length(x) \%\% length(y)) != 0 }
+  \item Con esto en mente ahora podemos encontrar la suma de los cuadrados de un vector.
+  \end{itemize}
+  \begin{example}[Suma de cuadrados]
+  Normalmente sacamos el cuadrado de cada valor y luego los sumamos.
+<<eval = TRUE, echo = TRUE>>=
+x <- c(2, 7, 19)
+x[1]^2 + x[2]^2 + x[3]^2
+@
+  Pero ahora con el reciclaje, simplemente aplicamos la función para sacar el cuadrado al vector entero. Por reciclaje, la función se va a aplicar a cada elemento del vector. Además, usamos la función \Rcode{sum} para sumar los valores resultantes.
+<<eval = TRUE, echo = TRUE>>=
+sum(x^2)
+@
+  \end{example}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Obtener ayuda}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Buscando ayuda}
+  \begin{itemize}
+  \item Tal vez lo más importante en cualquier lenguaje de programación es saber donde buscar ayuda. \pl{R} tiene un sistema de ayuda bastante completo, aunque a veces si hay que meterse a google.
+  \item \alert{La función madre para buscar ayuda es \Rcode{help()}} Digamos que no saben que hace la función \Rfunction{names}, así que pueden buscar ayuda al respecto con \BIOCfunction{\Rcode{help("names")}} o alguno de los atajos: \BIOCfunction{\Rcode{?names}} o \BIOCfunction{\Rcode{?"names"}}.
+  \item Si no saben que es lo que buscan pueden usar \BIOCfunction{\Rcode{help.start()}} que abre una página html. Aquí siempre encontrarán ejemplos que los pueden ayudar a entender. Estos los pueden copiar y pegar en R para correlos :)
+  \item Para hacer una búsqueda más profunda usen \BIOCfunction{\Rcode{help.search()}} ya que esta función busca en más secciones de los manuales de ayuda. Por ejemplo, \Rcode{help.search("names")}
+  \item Si están buscando nombres de funciones, usen \BIOCfunction{\Rcode{apropos()}} Por ejemplo, \Rcode{apropos("names")}. Otras funciones útiles son \BIOCfunction{\Rcode{RSiteSearch()}}, \BIOCfunction{\Rcode{args()}} y \BIOCfunction{\Rcode{example()}}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Un ejercicio simple}
+  \begin{block}{Aprendiendo a hacer secuencias y repeticiones}
+  Como un ejercicio simple queremos que aprendan a usar las funciones \BIOCfunction{seq}, \BIOCfunction{rev}, \BIOCfunction{rep}, \BIOCfunction{paste} y el operador \pl{colon \BIOCfunction{:}}. Almacenen en diferentes vectores los siguientes datos sin usar \Rcode{c()} a menos de que no haya otra opción.
+    \begin{itemize}
+	\item Las fracciones 1/1 hasta 1/10 \emph{usando enteros}.
+	\item Los años desde 1964 hasta el 2008.
+	\item Los múltiplos de 25 desde 1000 hasta 0 \emph{en ese orden}.
+	\item La serie "A" "A" "T" "T" "T" "T" "C" "G" y luego conviertanla a "AATTTTCG".
+	\item Los números de \myurlshort{es.wikipedia.org/wiki/Sucesión_de_Fibonacci}{Fibonnacci} del 1 al 34
+	\end{itemize}
+  \end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Índices de vectores}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Usar los índices}
+  \begin{itemize}
+  \item En \pl{R} al igual que en otros lenguajes es importante aprender como accesar a la información que tienes en tu variable; vectores en este caso.
+  \item Muchas veces van a tener su información almacenada en un vector de datos; hay cuatro índices principales que puedes usar para seleccionar subconjuntos de tu vector: vectores lógicos, un vector de enteros positivos, otro de negativos y un string de caracteres.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Vectores Lógicos}
+  \begin{itemize}
+  \item Cuando accesas a un vector por medio de un vector lógico, estas filtrando a los que te dan como \alert{TRUE}\footnote{Muchas veces puedes usar \pl{T} en vez de \pl{TRUE}; eviten llamar una variable como T} en alguna comparación.
+  \end{itemize}
+<<eval = FALSE, echo = TRUE>>=
+x <- c(-2:2)
+y <- x/x
+z <- y[!is.na(y)]
+z2 <- y[!is.na(y) & x>0]
+@ 
+  \begin{itemize}
+  \item En la primera \pl{z}, estamos eliminando a los valores \alert{NaN}\footnote{NaN significa Not a Number} como 0/0. En \pl{z2} además queremos solo los de \Rcode{x>0}.
+  \item Tengan en mente que la longitud de los vectores \pl{z} y \pl{z2} son diferentes a la longitud de \pl{x}.
+  \end{itemize}
+  
+  \begin{block}{Operadores Lógicos}
+  En \pl{R} hay diversos operadores lógicos que funcionan como en otros lenguajes con alguna pequeña diferencia. Corran los siguientes comandos para aprender como funcionan :). Para un aprendizaje más detallado lean la ayuda con \Rcode{?">"} y/o \Rcode{?all.equal}
+  \end{block}
+<<eval = FALSE, echo=TRUE>>=
+x <- c(1:5)
+x < 5
+x > 1
+x > 1 & x < 5
+x > 1 && x < 5
+x > 1 | x < 5
+x > 1 || x < 5
+x == 3
+x != 3
+! x == 3
+x == c(2,4)
+x %in% c(2,4)
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Vector de enteros positivos}
+  \begin{itemize}
+  \item Tal vez la forma más comun de accesar a un vector de datos es por posición. Aquí simplemente las posiciones van desde 1\footnote{Es diferente de Perl!} hasta n donde n es la longitud del vector de datos.
+  \item Si \Rcode{x} tiene 100 elementos, puedes entrar a los primeros 10 usando \Rcode{x[1:10]} o a los elementos 1, 5 y 8 usando \Rcode{x[c(1,5,8)]}.
+  \item Otra forma de usar esta tipo de índice sería:
+  \end{itemize}
+<<eval=FALSE, echo=TRUE>>=
+c("A", "T", "C", "G")[rep(c(1,2,2,4,3), times=2)]
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Vector de enteros negativos}
+  \begin{itemize}
+  \item En realidad esto es muy sencillo. Simplemente son las posiciones que queremos excluir.
+  \item En el siguiente ejemplo simplemente nos quedamos con las posiciones 1, 7, 8 y 10.
+  \end{itemize}
+<<eval = TRUE, echo = TRUE>>=
+x <- c("inicio", rep(c("A", "T", "C", "G"), times=2), "fin")
+y <- x[-c(2:6, 9)]
+y
+@
+\end{frame}
+
+\begin{frame}[allowframebreaks, fragile]
+  \frametitle{Por vector de caracteres}
+  \begin{itemize}
+  \item En realidad esta forma es muy parecida a las anteriores. Simplemente tienen que poner entre comillas dobles las palabras que identifican a las posiciones.
+  \end{itemize}
+<<eval = FALSE, echo = TRUE>>=
+fagos <- c(233.2, 180.5, 280.3)
+names(fagos) <- c("Aeromonas phage Aeh1", "Enterobacteria phage RB43", "Pseudomonas phage phiKZ")
+fagos["Aeromonas phage Aeh1"]
+fagos[grep("Aeh1", names(fagos))]
+@
+  \alert{Chequen la función grep!} \BIOCfunction{which}, \BIOCfunction{match} y \BIOCfunction{subset} también son bastante útiles!
+  \begin{itemize}
+  \item Para ahora ya se deben haber dado cuenta... las funciones siempre usan (...) y los vectores de datos usan [...]
+  \end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Mostrando el poder de R}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{:)}
+  \begin{itemize}
+  \item Las siguientes imágenes son unas que creamos nosotros para mostrarles el poder de \pl{R}. Mas adelante podrán hacer cosas parecidas :D
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{Una gráfica con lattice}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{lattice1.pdf}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{Una matriz de datos gigante}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{datosbact.jpg}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{Un scatterplot de los datos Iris}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+<<eval=TRUE, fig=TRUE, echo=FALSE>>=
+pairs(iris[1:4], pch = 21, bg = c("red", "green3", "blue")[unclass(iris$Species)], lower.panel=NULL, labels=c("SL","SW","PL","PW"), font.labels=2, cex.labels=4.5, main = "Datos Iris de Anderson -- 3 especies")
+@
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{Asociación de un SNP con la expresión de un gene}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics{8popSNP-ProbeAssociation.jpg}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]  
+  \frametitle{Una gráfica de mosaicos}
+  \begin{figure}[htbp] 
+  \begin{centering}   
+  \includegraphics[height=3in]{mosaicplot_tissuesAssoc.jpg}
+  \end{centering} 
+  \end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Emacs}
+
+\begin{frame}[allowframebreaks]  
+  \frametitle{\BIOCfunction{Emacs}}
+  \begin{itemize}
+    \item \myurlshort{www.gnu.org/software/emacs/}{Emacs} es un editor de texto muy extenso y que nos va a facilitar el trabajo en \pl{R}.
+	\item Ya está instalado en su servidor pero para que corra bien creen el archivo \emph{.emacs} en su HOME con la siguiente línea: \pl{(require 'ess-site)}
+	\item Ya después pueden abrirlo con el comando \emph{emacs} y correr \pl{R} usando M-x-R\footnote{M == ESC}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]  
+  \frametitle{En sus laps}
+  \begin{itemize}
+    \item Si tiene una laptop con Windows, el archivo \emph{.emacs} debe tener una línea extra al principio con el lugar de donde tienen instalado el ESS. Por ejemplo:
+	\item \pl{(load "C:/Documents and Settings/Leonardo/Desktop/Curso R/ess-5.3.6/lisp/ess-site")}
+	\item Les recomendamos que lean los siguientes links para saber \myurlshort{foros.nnb.unam.mx/viewtopic.php?f=15&t=14}{más del Emacs} y de \myurlshort{foros.nnb.unam.mx/viewtopic.php?f=15&t=12}{como instalarlo en Windows}.
+  \end{itemize}
+\end{frame}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

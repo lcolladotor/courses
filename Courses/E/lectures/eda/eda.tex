@@ -1,0 +1,63 @@
+\input{../header.tex}
+\usepackage{Sweave}
+\begin{document}
+
+
+
+%%% set up some options for Sweave and R %%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]
+  \titlepage
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+  \frametitle{Exploratory Data Analysis with R}
+  \tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Graphical Tools}
+
+\begin{frame}
+  \frametitle{Diaps. de Jim}
+  \begin{itemize}
+    \item Estas diapositivas corresponden a las 28, 29 y 30 de la presentación \BIOCfunction{EDA} de Jim.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{boxplots}
+  \begin{itemize}
+  \item \Rfunction{boxplot} : A plotting method for generating
+    Tukey's boxplots.
+  \item Excellent for comparing location shifts of $k$ distributions
+    of varying size.
+  \item Assess skewness and spread of either of one or more distributions.
+  \item Boxplots are often a much better summary of a distribution
+    than are histograms as they do not suffer from either bandwidth
+    choice or the need to have large data sets.
+  \end{itemize}
+  \begin{example}
+    What does skewness look like on a boxplot, spread? can we generate
+    some data to exemplify these things? (hint: remember all of the
+    random number generators which we talked about in the first lecture)
+  \end{example}
+\end{frame} 
+
+\begin{frame}[fragile, allowframebreaks]
+  \frametitle{Anatomy of a boxplot}
+  \begin{itemize}
+  \item A, B : lower/upper adjacent values: 
+    \begin{eqnarray}
+      r & \triangleq & | q_{75} - q_{25} | \\
+      A & = & \textrm{inf}\{x_i : x_i > q_{25} - 1.5r\} \\
+      B & = & \textrm{sup}\{x_i : x_i < q_{75} + 1.5r\}
+    \end{eqnarray}
+  \end{itemize}
+  
+\includegraphics{plots/eda-003}
+\end{frame}
+
+\end{document}

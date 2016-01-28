@@ -1,0 +1,106 @@
+\documentclass[letterpaper,12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Standard Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage{fancyvrb}
+\usepackage{caption}
+\usepackage{comment}
+\usepackage{fancyhdr}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Adapted from Sweave %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\DefineVerbatimEnvironment{Rcode}{Verbatim}{fontshape=sl, frame=single, 
+  framesep=2mm, fontsize=\small, baselinestretch=.5}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%% My macros (which of course are borrowed from a million ... %%
+\def\argmax{\operatornamewithlimits{arg\,max}}
+\def\argmin{\operatornamewithlimits{arg\,min}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%% Page and Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\addtolength{\oddsidemargin}{-0.875in}
+\addtolength{\topmargin}{-0.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\textheight}{1.75in}
+
+\captionsetup{margin=15pt,font=small,labelfont=bf}
+
+\renewcommand{\topfraction}{0.9}        % max fraction of floats at top
+\renewcommand{\bottomfraction}{0.8}     % max fraction of floats at bottom
+
+% Parameters for TEXT pages (not float pages):
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}             % 2 may work better
+\setcounter{dbltopnumber}{2}            % for 2-column pages
+\renewcommand{\dbltopfraction}{0.9}     % fit big float above 2-col. text
+\renewcommand{\textfraction}{0.07}      % allow minimal text w. figs
+
+% Parameters for FLOAT pages (not text pages):
+\renewcommand{\floatpagefraction}{0.7}          % require fuller float pages
+
+% N.B.: floatpagefraction MUST be less than topfraction !!
+\renewcommand{\dblfloatpagefraction}{0.7}       % require fuller float pages
+
+
+%%%%%%%%%%%%%%%%%%%%%%% options for sweave %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\SweaveOpts{prefix.string=plots/ej4}
+
+%%%%%%%%%%%%%%%%%%%%%% headers and footers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy} 
+\renewcommand{\footrulewidth}{\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plainnat}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%% Now Edit %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fancyhead[L]{\em Leonardo Collado Torres}
+\fancyhead[R]{\em Ejercicios 4}
+\fancyfoot[L]{\em \today}
+\fancyfoot[C]{}
+\fancyfoot[R]{\em \thepage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%% opening %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Ejercicios 4}
+\author{Leonardo Collado Torres}
+
+\begin{document}
+\maketitle
+
+\bigskip
+Entrega tu código para resolver los siguientes ejercicios vía la página de cursos. Tu código debe ser portable y tiene que tener un nombre como lcollado.R aunque de preferencia práctica usar \texttt{Sweave} en cuyo caso entrega solo un archivo PDF.
+\bigskip
+
+\begin{enumerate}
+  
+  \item Asume que una población está dividia en dos sobre alguna decisión ($p = 1/2$). Toman una muestra aleatoria de tamaño 1000. Cual es la probabilidad de que la muestra aleatoria tendrá 550 o más votos a favor de la decisión? Responde usando una aproximación normal.
+  \bigskip
+
+  \item Para qué valor de $n$ la distribución $\overline{X}$ se ve aproximadamente como una normal cuando cada $X_i$ es de tipo exponencial (1)\footnote{\texttt{rexp(n,1}}. Corre varias simulaciones para diferentes $n$s hasta que decidas cuando empieza a verse como normal.
+  \bigskip
+  
+  \item Usa el set de datos \texttt{cabinet} del paquete \texttt{UsingR}. Este contiene información sobre la cantidad de dinero que se ahorrarón los miembros del comité de Bush en el 2003 ccuando pasaron una nueva ley sobre impuestos. Esta información está almacenada en la variable \texttt{est.tax.savings}. Encuentra un intervalo de confianza de 90\% para la mediana.
+  \bigskip
+  
+  \item El set de datos \texttt{babies} de \texttt{UsingR} tiene las edades de las madres en la variable \texttt{age} y la de los padres en \texttt{dage}. Haz una prueba de significancia de la hipótesis nula de edades iguales contra una de alternativa de un solo lado donde los papás están más viejos. Reporta el valor $p$ y tu conclusión sobre $H_0$.
+  \bigskip
+  
+  \item El set de datos \texttt{pi2000} de \texttt{UsingR} tiene los primeros 2000 dígitos de $\pi$. Haz una prueba de hipótesis para ver si los dígitos aparecen con la misma probabilidad. Usa la prueba de la $\chi^2$.
+  \bigskip
+  
+  \bigskip
+\end{enumerate}
+
+
+\end{document}

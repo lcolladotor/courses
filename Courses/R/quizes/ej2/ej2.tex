@@ -1,0 +1,115 @@
+\documentclass[letterpaper,12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Standard Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage{fancyvrb}
+\usepackage{caption}
+\usepackage{comment}
+\usepackage{fancyhdr}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Adapted from Sweave %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\DefineVerbatimEnvironment{Rcode}{Verbatim}{fontshape=sl, frame=single, 
+  framesep=2mm, fontsize=\small, baselinestretch=.5}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%% My macros (which of course are borrowed from a million ... %%
+\def\argmax{\operatornamewithlimits{arg\,max}}
+\def\argmin{\operatornamewithlimits{arg\,min}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%% Page and Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\addtolength{\oddsidemargin}{-0.875in}
+\addtolength{\topmargin}{-0.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\textheight}{1.75in}
+
+\captionsetup{margin=15pt,font=small,labelfont=bf}
+
+\renewcommand{\topfraction}{0.9}        % max fraction of floats at top
+\renewcommand{\bottomfraction}{0.8}     % max fraction of floats at bottom
+
+% Parameters for TEXT pages (not float pages):
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}             % 2 may work better
+\setcounter{dbltopnumber}{2}            % for 2-column pages
+\renewcommand{\dbltopfraction}{0.9}     % fit big float above 2-col. text
+\renewcommand{\textfraction}{0.07}      % allow minimal text w. figs
+
+% Parameters for FLOAT pages (not text pages):
+\renewcommand{\floatpagefraction}{0.7}          % require fuller float pages
+
+% N.B.: floatpagefraction MUST be less than topfraction !!
+\renewcommand{\dblfloatpagefraction}{0.7}       % require fuller float pages
+
+
+%%%%%%%%%%%%%%%%%%%%%%% options for sweave %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%% headers and footers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy} 
+\renewcommand{\footrulewidth}{\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plainnat}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%% Now Edit %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fancyhead[L]{\em Leonardo Collado Torres}
+\fancyhead[R]{\em ej1}
+\fancyfoot[L]{\em \today}
+\fancyfoot[C]{}
+\fancyfoot[R]{\em \thepage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%% opening %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Ejercicios 2: ahora sí es de tarea}
+\author{Leonardo Collado Torres}
+
+\usepackage{Sweave}
+\begin{document}
+\maketitle
+\begin{enumerate}
+  \item Usen el set de datos \texttt{DDT} del paquete \texttt{MASS}. Este contiene mediciones independientes del pesticida DDT en Brassica oleracea.
+  \begin{enumerate}
+    \item Hagan un histograma y un boxplot de los datos con colores (a su gusto) y títulos apropiados.
+	\item De esta gráficas estimen la media y desviación estándar.
+	\item Agreguen la información del punto anterior al código e imprímanla usando \texttt{print}.
+	\item Tienen que subir el código para responder a esta pregunta. El código debe ser portable!!!!
+  \end{enumerate}
+  \bigskip
+  \bigskip
+  
+  \item Revisen el parámetro \texttt{mfrow} de la función \texttt{par}. Usen los datos de \texttt{lawsuits} del paquete \texttt{UsingR}. 
+  \begin{enumerate}
+    \item Tienen que guardar las gráficas en un archivo PDF para este ejercicio.
+	\item En el lugar de 1 sola gráfica, quiero que me pongan lado a lado el histograma de \texttt{lawsuits} y el histograma de los valores logarítmicos de los mismos datos.
+	\item El título de las gráficas debe incluir su nombre en formato de su username del email: por ejemplo, lcollado.
+	\item Evidentemente, sus histogramas deben estar personalizados (colores, etc).
+	\item Solo suban el código (portable!!) que crea el archivo PDF con las 2 gráficas.
+  \end{enumerate}	
+  \bigskip
+  \bigskip
+  
+  \item Simplemente busquen una gráfica\footnote{Evidentemente, busquen una del tipo que vimos en clase}\footnote{No acepto gráficas tipo "pie" o "sope" como unos les llaman} en algún periodico o revista científica y hagan una réplica (a su estilo) usando \texttt{R}.
+  \begin{itemize}
+    \item Incluyan el URL de donde encontraron la gráfica en su código como comentario.
+	\item Envien solo el código para hacer la gráfica y no la gráfica en sí. Este debe ser portable!!!!\footnote{Si usan algún paquete que no mencioné como los de base en el curso en el foro, incluyan el código para bajarlo}
+	\item Si usan algún archivo para crear su \texttt{data set} este debe estar en su folder de \texttt{public\_html} y su codigo debe accesarlo via Internet. Otra vez... su código debe ser portable!!!
+    \item Suban su código a la página de cursos (incluyendo el de las anteriores preguntas).
+  \end{itemize}
+  \bigskip
+  \bigskip
+\end{enumerate}
+
+
+\end{document}

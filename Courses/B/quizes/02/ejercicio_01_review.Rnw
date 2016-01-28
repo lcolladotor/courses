@@ -1,0 +1,87 @@
+%\VignetteIndexEntry{Ejercicio 1 del Seminario III: R/Bioconductor}
+%\VignetteDepends{}
+%\VignetteKeywords{R, Bioconductor}
+%\VignettePackage{SIII: R/Bioc}
+\documentclass[letterpaper,12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Standard Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage{epsfig}
+%\usepackage{graphicx}
+%\usepackage{graphics}
+%\usepackage{amssymb}
+%\usepackage{amsmath}
+%\usepackage{mathrsfs}
+%\usepackage{caption}
+%\usepackage{comment}
+\usepackage{fancyvrb}
+\usepackage{fancyhdr}
+
+\usepackage[a4paper]{geometry}
+\usepackage{hyperref,graphicx}
+
+\usepackage[spanish]{babel}
+\selectlanguage{spanish}
+\usepackage[utf8]{inputenc}
+
+%%%%%%%%%%%%%%%%%%%%%% some personal commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\pl}[1]{\texttt{#1}}
+\newcommand{\myurlshort}[2]{\href{http://#1}{{\textsf{#2}}}}
+
+%%%%%%%%%%%%%%%%%%%%%% headers and footers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy} 
+\renewcommand{\footrulewidth}{\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plainnat}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% sweave options  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\SweaveOpts{prefix.string=plots/figura,eps=FALSE,echo=FALSE}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%% opening %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\textbf{Seminario III: \texttt{R}/\texttt{Bioconductor}\\ \small August-December 2009}}
+\author{Leonardo Collado Torres\\[1em]Licenciado en Ciencias Genómicas,\\ UNAM, Cuernavaca, México\\[1em]\texttt{lcollado@lcg.unam.mx}\\[1em]\url{http://www.lcg.unam.mx/~lcollado/}}
+
+\begin{document}
+\maketitle
+
+\medskip
+\noindent{\small\textbf{Assistants:} Alejandro Reyes \pl{areyes@lcg.unam.mx}, Jos\'e Reyes \pl{jreyes@lcg.unam.mx} and V\'ictor Moreno \pl{jmoreno@lcg.unam.mx}}
+
+\medskip
+\noindent{\small\textbf{Note:} Questions through the \myurlshort{foros.nnb.unam.mx/viewforum.php?f=111}{forum} please. Those who are not from the sixth LCG generation send us an email so we can register you on the forum.}
+
+\medskip
+\begin{abstract}
+The following exercises are meant to review how to use \pl{R}, create some basic plots and use the \pl{apply} function family.
+\end{abstract}
+
+\section{Review}
+  \begin{enumerate}
+  \item Why does the following expression show a warning? This is part of what rule?
+<<eval=FALSE, echo=TRUE>>=
+c(2,3) + c(4,5,7)
+@ 
+  \item For all the prime numbers between 1 and 10, calculate its square root. What is the sum, median and mean?
+  \end{enumerate}
+
+\section{Plots}
+  \begin{itemize}
+  \item Read the following file into \pl{R}: \url{ftp://ftp.ebi.ac.uk/pub/databases/genome_reviews/gr2species_phage.txt}\footnote{Look for the useful function for this case} and make the following plots with your username on the title. Check whether using a log10 scale on the $y$ axis helps.
+  \begin{enumerate}
+  \item Sort the genome sizes (column 2) and plot them in a line with increasing values.
+  \item Plot a histogram with a density line for the same data.
+  \item Plot a boxplot for the differences between contigous sorted genomes. Meaning, 2nd smallest - smallest, 3rd smallest - 2nd smallest, etc.\footnote{You might want to use \pl{apropos} searching for diff\ldots}
+  \item Make a barplot showing the 10 biggest genomes. Include the names\footnote{They have to be redable} on the $x$ axis and every bar has to have a different color and/or density.\footnote{The \pl{which} function might be useful.}
+  \end{enumerate}
+  \end{itemize}
+
+\section{\pl{Apply} functions}
+  \begin{enumerate}
+  \item What is the mean genome size for every type of replicon (column 4)? You have an atomic vector and a factor so use \ldots
+  \item Create a matrix \pl{mat} with 10 rows and 10 columns and 100 random uniform values from 1 to 10. Create your own function and apply it to every row so that every row will now sum 1 in your new matrix \pl{mat2}.
+  \item Using the same matrix \pl{mat}, make the matrix \pl{mat3} with row sums equal to 1 using built in \pl{R} matrix functions. \pl{mat2} and \pl{mat3} should be the same.
+  \end{enumerate}
+
+\end{document}

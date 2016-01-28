@@ -1,0 +1,11 @@
+\frametitle {Comparando tiempos de expresiones}
+  \begin{itemize}
+  \item Bueno, ahora pasemos al ejercicio principal.
+  \item Usando \BIOCfunction{t.test} hagan la prueba de hipótesis para ver si las medias de los tiempos\footnote{Solo fíjense en \pl{elapsed}} en los que corren las siguientes expresiones son iguales o diferentes. Las medias son de 100 eventos y solo necesitaremos el valor p para poder sacar nuestra conclusión.
+\begin{Schunk}
+\begin{Sinput}
+> x <- rnorm(1e+06)
+> sort(x)
+\end{Sinput}
+\end{Schunk}
+  \end{itemize}

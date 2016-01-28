@@ -1,0 +1,49 @@
+Damaris Ketino Rangel Guerrero
+
+ejercicio 1
+
+library(MASS)
+hist(DDT, col="yellow")
+plot(DDT)
+sqrt(var(DDT))
+mean(DDT)
+estadisticas<-summary(DDT)
+estadisticas2<-estadisticas[-c(3)]
+
+hist(DDT, xlab="DDT", ylab="Freq", col="yellow", main="concentracion DDT")
+boxplot(DDT, col="black", xlab="DDT", ylab="freq", main="DDT")
+text(rep(1.3,5),estadisticas2,labels=c(print(estadisticas2)))
+boxplot(DDT, col="black", xlab="DDT mean=3.28 desv est=0.437", ylab="freq", 
+main="DDT")
+hist(DDT, xlab="DDT mean=3.28 desvest=0.437", ylab="Freq", col="yellow", 
+main="concentracion DDT")
+
+# Hehe, complicado pero si lo hiciste ^^
+ 
+ejercicio2
+
+pdf("drangel.pdf", height=3.5, width=10)
+colores <- c("violet","light blue","pink","yellow","forestgreen")
+par(mfrow=c(1,2))
+hist(lawsuits, col=colores,main="lawsuits")
+hist(log(lawsuits),col=colores,main="logs")
+dev.off()
+
+ejercicio 3
+
+El articulo de donde obtuve la grafica se llama:
+Roadless Wilderness Area Determines Forest Elephant Movements in the Congo Basin
+los autores son:
+Stephen Blake1,2,3*, Sharon L. Deem2,4, Samantha Strindberg1, Fiona Maisels1, Ludovic Momont5, Inogwabini-Bila Isia6, Iain Douglas-Hamilton7,8, William B. Karesh1, Michael D. Kock1
+la grafica es:
+Figura suplementaria 2, Figure S2. La parte llamada  "Histogram of Resiuduals"
+el codigo que lo genera es el siguiente:
+
+# No me pusiste un link al artículo. Tsk tsk.
+
+valores <-c(-55,-35,-23,-19,-18,-17,-16,-15,-14,-13,-12,-11,-10-19,-8,-9,1,2,3,4,5,6,7,8,24,25,36,39,58)
+hist(valores, xlab="Residuals",ylab="Frequency",main="Histogram of Resiuduals")
+
+# Hm... bueno, si lo pusiste :P
+# Casi te sale, te faltó usar el argumento ylim.
+#el url de la grafica es http://www.plosone.org/article/info:doi/10.1371/journal.pone.0003546#pone-0003546-t001
