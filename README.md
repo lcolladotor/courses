@@ -1,1 +1,1 @@
-http://lcolladotor.github.io/courses
+http://lcolladotor.github.io/teaching.html#.VqqJ21MrLEY
